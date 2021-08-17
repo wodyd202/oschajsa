@@ -17,6 +17,11 @@ public class Password {
         this.pw = pw;
     }
 
+    /**
+     * @param pw 사용자 비밀번호
+     * - 사용자 비밀번호는 8자 이상 15자 이하만 허용
+     * - 사용자 비밀번호는 숫자, 영어[대,소문자], 허용하는 특수문자만 허용
+     */
     private final static Pattern PW_REGEX = Pattern.compile("[0-9a-zA-Z._%+-]{8,15}$");
     private void passwordValidation(String pw) {
         if(!PW_REGEX.matcher(pw).matches()){

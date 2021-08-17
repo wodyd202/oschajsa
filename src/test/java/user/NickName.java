@@ -17,6 +17,11 @@ public class NickName {
         this.name = name;
     }
 
+    /**
+     * @param name 사용자 닉네임
+     * - 사용자 닉네임은 3자 이상 10자 이하만 허용
+     * - 사용자 닉네임은 완성형 한글, 숫자, 영어[대,소문자]만 허용
+     */
     private final static Pattern NICKNAME_REGEX = Pattern.compile("^[\\w가-힣]{3,10}$");
     private void nicknameValidation(String name) {
         if(!NICKNAME_REGEX.matcher(name).matches()){
