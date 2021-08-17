@@ -75,5 +75,37 @@ public class UserTest {
         assertEquals(password.get(), "password");
     }
 
+    @Test
+    @DisplayName("사용자 닉네임은 null을 허용하지 않음")
+    void nullNickName(){
+        assertThrows(NullPointerException.class,()->{
+           NickName.of(null);
+        });
+    }
+
+    @Test
+    @DisplayName("사용자 닉네임은 빈값을 허용하지 않음")
+    void emptyNickname(){
+        assertThrows(InvalidNicknameException.class,()->{
+            NickName.of("");
+        });
+    }
+
+    @DisplayName("사용자 닉네임은 한글, 영어[대,소문자], 숫자만 허용하고 3자 이상 10자 이하여야함")
+    @ParameterizedTest
+    @ValueSource(strings = {"ㅌㅅㅌ","테스트 "," 테스트","테스트%","테스트@","TEST "})
+    void invalidNickName(String nickname){
+        assertThrows(InvalidNicknameException.class,()->{
+           NickName.of(nickname);
+        });
+    }
+
+    @DisplayName("사용자 닉네임 정상 입력")
+    @Test
+    void validNickname(){
+        NickName nickname = NickName.of("test");
+        assertEquals(nickname, NickName.of("test"));
+        assertEquals(nickname.get(), "test");
+    }
 
 }
