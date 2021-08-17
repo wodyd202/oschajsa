@@ -1,4 +1,4 @@
-package user;
+package com.ljy.oschajsa.oschajsa.user.domain;
 
 import org.springframework.util.StringUtils;
 

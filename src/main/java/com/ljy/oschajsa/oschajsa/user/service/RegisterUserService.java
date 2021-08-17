@@ -1,4 +1,7 @@
-package user;
+package com.ljy.oschajsa.oschajsa.user.service;
+
+import com.ljy.oschajsa.oschajsa.user.domain.User;
+import com.ljy.oschajsa.oschajsa.user.service.model.RegisterUser;
 
 final public class RegisterUserService {
     private final UserRepository userRepository;

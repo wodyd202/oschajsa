@@ -1,4 +1,7 @@
-package user;
+package com.ljy.oschajsa.oschajsa.user.service;
+
+import com.ljy.oschajsa.oschajsa.user.domain.*;
+import com.ljy.oschajsa.oschajsa.user.service.model.RegisterUser;
 
 import java.util.Objects;
 

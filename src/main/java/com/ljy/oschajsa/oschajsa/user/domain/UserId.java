@@ -1,6 +1,5 @@
-package user;
+package com.ljy.oschajsa.oschajsa.user.domain;
 
-import lombok.EqualsAndHashCode;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;

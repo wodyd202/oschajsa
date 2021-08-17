@@ -1,4 +1,4 @@
-package user;
+package com.ljy.oschajsa.oschajsa.user.service.model;
 
 import lombok.AccessLevel;
 import lombok.Builder;
