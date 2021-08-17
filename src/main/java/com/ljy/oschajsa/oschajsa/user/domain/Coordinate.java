@@ -24,15 +24,17 @@ public class Coordinate {
         this.lettitude = lettitude;
     }
 
+    private final static String LETTITUDE_NULL_MESSAGE = "lettitude must not be null";
     private void verifyNotNullLettitude(Double lettitude) {
         if (Objects.isNull(lettitude)) {
-            throw new InvalidAddressException("lettitude must not be null");
+            throw new InvalidAddressException(LETTITUDE_NULL_MESSAGE);
         }
     }
 
+    private final static String LONGTITUDE_NULL_MESSAGE = "longtitude must not be null";
     private void verifyNotNullLongtitude(Double longtitude) {
         if (Objects.isNull(longtitude)) {
-            throw new InvalidAddressException("lettitude must not be null");
+            throw new InvalidAddressException(LONGTITUDE_NULL_MESSAGE);
         }
     }
 

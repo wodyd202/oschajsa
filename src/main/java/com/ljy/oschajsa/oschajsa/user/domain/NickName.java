@@ -23,15 +23,17 @@ public class NickName {
      * - 사용자 닉네임은 완성형 한글, 숫자, 영어[대,소문자]만 허용
      */
     private final static Pattern NICKNAME_REGEX = Pattern.compile("^[\\w가-힣]{3,10}$");
+    private final static String NICKNAME_EXCEPTION_MESSAGE = "nickname can use only hangul ,number,alphabet and the length must be between 3 and 10 characters";
     private void nicknameValidation(String name) {
         if(!NICKNAME_REGEX.matcher(name).matches()){
-            throw new InvalidNicknameException("nickname can use only hangul ,number,alphabet and the length must be between 3 and 10 characters");
+            throw new InvalidNicknameException(NICKNAME_EXCEPTION_MESSAGE);
         }
     }
 
+    private final static String NICKNAME_EMPTY_MESSAGE = "nickname must not be empty";
     private void verifyNotEmptyNickname(String name) {
         if(!StringUtils.hasText(name)){
-            throw new InvalidNicknameException("nickname must not be empty");
+            throw new InvalidNicknameException(NICKNAME_EMPTY_MESSAGE);
         }
     }
 

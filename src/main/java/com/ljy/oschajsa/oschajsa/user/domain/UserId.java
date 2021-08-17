@@ -18,9 +18,10 @@ public class UserId implements Serializable {
         this.id = id;
     }
 
+    private final static String USER_ID_EMPTY_MESSAGE = "user id must not be empty";
     private void verifyNotEmptyUserId(String id) {
         if(!StringUtils.hasText(id)){
-            throw new InvalidUserIdException("user id must not be empty");
+            throw new InvalidUserIdException(USER_ID_EMPTY_MESSAGE);
         }
     }
 
@@ -31,9 +32,10 @@ public class UserId implements Serializable {
      * - 사용자 아이디는 영어[소문자], 숫자만 허용한다.
      */
     private final static Pattern USER_ID_REGEX = Pattern.compile("^[a-z]+[a-z0-9]{4,15}$");
+    private final static String USER_ID_EXCEPTION_MESSAGE = "user id be allowed small letter, number however first char must be small letter";
     private void idValidation(String id) {
         if(!USER_ID_REGEX.matcher(id).matches()){
-            throw new InvalidUserIdException("user id be allowed small letter, number however first char must be small letter");
+            throw new InvalidUserIdException(USER_ID_EXCEPTION_MESSAGE);
         }
     }
 

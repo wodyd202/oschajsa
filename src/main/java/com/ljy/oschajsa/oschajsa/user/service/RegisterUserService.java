@@ -18,9 +18,10 @@ final public class RegisterUserService {
         userRepository.save(user);
     }
 
+    private final static String ALREADY_EXIST_USER_MESSAGE = "already exist user";
     private void verifyNotExistUser(User user) {
         if(userRepository.findByUserId(user.getUserId()).isPresent()){
-            throw new AlreadyExistUserException("already exist user");
+            throw new AlreadyExistUserException(ALREADY_EXIST_USER_MESSAGE);
         }
     }
 }
