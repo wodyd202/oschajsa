@@ -1,0 +1,68 @@
+package user;
+
+import lombok.EqualsAndHashCode;
+import org.springframework.util.StringUtils;
+
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.regex.Pattern;
+
+public class UserId implements Serializable {
+    private final String id;
+
+    // JPA에서 embedded로 사용시 기본 생성자 필요
+    protected UserId(){id = null;}
+
+    private UserId(String id) {
+        verifyNotEmptyUserId(id);
+        idValidation(id);
+        this.id = id;
+    }
+
+    private void verifyNotEmptyUserId(String id) {
+        if(!StringUtils.hasText(id)){
+            throw new InvalidUserIdException("user id must not be empty");
+        }
+    }
+
+    /**
+     * @param id 사용자 아이디
+     * - 사용자 아이디는 4자 이상 15자 이하만 허용한다.
+     * - 사용자 아이디의 첫 시작은 영어[소문자]만 허용한다.
+     * - 사용자 아이디는 영어[소문자], 숫자만 허용한다.
+     */
+    private final static Pattern USER_ID_REGEX = Pattern.compile("^[a-z]+[a-z0-9]{4,15}$");
+    private void idValidation(String id) {
+        if(!USER_ID_REGEX.matcher(id).matches()){
+            throw new InvalidUserIdException("user id be allowed small letter, number however first char must be small letter");
+        }
+    }
+
+    public static UserId of(String id){
+        return new UserId(Objects.requireNonNull(id));
+    }
+
+    public String get() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "UserId{" +
+                "id='" + id + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserId userId = (UserId) o;
+        return Objects.equals(id, userId.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+}

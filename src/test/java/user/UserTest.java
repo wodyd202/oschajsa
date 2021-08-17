@@ -5,56 +5,75 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserTest {
 
-    @DisplayName("이메일은 null값을 허용하지 않음")
+    @DisplayName("사용자 아이디는 null값을 허용하지 않음")
     @Test
-    void nullEmail(){
-        assertThrows(NullPointerException.class,()->{
-            Email.of(null);
+    void nullUserId(){
+        assertThrows(NullPointerException.class, ()->{
+            UserId.of(null);
         });
     }
 
-    @DisplayName("이메일은 빈값을 허용하지 않음")
-    @Test
-    void emptyEmail(){
-        assertThrows(InvalidEmailException.class,()->{
-           Email.of("");
+    @DisplayName("사용자 아이디는 빈값을 허용하지 않음")
+    void emptyUserId(){
+        assertThrows(InvalidUserIdException.class,()->{
+           UserId.of("");
         });
     }
 
-    @DisplayName("이메일 형식중 아이디는 영문[대,소문자], 숫자, 특수문자(._%+-)만 허용하고 2자 이상 20자 이하만 가능")
+    @DisplayName("사용자 아이디는 영어[소문자], 숫자만 허용하고 4자 이상 15자 이하로 입력해야하며, 첫 글자는 반드시 영문이여야한다.")
     @ParameterizedTest
-    @ValueSource(strings = {"실패@naver.com",
-                            "ㅌㅅㅌ@naver.com",
-                            "test @naver.com",
-                            "test&&@naver.com"})
-    void invalidIdOfEmail(String email){
-        assertThrows(InvalidEmailException.class,()->{
-            Email.of(email);
+    @ValueSource(strings = {"test", " test3", " 3test", "test 3","test3 "})
+    void invalidUserId(String id){
+        assertThrows(InvalidUserIdException.class, ()->{
+           UserId.of(id);
         });
     }
 
-    @DisplayName("이메일 형식중 호스트는 영문[대,소문자], 숫자, 특수문자(.-)만을 허용하고 5자 이상 30자 이하만 가능")
-    @ParameterizedTest
-    @ValueSource(strings = {"test@navercom",
-                            "test@nav..com",
-                            "test@.com",
-                            "test@test.test.test"})
-    void invalidHostOfEmail(String email){
-        assertThrows(InvalidEmailException.class,()->{
-            Email.of(email);
-        });
-    }
-
-    @DisplayName("이메일에는 @이 하나만 있어야함")
     @Test
-    void invalidEmail(){
-        assertThrows(InvalidEmailException.class,()->{
-            Email.of("test@@test.com");
+    @DisplayName("사용자 아이디 정상 입력")
+    void validUserId(){
+        UserId userId = UserId.of("test3");
+        assertEquals(userId, UserId.of("test3"));
+        assertEquals(userId.get(), "test3");
+    }
+
+    @DisplayName("사용자 비밀번호는 null값을 허용하지 않음")
+    @Test
+    void nullPassword(){
+         assertThrows(NullPointerException.class,()->{
+            Password.of(null);
+         });
+    }
+
+    @DisplayName("사용자 비밀번호는 빈값을 허용하지 않음")
+    @Test
+    void emptyPassword(){
+        assertThrows(InvalidPasswordException.class, ()->{
+           Password.of("");
         });
     }
+
+    @DisplayName("사용자 비밀번호는 공백을 제외한 숫자, 영문[대,소문자], 특수문자(._%+=)만 허용하며, 8자 이상 15자 이하만 허용")
+    @ParameterizedTest
+    @ValueSource(strings = {"테스트"," password","password ","pass word"})
+    void invalidPassword(String pw){
+        assertThrows(InvalidPasswordException.class, ()->{
+            Password.of(pw);
+        });
+    }
+
+    @Test
+    @DisplayName("사용자 비밀번호 정상 입력")
+    void validPassword(){
+        Password password = Password.of("password");
+        assertEquals(password, Password.of("password"));
+        assertEquals(password.get(), "password");
+    }
+
 
 }
