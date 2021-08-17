@@ -1,12 +1,15 @@
 package user;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -167,6 +170,89 @@ public class UserTest {
         Address address = Address.withCoodinate(coordinate, addressHelper);
         assertEquals(address.getCoordinate(), coordinate);
         assertEquals(address.getAddressInfo(), AddressInfo.withCityProvinceDong("서울특별시","용산구","남영동"));
+    }
+
+    @Test
+    @DisplayName("사용자 생성시 주소 좌표값을 입력하지 않을 경우 Address가 null값이됨")
+    void emptyCoordinate(){
+        // 사용자 생성시 주소는 입력하지 않아도 됨
+        RegisterUser registerUser = RegisterUser.builder()
+                .id("userid")
+                .password("password")
+                .nickname("nickname")
+                .build();
+
+        AddressHelper addressHelper = mock(AddressHelper.class);
+        UserMapper userMapper = new UserMapper(addressHelper);
+        User user = userMapper.mapFrom(registerUser);
+        assertEquals(user.getUserId(), UserId.of("userid"));
+        assertEquals(user.getNickname(), NickName.of("nickname"));
+        assertNull(user.getAddress());
+    }
+
+    @Test
+    void containCoordinate(){
+        RegisterUser registerUser = RegisterUser.builder()
+                .id("userid")
+                .password("password")
+                .nickname("nickname")
+                // 임의 좌표값 이 좌표를 서울역 좌표로 가정함
+                .lettitude(1.0)
+                .longtitude(1.0)
+                .build();
+
+        AddressHelper addressHelper = mock(AddressHelper.class);
+        when(addressHelper.getAddressInfoFrom(Coordinate.withLattitudeLongtitude(1.0,1.0)))
+                .thenReturn(AddressInfo.withCityProvinceDong("서울특별시","용산구","남영동"));
+
+        UserMapper userMapper = new UserMapper(addressHelper);
+        User user = userMapper.mapFrom(registerUser);
+        assertNotNull(user.getAddress());
+        assertEquals(user.getAddress().getAddressInfo().getCity(),"서울특별시");
+    }
+
+    @Nested
+    @DisplayName("사용자 생성 테스트")
+    class RegisterUserServiceTest {
+        UserRepository userRepository = mock(UserRepository.class);
+        RegisterUserService service = new RegisterUserService(userRepository, new UserMapper(mock(AddressHelper.class)));
+
+        @Test
+        @DisplayName("사용자 생성")
+        void register(){
+            RegisterUser registerUser = RegisterUser.builder()
+                    .id("userid")
+                    .password("password")
+                    .nickname("nickname")
+                    // 임의 좌표값 이 좌표를 서울역 좌표로 가정함
+                    .lettitude(1.0)
+                    .longtitude(1.0)
+                    .build();
+
+            assertDoesNotThrow(()->{
+                service.register(registerUser);
+            });
+        }
+
+        @Test
+        @DisplayName("이미 가입한 아이디가 존재함")
+        void alreadyExistUser(){
+            when(userRepository.findByUserId(UserId.of("userid")))
+                    .thenReturn(Optional.of(mock(User.class)));
+
+            RegisterUser registerUser = RegisterUser.builder()
+                    .id("userid")
+                    .password("password")
+                    .nickname("nickname")
+                    // 임의 좌표값 이 좌표를 서울역 좌표로 가정함
+                    .lettitude(1.0)
+                    .longtitude(1.0)
+                    .build();
+
+            assertThrows(AlreadyExistUserException.class,()->{
+                service.register(registerUser);
+            });
+        }
     }
 
 }
