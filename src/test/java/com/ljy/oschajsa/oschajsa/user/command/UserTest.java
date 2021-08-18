@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+import static com.ljy.oschajsa.oschajsa.user.command.UserFixture.aUser;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -225,37 +226,42 @@ public class UserTest {
         when(addressHelper.getAddressInfoFrom(Coordinate.withLattitudeLongtitude(1.0,1.0)))
                 .thenReturn(AddressInfo.withCityProvinceDong("서울특별시","용산구","남영동"));
 
-        User user = UserFixture.aUser().build();
+        User user = aUser().build();
         user.changeAddress(Address.withCoodinate(Coordinate.withLattitudeLongtitude(1.0,1.0), addressHelper));
         assertNotNull(user.getAddress());
         assertEquals(user.getAddress().getAddressInfo().getCity(),"서울특별시");
     }
 
+    PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
     @Test
     @DisplayName("회원탈퇴")
     void withdrawal(){
-        User user = UserFixture.aUser()
+        User user = aUser()
                 .password(Password.of("password")).build();
-        user.withdrawal(Password.of("password"));
+        user.encodePassword(passwordEncoder);
+        user.withdrawal(passwordEncoder, "password");
         assertEquals(user.getState(), UserState.WITHDRAWAL);
     }
 
     @Test
     @DisplayName("회원탈퇴시 비밀번호가 일치하지 않으면 안됨")
     void notEqPasswordWhenWithdrawal(){
-        User user = UserFixture.aUser()
+        User user = aUser()
                 .password(Password.of("password")).build();
+        user.encodePassword(passwordEncoder);
         assertThrows(InvalidPasswordException.class, ()->{
-            user.withdrawal(Password.of("notEqPassword"));
+            user.withdrawal(passwordEncoder, "notEqPassword");
         });
     }
 
     @Test
     @DisplayName("이미 탈퇴한 회원은 주소지를 변경할 수 없음")
     void notAbleChangeAddressWhoAlreadyWithdrawalUser(){
-        User user = UserFixture.aUser()
+        User user = aUser()
                 .password(Password.of("password")).build();
-        user.withdrawal(Password.of("password"));
+        user.encodePassword(passwordEncoder);
+        user.withdrawal(passwordEncoder, "password");
 
         assertThrows(AlreadyWithdrawalUserException.class,()->{
             user.changeAddress(Address.withCoodinate(Coordinate.withLattitudeLongtitude(1.0,1.0), mock(AddressHelper.class)));
@@ -265,7 +271,7 @@ public class UserTest {
     @Test
     @DisplayName("비밀번호 암호화")
     void encodePassword(){
-        User user = UserFixture.aUser()
+        User user = aUser()
                 .password(Password.of("password")).build();
         PasswordEncoder delegatingPasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         user.encodePassword(delegatingPasswordEncoder);
@@ -316,8 +322,9 @@ public class UserTest {
 
     @Nested
     class ChangeAddressServiceTest {
+        AddressHelper addressHelper = mock(AddressHelper.class);
         UserRepository userRepository = mock(UserRepository.class);
-        ChangeAddressService service = new ChangeAddressService(userRepository, mock(AddressHelper.class));
+        ChangeAddressService service = new ChangeAddressService(userRepository, addressHelper);
 
         @Test
         @DisplayName("사용자 주소 변경시 해당 사용자가 존재하지 않으면 안됨")
@@ -335,8 +342,12 @@ public class UserTest {
         @Test
         @DisplayName("사용자 주소 변경")
         void changeAddress(){
+            when(addressHelper.getAddressInfoFrom(Coordinate.withLattitudeLongtitude(1.0,1.1)))
+                    .thenReturn(AddressInfo.withCityProvinceDong("서울특별시","용산구","남영동"));
+
+            User user = aUser().build();
             when(userRepository.findByUserId(UserId.of("userid")))
-                    .thenReturn(Optional.of(mock(User.class)));
+                    .thenReturn(Optional.of(user));
 
             UserId userid = UserId.of("userid");
             ChangeAddress changeAddress = ChangeAddress.builder()
@@ -353,7 +364,7 @@ public class UserTest {
     @Nested
     class WithdrawalServiceTest {
         UserRepository userRepository = mock(UserRepository.class);
-        WithdrawalService service = new WithdrawalService(userRepository);
+        WithdrawalService service = new WithdrawalService(userRepository, passwordEncoder);
 
         @Test
         @DisplayName("회원 탈퇴시 해당 아이디가 존재하지 않으면 안됨")
@@ -368,8 +379,10 @@ public class UserTest {
         @Test
         @DisplayName("회원 탈퇴")
         void withdrawal(){
+            User user = aUser().password(Password.of("password")).build();
+            user.encodePassword(passwordEncoder);
             when(userRepository.findByUserId(UserId.of("userid")))
-                    .thenReturn(Optional.of(UserFixture.aUser().password(Password.of("password")).build()));
+                    .thenReturn(Optional.of(user));
 
             UserId userid = UserId.of("userid");
             WithdrawalUser withdrawalUser = WithdrawalUser.builder()

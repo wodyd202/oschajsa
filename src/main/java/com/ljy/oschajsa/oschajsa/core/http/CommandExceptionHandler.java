@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.oschajsa.core;
+package com.ljy.oschajsa.oschajsa.core.http;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

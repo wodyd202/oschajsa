@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.oschajsa.core;
+package com.ljy.oschajsa.oschajsa.core.http;
 
 import org.springframework.validation.Errors;
 

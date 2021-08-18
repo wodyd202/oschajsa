@@ -1,6 +1,7 @@
 package com.ljy.oschajsa.oschajsa.user.query.model;
 
 import lombok.Builder;
+import lombok.Getter;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "q_user")
+@Getter
 public class QueryUser {
     @Id
     private final String userId;
@@ -20,6 +22,9 @@ public class QueryUser {
 
     @Embedded
     private QueryAddress address;
+
+    // JPA에서 embedded로 사용시 기본 생성자 필요
+    protected QueryUser(){userId=null; nickname=null;}
 
     @Builder
     public QueryUser(String userId, String password, String nickname, QueryAddress address) {

@@ -10,6 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
+/**
+ * user event projector
+ * - 사용자 관련 이벤트를 전달받아 해당 이벤트에 맞게 DB에 저장함
+ */
 @Component
 @Async
 @Transactional

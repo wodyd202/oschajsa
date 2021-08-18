@@ -95,15 +95,11 @@ public class User {
      * @param originPassword 기존 비밀번호
      * - 기존 비밀번호를 입력해야 회원 탈퇴할 수 있음
      */
-    public void withdrawal(Password originPassword) {
-        if(!eqPassword(originPassword)){
+    public void withdrawal(PasswordEncoder passwordEncoder, String originPassword) {
+        if(!passwordEncoder.matches(originPassword, password.get())){
             throw new InvalidPasswordException("not equal password");
         }
         state = UserState.WITHDRAWAL;
-    }
-
-    private boolean eqPassword(Password originPassword) {
-        return password.equals(originPassword);
     }
 
     private boolean isWithdrawal() {

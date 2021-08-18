@@ -5,10 +5,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChangeAddress {
-    private Double lettitude, longtitude;
+    @NotNull(message = "lettitude must not be null")
+    private Double lettitude;
+    @NotNull(message = "longtitude must not be null")
+    private Double longtitude;
 
     @Builder
     public ChangeAddress(Double lettitude, Double longtitude) {

@@ -1,11 +1,14 @@
 package com.ljy.oschajsa.oschajsa.user.command.service;
 
 import com.ljy.oschajsa.oschajsa.user.command.domain.*;
+import com.ljy.oschajsa.oschajsa.user.command.domain.read.UserModel;
 import com.ljy.oschajsa.oschajsa.user.command.service.model.ChangeAddress;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-final public class ChangeAddressService {
+@Transactional
+public class ChangeAddressService {
 
     private final UserRepository userRepository;
     private final AddressHelper addressHelper;
@@ -15,10 +18,14 @@ final public class ChangeAddressService {
         this.addressHelper = addressHelper;
     }
 
-
-    public void changeAddress(ChangeAddress changeAddress, UserId userid) {
+    public UserModel changeAddress(ChangeAddress changeAddress, UserId userid) {
         User user = UserServiceHelper.findByUserId(userRepository, userid);
         Coordinate coordinate = Coordinate.withLattitudeLongtitude(changeAddress.getLettitude(), changeAddress.getLongtitude());
         user.changeAddress(Address.withCoodinate(coordinate, addressHelper));
+        return UserModel.builder()
+                .userId(user.getUserId())
+                .nickname(user.getNickname())
+                .address(user.getAddress())
+                .build();
     }
 }
