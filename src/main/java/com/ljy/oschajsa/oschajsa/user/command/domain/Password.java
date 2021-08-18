@@ -1,5 +1,6 @@
 package com.ljy.oschajsa.oschajsa.user.command.domain;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Embeddable;
@@ -12,6 +13,15 @@ public class Password {
 
     // JPA에서 embedded로 사용시 기본 생성자 필요
     protected Password(){ pw = null;}
+
+    /**
+     * @param pw 기존 비밀번호
+     * @param passwordEncoder
+     * - 비밀번호 암호화시에 사용되는 생성자로 반드시 초기화 후에 사용해야함
+     */
+    public Password(String pw, PasswordEncoder passwordEncoder) {
+        this.pw = passwordEncoder.encode(pw);
+    }
 
     private Password(String pw) {
         verifyNotEmptyPassword(pw);
@@ -27,6 +37,7 @@ public class Password {
     private final static Pattern PW_REGEX = Pattern.compile("[0-9a-zA-Z._%+-]{8,15}$");
     private final static String PW_EXCEPTION_MESSAGE = "passwords can use numbers, alphabets, and a list of special characters (._%+-), " +
             "and the length must be between 8 and 15 characters.";
+
     private void passwordValidation(String pw) {
         if(!PW_REGEX.matcher(pw).matches()){
             throw new InvalidPasswordException(PW_EXCEPTION_MESSAGE);
@@ -42,6 +53,10 @@ public class Password {
 
     public static Password of(String pw){
         return new Password(Objects.requireNonNull(pw));
+    }
+
+    Password encode(PasswordEncoder passwordEncoder) {
+        return new Password(get(), passwordEncoder);
     }
 
     public String get() {
@@ -60,4 +75,5 @@ public class Password {
     public int hashCode() {
         return Objects.hash(pw);
     }
+
 }

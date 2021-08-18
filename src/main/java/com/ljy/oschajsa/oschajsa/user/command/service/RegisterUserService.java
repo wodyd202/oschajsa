@@ -1,25 +1,38 @@
 package com.ljy.oschajsa.oschajsa.user.command.service;
 
 import com.ljy.oschajsa.oschajsa.user.command.domain.User;
-import com.ljy.oschajsa.oschajsa.user.command.domain.read.AddressModel;
 import com.ljy.oschajsa.oschajsa.user.command.domain.read.UserModel;
+import com.ljy.oschajsa.oschajsa.user.command.service.event.RegisteredUserEvent;
 import com.ljy.oschajsa.oschajsa.user.command.service.model.RegisterUser;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-final public class RegisterUserService {
+@Transactional
+public class RegisterUserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public RegisterUserService(UserRepository userRepository, UserMapper userMapper) {
+    public RegisterUserService(UserRepository userRepository,
+                               UserMapper userMapper,
+                               PasswordEncoder passwordEncoder,
+                               ApplicationEventPublisher publisher) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
+        this.eventPublisher = publisher;
     }
 
     public UserModel register(RegisterUser registerUser) {
         User user = userMapper.mapFrom(registerUser);
         verifyNotExistUser(user);
+        user.encodePassword(passwordEncoder);
         userRepository.save(user);
+        eventPublisher.publishEvent(new RegisteredUserEvent(user));
         return UserModel.builder()
                 .userId(user.getUserId())
                 .nickname(user.getNickname())

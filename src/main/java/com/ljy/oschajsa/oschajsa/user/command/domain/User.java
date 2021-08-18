@@ -1,6 +1,7 @@
 package com.ljy.oschajsa.oschajsa.user.command.domain;
 
 import lombok.Builder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -90,6 +91,10 @@ public class User {
         address = changeAddress;
     }
 
+    /**
+     * @param originPassword 기존 비밀번호
+     * - 기존 비밀번호를 입력해야 회원 탈퇴할 수 있음
+     */
     public void withdrawal(Password originPassword) {
         if(!eqPassword(originPassword)){
             throw new InvalidPasswordException("not equal password");
@@ -104,6 +109,16 @@ public class User {
     private boolean isWithdrawal() {
         return state.equals(UserState.WITHDRAWAL);
     }
+
+    /**
+     * @param passwordEncoder
+     * - 비밀번호 암호화
+     */
+    public void encodePassword(PasswordEncoder passwordEncoder) {
+        password = password.encode(passwordEncoder);
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public UserId getUserId() {
         return userId;

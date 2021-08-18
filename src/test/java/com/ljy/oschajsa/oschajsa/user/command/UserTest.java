@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -259,11 +262,21 @@ public class UserTest {
         });
     }
 
+    @Test
+    @DisplayName("비밀번호 암호화")
+    void encodePassword(){
+        User user = UserFixture.aUser()
+                .password(Password.of("password")).build();
+        PasswordEncoder delegatingPasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        user.encodePassword(delegatingPasswordEncoder);
+        assertTrue(delegatingPasswordEncoder.matches("password", user.getPassword().get()));
+    }
+
     @Nested
     @DisplayName("사용자 생성 테스트")
     class RegisterUserServiceTest {
         UserRepository userRepository = mock(UserRepository.class);
-        RegisterUserService service = new RegisterUserService(userRepository, new UserMapper(mock(AddressHelper.class)));
+        RegisterUserService service = new RegisterUserService(userRepository, new UserMapper(mock(AddressHelper.class)), mock(PasswordEncoder.class), mock(ApplicationEventPublisher.class));
 
         @Test
         @DisplayName("사용자 생성")
@@ -273,8 +286,6 @@ public class UserTest {
                     .password("password")
                     .nickname("nickname")
                     // 임의 좌표값 이 좌표를 서울역 좌표로 가정함
-                    .lettitude(1.0)
-                    .longtitude(1.0)
                     .build();
 
             assertDoesNotThrow(()->{
