@@ -228,6 +228,37 @@ public class UserTest {
         assertEquals(user.getAddress().getAddressInfo().getCity(),"서울특별시");
     }
 
+    @Test
+    @DisplayName("회원탈퇴")
+    void withdrawal(){
+        User user = aUser()
+                .password(Password.of("password")).build();
+        user.withdrawal(Password.of("password"));
+        assertEquals(user.getState(), UserState.WITHDRAWAL);
+    }
+
+    @Test
+    @DisplayName("회원탈퇴시 비밀번호가 일치하지 않으면 안됨")
+    void notEqPasswordWhenWithdrawal(){
+        User user = aUser()
+                .password(Password.of("password")).build();
+        assertThrows(InvalidPasswordException.class, ()->{
+            user.withdrawal(Password.of("notEqPassword"));
+        });
+    }
+
+    @Test
+    @DisplayName("이미 탈퇴한 회원은 주소지를 변경할 수 없음")
+    void notAbleChangeAddressWhoAlreadyWithdrawalUser(){
+        User user = aUser()
+                .password(Password.of("password")).build();
+        user.withdrawal(Password.of("password"));
+
+        assertThrows(AlreadyWithdrawalUserException.class,()->{
+            user.changeAddress(Address.withCoodinate(Coordinate.withLattitudeLongtitude(1.0,1.0), mock(AddressHelper.class)));
+        });
+    }
+
     @Nested
     @DisplayName("사용자 생성 테스트")
     class RegisterUserServiceTest {
@@ -304,6 +335,37 @@ public class UserTest {
 
             assertDoesNotThrow(()->{
                 service.changeAddress(changeAddress, userid);
+            });
+        }
+    }
+
+    @Nested
+    class WithdrawalServiceTest {
+        UserRepository userRepository = mock(UserRepository.class);
+        WithdrawalService service = new WithdrawalService(userRepository);
+
+        @Test
+        @DisplayName("회원 탈퇴시 해당 아이디가 존재하지 않으면 안됨")
+        void notExistUser() {
+            UserId userid = UserId.of("userid");
+            WithdrawalUser withdrawalUser = WithdrawalUser.builder().build();
+            assertThrows(UserNotFoundException.class,()->{
+                service.withdrawal(withdrawalUser, userid);
+            });
+        }
+
+        @Test
+        @DisplayName("회원 탈퇴")
+        void withdrawal(){
+            when(userRepository.findByUserId(UserId.of("userid")))
+                    .thenReturn(Optional.of(aUser().password(Password.of("password")).build()));
+
+            UserId userid = UserId.of("userid");
+            WithdrawalUser withdrawalUser = WithdrawalUser.builder()
+                    .originPassword("password")
+                    .build();
+            assertDoesNotThrow(()->{
+                service.withdrawal(withdrawalUser, userid);
             });
         }
     }

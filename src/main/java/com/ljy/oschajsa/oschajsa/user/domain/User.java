@@ -72,6 +72,17 @@ public class User {
         address = changeAddress;
     }
 
+    public void withdrawal(Password originPassword) {
+        if(!eqPassword(originPassword)){
+            throw new InvalidPasswordException("not equal password");
+        }
+        state = UserState.WITHDRAWAL;
+    }
+
+    private boolean eqPassword(Password originPassword) {
+        return password.equals(originPassword);
+    }
+
     private boolean isWithdrawal() {
         return state.equals(UserState.WITHDRAWAL);
     }
