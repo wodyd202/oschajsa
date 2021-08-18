@@ -15,8 +15,7 @@ public class RegisterUser {
     /**
      * 좌표값
      */
-    private Double lettitude;
-    private Double longtitude;
+    private Double lettitude, longtitude;
 
     /**
      * @param id 사용자 아이디

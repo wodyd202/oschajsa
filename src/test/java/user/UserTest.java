@@ -2,6 +2,7 @@ package user;
 
 import com.ljy.oschajsa.oschajsa.user.domain.*;
 import com.ljy.oschajsa.oschajsa.user.service.*;
+import com.ljy.oschajsa.oschajsa.user.service.model.ChangeAddress;
 import com.ljy.oschajsa.oschajsa.user.service.model.RegisterUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -14,6 +15,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static user.UserFixture.aUser;
 
 public class UserTest {
 
@@ -213,6 +215,19 @@ public class UserTest {
         assertEquals(user.getAddress().getAddressInfo().getCity(),"서울특별시");
     }
 
+    @Test
+    @DisplayName("사용자 주소지 변경")
+    void changeAddress(){
+        AddressHelper addressHelper = mock(AddressHelper.class);
+        when(addressHelper.getAddressInfoFrom(Coordinate.withLattitudeLongtitude(1.0,1.0)))
+                .thenReturn(AddressInfo.withCityProvinceDong("서울특별시","용산구","남영동"));
+
+        User user = aUser().build();
+        user.changeAddress(Address.withCoodinate(Coordinate.withLattitudeLongtitude(1.0,1.0), addressHelper));
+        assertNotNull(user.getAddress());
+        assertEquals(user.getAddress().getAddressInfo().getCity(),"서울특별시");
+    }
+
     @Nested
     @DisplayName("사용자 생성 테스트")
     class RegisterUserServiceTest {
@@ -253,6 +268,42 @@ public class UserTest {
 
             assertThrows(AlreadyExistUserException.class,()->{
                 service.register(registerUser);
+            });
+        }
+    }
+
+    @Nested
+    class ChangeAddressServiceTest {
+        UserRepository userRepository = mock(UserRepository.class);
+        ChangeAddressService service = new ChangeAddressService(userRepository, mock(AddressHelper.class));
+
+        @Test
+        @DisplayName("사용자 주소 변경시 해당 사용자가 존재하지 않으면 안됨")
+        void notExistUser(){
+            UserId userid = UserId.of("userid");
+            ChangeAddress changeAddress = ChangeAddress.builder()
+                    .lettitude(1.0)
+                    .longtitude(1.1)
+                    .build();
+            assertThrows(UserNotFoundException.class,()->{
+                service.changeAddress(changeAddress, userid);
+            });
+        }
+
+        @Test
+        @DisplayName("사용자 주소 변경")
+        void changeAddress(){
+            when(userRepository.findByUserId(UserId.of("userid")))
+                    .thenReturn(Optional.of(mock(User.class)));
+
+            UserId userid = UserId.of("userid");
+            ChangeAddress changeAddress = ChangeAddress.builder()
+                    .lettitude(1.0)
+                    .longtitude(1.1)
+                    .build();
+
+            assertDoesNotThrow(()->{
+                service.changeAddress(changeAddress, userid);
             });
         }
     }

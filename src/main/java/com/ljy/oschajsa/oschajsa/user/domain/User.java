@@ -60,6 +60,22 @@ public class User {
         }
     }
 
+    /**
+     * @param withCoodinate 변경할 주소
+     * - 이미 회원탈퇴한 계정이라면 주소 변경을 할 수 없음
+     */
+    private final static String ALREADY_WITHDRAWAL_USER = "already withdrawal user";
+    public void changeAddress(Address changeAddress) {
+        if(isWithdrawal()){
+            throw new AlreadyWithdrawalUserException(ALREADY_WITHDRAWAL_USER);
+        }
+        address = changeAddress;
+    }
+
+    private boolean isWithdrawal() {
+        return state.equals(UserState.WITHDRAWAL);
+    }
+
     public UserId getUserId() {
         return userId;
     }
@@ -83,4 +99,5 @@ public class User {
     public UserState getState() {
         return state;
     }
+
 }
