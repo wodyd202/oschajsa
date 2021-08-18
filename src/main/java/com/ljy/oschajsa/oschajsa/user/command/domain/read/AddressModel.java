@@ -3,6 +3,9 @@ package com.ljy.oschajsa.oschajsa.user.command.domain.read;
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * Address Command Model
+ */
 @Getter
 public class AddressModel {
     private String city, dong, province;

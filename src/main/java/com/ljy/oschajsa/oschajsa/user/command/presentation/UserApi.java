@@ -25,7 +25,7 @@ public class UserApi {
         if(errors.hasErrors()){
             throw new CommandException(errors);
         }
-        registerUserService.register(registerUser);
-        return ResponseEntity.ok(null);
+        UserModel userModel = registerUserService.register(registerUser);
+        return ResponseEntity.ok(userModel);
     }
 }
