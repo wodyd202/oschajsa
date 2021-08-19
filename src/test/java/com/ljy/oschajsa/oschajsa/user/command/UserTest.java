@@ -324,7 +324,7 @@ public class UserTest {
     class ChangeAddressServiceTest {
         AddressHelper addressHelper = mock(AddressHelper.class);
         UserRepository userRepository = mock(UserRepository.class);
-        ChangeAddressService service = new ChangeAddressService(userRepository, addressHelper);
+        ChangeAddressService service = new ChangeAddressService(userRepository, addressHelper, mock(ApplicationEventPublisher.class));
 
         @Test
         @DisplayName("사용자 주소 변경시 해당 사용자가 존재하지 않으면 안됨")

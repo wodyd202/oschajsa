@@ -8,6 +8,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 
 
 /**
@@ -16,7 +17,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "q_user")
 @DynamicUpdate
-@Getter
 public class QueryUser {
     @Id
     private final String userId;
@@ -35,5 +35,36 @@ public class QueryUser {
         this.password = password;
         this.nickname = nickname;
         this.address = address;
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public QueryAddress getAddress() {
+        return address;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        QueryUser queryUser = (QueryUser) o;
+        return Objects.equals(userId, queryUser.userId) && Objects.equals(password, queryUser.password) && Objects.equals(nickname, queryUser.nickname) && Objects.equals(address, queryUser.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, password, nickname, address);
     }
 }

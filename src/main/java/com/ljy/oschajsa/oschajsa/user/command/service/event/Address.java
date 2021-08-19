@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class Address {
+final public class Address {
     private final String city, province, dong;
     private final double lettitude, longtitude;
 
