@@ -1,5 +1,7 @@
 package com.ljy.oschajsa.oschajsa.store.command.domain;
 
+import com.ljy.oschajsa.oschajsa.store.command.domain.exception.InvalidTagException;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;

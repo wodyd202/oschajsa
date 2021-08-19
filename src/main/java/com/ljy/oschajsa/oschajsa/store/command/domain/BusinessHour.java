@@ -1,5 +1,7 @@
 package com.ljy.oschajsa.oschajsa.store.command.domain;
 
+import com.ljy.oschajsa.oschajsa.store.command.domain.exception.InvalidBusinessHourException;
+
 import java.util.Objects;
 
 public class BusinessHour {

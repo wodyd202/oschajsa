@@ -1,6 +1,4 @@
-package com.ljy.oschajsa.oschajsa.store.command.application;
-
-import com.ljy.oschajsa.oschajsa.store.command.domain.Tag;
+package com.ljy.oschajsa.oschajsa.store.command.domain;
 
 import java.util.Optional;
 
