@@ -1,5 +1,9 @@
 package com.ljy.oschajsa.oschajsa.user.command.domain;
 
+import com.ljy.oschajsa.oschajsa.core.object.AddressInfo;
+import com.ljy.oschajsa.oschajsa.core.object.Coordinate;
+import com.ljy.oschajsa.oschajsa.core.object.InvalidAddressException;
+
 public interface AddressHelper {
     /**
      * @param coordinate 좌표값

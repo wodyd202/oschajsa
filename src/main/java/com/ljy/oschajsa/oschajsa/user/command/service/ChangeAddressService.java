@@ -1,5 +1,7 @@
 package com.ljy.oschajsa.oschajsa.user.command.service;
 
+import com.ljy.oschajsa.oschajsa.core.object.Address;
+import com.ljy.oschajsa.oschajsa.core.object.Coordinate;
 import com.ljy.oschajsa.oschajsa.user.command.domain.read.UserModel;
 import com.ljy.oschajsa.oschajsa.user.command.service.event.ChangedUserAddressEvent;
 import com.ljy.oschajsa.oschajsa.user.command.service.model.ChangeAddress;

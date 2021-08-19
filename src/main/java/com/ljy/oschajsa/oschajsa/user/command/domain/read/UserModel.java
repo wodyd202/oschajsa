@@ -1,7 +1,7 @@
 package com.ljy.oschajsa.oschajsa.user.command.domain.read;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ljy.oschajsa.oschajsa.user.command.domain.Address;
+import com.ljy.oschajsa.oschajsa.core.object.Address;
 import com.ljy.oschajsa.oschajsa.user.command.domain.NickName;
 import com.ljy.oschajsa.oschajsa.user.command.domain.UserId;
 import lombok.Builder;

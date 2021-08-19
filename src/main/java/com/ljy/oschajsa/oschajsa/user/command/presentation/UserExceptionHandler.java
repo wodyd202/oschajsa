@@ -1,5 +1,6 @@
 package com.ljy.oschajsa.oschajsa.user.command.presentation;
 
+import com.ljy.oschajsa.oschajsa.core.object.InvalidAddressException;
 import com.ljy.oschajsa.oschajsa.user.command.domain.*;
 import com.ljy.oschajsa.oschajsa.user.command.service.AlreadyExistUserException;
 import com.ljy.oschajsa.oschajsa.user.command.service.UserNotFoundException;

@@ -1,5 +1,6 @@
 package com.ljy.oschajsa.oschajsa.user.command.domain;
 
+import com.ljy.oschajsa.oschajsa.core.object.Address;
 import lombok.Builder;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -86,7 +87,7 @@ public class User {
      * - 이미 회원탈퇴한 계정이라면 주소 변경을 할 수 없음
      */
     private final static String ALREADY_WITHDRAWAL_USER = "already withdrawal user";
-    public void changeAddress(Address changeAddress) {
+    final public void changeAddress(Address changeAddress) {
         if(isWithdrawal()){
             throw new AlreadyWithdrawalUserException(ALREADY_WITHDRAWAL_USER);
         }
@@ -97,7 +98,7 @@ public class User {
      * @param originPassword 기존 비밀번호
      * - 기존 비밀번호를 입력해야 회원 탈퇴할 수 있음
      */
-    public void withdrawal(PasswordEncoder passwordEncoder, String originPassword) {
+    final public void withdrawal(PasswordEncoder passwordEncoder, String originPassword) {
         if(!passwordEncoder.matches(originPassword, password.get())){
             throw new InvalidPasswordException("not equal password");
         }
@@ -112,7 +113,7 @@ public class User {
      * @param passwordEncoder
      * - 비밀번호 암호화
      */
-    public void encodePassword(PasswordEncoder passwordEncoder) {
+    final public void encodePassword(PasswordEncoder passwordEncoder) {
         password = password.encode(passwordEncoder);
     }
 

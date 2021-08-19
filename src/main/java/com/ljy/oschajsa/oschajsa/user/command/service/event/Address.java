@@ -9,7 +9,7 @@ final public class Address {
     private final double lettitude, longtitude;
 
     @Builder
-    public Address(com.ljy.oschajsa.oschajsa.user.command.domain.Address address) {
+    public Address(com.ljy.oschajsa.oschajsa.core.object.Address address) {
         this.city = address.getAddressInfo().getCity();
         this.province = address.getAddressInfo().getProvince();
         this.dong = address.getAddressInfo().getDong();

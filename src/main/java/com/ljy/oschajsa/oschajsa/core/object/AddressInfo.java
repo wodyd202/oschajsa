@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.oschajsa.user.command.domain;
+package com.ljy.oschajsa.oschajsa.core.object;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
