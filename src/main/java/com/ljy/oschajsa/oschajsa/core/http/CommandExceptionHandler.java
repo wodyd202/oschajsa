@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 
+/**
+ * Command exception이 발생시 처리할 핸들러
+ */
 @RestControllerAdvice
 public class CommandExceptionHandler {
 

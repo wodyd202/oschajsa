@@ -31,6 +31,11 @@ public class QueryUser {
     // JPA에서 embedded로 사용시 기본 생성자 필요
     protected QueryUser(){userId=null; nickname=null;}
 
+    public QueryUser(QueryAddress address) {
+        this.userId = null; nickname = null;
+        this.address = address;
+    }
+
     @Builder
     public QueryUser(String userId, String password, String nickname, QueryAddress address) {
         this.userId = userId;

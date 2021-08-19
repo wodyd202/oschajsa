@@ -1,11 +1,11 @@
 package com.ljy.oschajsa.oschajsa.user.query.infrastructure;
 
 import com.ljy.oschajsa.oschajsa.core.infrastructure.QuerydslRepository;
-import com.ljy.oschajsa.oschajsa.user.query.model.QQueryUser;
+import com.ljy.oschajsa.oschajsa.user.query.model.QueryAddress;
 import com.ljy.oschajsa.oschajsa.user.query.model.QueryUser;
 import com.ljy.oschajsa.oschajsa.user.query.model.UserState;
 import com.ljy.oschajsa.oschajsa.user.query.service.QUserRepository;
-import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +22,15 @@ public class QuerydslQUserRepository extends QuerydslRepository<QueryUser> imple
                 .where(eqUserId(username), eqState(UserState.ACTIVE))
                 .fetchFirst();
         return Optional.ofNullable(findUser);
+    }
+
+    @Override
+    public Optional<QueryAddress> findAddressByUserId(String userId) {
+        QueryUser findUser = jpaQueryFactory.select(Projections.constructor(QueryUser.class, queryUser.address()))
+                .from(queryUser)
+                .where(eqUserId(userId), eqState(UserState.ACTIVE))
+                .fetchFirst();
+        return Optional.ofNullable(findUser.getAddress());
     }
 
     private BooleanExpression eqState(UserState state) {

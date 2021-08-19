@@ -7,6 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+/**
+ * @param <T> Entity type
+ * - Querydsl 사용시 공통적으로 사용할 Repository
+ */
 @Transactional
 public class QuerydslRepository<T> {
     @Autowired protected JPAQueryFactory jpaQueryFactory;
