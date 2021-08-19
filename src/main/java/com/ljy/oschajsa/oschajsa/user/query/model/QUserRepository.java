@@ -1,7 +1,4 @@
-package com.ljy.oschajsa.oschajsa.user.query.application;
-
-import com.ljy.oschajsa.oschajsa.user.query.model.QueryAddress;
-import com.ljy.oschajsa.oschajsa.user.query.model.QueryUser;
+package com.ljy.oschajsa.oschajsa.user.query.model;
 
 import java.util.Optional;
 
