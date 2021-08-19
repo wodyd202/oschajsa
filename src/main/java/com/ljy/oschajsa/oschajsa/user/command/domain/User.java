@@ -1,6 +1,10 @@
 package com.ljy.oschajsa.oschajsa.user.command.domain;
 
 import com.ljy.oschajsa.oschajsa.core.object.Address;
+import com.ljy.oschajsa.oschajsa.user.command.domain.exception.AlreadyWithdrawalUserException;
+import com.ljy.oschajsa.oschajsa.user.command.domain.exception.InvalidNicknameException;
+import com.ljy.oschajsa.oschajsa.user.command.domain.exception.InvalidPasswordException;
+import com.ljy.oschajsa.oschajsa.user.command.domain.exception.InvalidUserIdException;
 import lombok.Builder;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -58,6 +62,14 @@ public class User {
         this.nickname = nickName;
         this.address = address;
         createDateTime = LocalDateTime.now();
+    }
+
+    /**
+     * @param registerUserValidator 회원가입시 사용되는 validator
+     * - validator에서 이미 해당 사용자가 존재하는지 체크함
+     */
+    final public void register(RegisterUserValidator registerUserValidator) {
+        registerUserValidator.validation(userId);
         state = UserState.ACTIVE;
     }
 

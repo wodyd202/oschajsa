@@ -1,5 +1,6 @@
 package com.ljy.oschajsa.oschajsa.user.command.domain;
 
+import com.ljy.oschajsa.oschajsa.user.command.domain.exception.InvalidNicknameException;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Embeddable;

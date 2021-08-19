@@ -4,6 +4,7 @@ import com.ljy.oschajsa.oschajsa.user.command.domain.User;
 import com.ljy.oschajsa.oschajsa.user.command.domain.UserId;
 import com.ljy.oschajsa.oschajsa.user.command.application.event.WithdrawaledUserEvent;
 import com.ljy.oschajsa.oschajsa.user.command.application.model.WithdrawalUser;
+import com.ljy.oschajsa.oschajsa.user.command.domain.UserRepository;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -2,6 +2,8 @@ package com.ljy.oschajsa.oschajsa.user.command.application;
 
 import com.ljy.oschajsa.oschajsa.user.command.domain.User;
 import com.ljy.oschajsa.oschajsa.user.command.domain.UserId;
+import com.ljy.oschajsa.oschajsa.user.command.domain.exception.UserNotFoundException;
+import com.ljy.oschajsa.oschajsa.user.command.domain.UserRepository;
 
 final public class UserServiceHelper {
 

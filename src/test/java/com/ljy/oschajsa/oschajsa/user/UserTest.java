@@ -9,6 +9,7 @@ import com.ljy.oschajsa.oschajsa.user.command.application.model.ChangeAddress;
 import com.ljy.oschajsa.oschajsa.user.command.application.model.RegisterUser;
 import com.ljy.oschajsa.oschajsa.user.command.application.model.WithdrawalUser;
 import com.ljy.oschajsa.oschajsa.user.command.domain.*;
+import com.ljy.oschajsa.oschajsa.user.command.domain.exception.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+import static com.ljy.oschajsa.oschajsa.user.UserFixture.registeredUser;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -164,13 +166,40 @@ public class UserTest {
     }
 
     @Test
+    @DisplayName("회원가입")
+    void signUp(){
+        UserRepository userRepository = mock(UserRepository.class);
+        RegisterUserValidator registerUserValidator = new RegisterUserValidator(userRepository);
+
+        User user = UserFixture.aUser().build();
+        user.register(registerUserValidator);
+        assertEquals(user.getState(), UserState.ACTIVE);
+    }
+
+    @Test
+    @DisplayName("이미 존재하는 아이디")
+    void alreadyExistUserId(){
+        UserRepository userRepository = mock(UserRepository.class);
+        RegisterUserValidator registerUserValidator = new RegisterUserValidator(userRepository);
+
+        when(userRepository.findByUserId(UserId.of("userid")))
+                .thenReturn(Optional.of(mock(User.class)));
+
+        User user = UserFixture.aUser().build();
+
+        assertThrows(AlreadyExistUserException.class,()->{
+            user.register(registerUserValidator);
+        });
+    }
+
+    @Test
     @DisplayName("사용자 주소지 변경")
     void changeAddress(){
         AddressHelper addressHelper = mock(AddressHelper.class);
         when(addressHelper.getAddressInfoFrom(Coordinate.withLattitudeLongtitude(1.0,1.0)))
                 .thenReturn(AddressInfo.withCityProvinceDong("서울특별시","용산구","남영동"));
 
-        User user = UserFixture.aUser().build();
+        User user = registeredUser("userid","password");
         user.changeAddress(Address.withCoodinate(Coordinate.withLattitudeLongtitude(1.0,1.0), addressHelper));
         assertNotNull(user.getAddress());
         assertEquals(user.getAddress().getAddressInfo().getCity(),"서울특별시");
@@ -181,8 +210,7 @@ public class UserTest {
     @Test
     @DisplayName("회원탈퇴")
     void withdrawal(){
-        User user = UserFixture.aUser()
-                .password(Password.of("password")).build();
+        User user = registeredUser("userid","password");
         user.encodePassword(passwordEncoder);
         user.withdrawal(passwordEncoder, "password");
         assertEquals(user.getState(), UserState.WITHDRAWAL);
@@ -191,8 +219,7 @@ public class UserTest {
     @Test
     @DisplayName("회원탈퇴시 비밀번호가 일치하지 않으면 안됨")
     void notEqPasswordWhenWithdrawal(){
-        User user = UserFixture.aUser()
-                .password(Password.of("password")).build();
+        User user = registeredUser("userid","password");
         user.encodePassword(passwordEncoder);
         assertThrows(InvalidPasswordException.class, ()->{
             user.withdrawal(passwordEncoder, "notEqPassword");
@@ -202,8 +229,7 @@ public class UserTest {
     @Test
     @DisplayName("이미 탈퇴한 회원은 주소지를 변경할 수 없음")
     void notAbleChangeAddressWhoAlreadyWithdrawalUser(){
-        User user = UserFixture.aUser()
-                .password(Password.of("password")).build();
+        User user = registeredUser("userid","password");
         user.encodePassword(passwordEncoder);
         user.withdrawal(passwordEncoder, "password");
 
@@ -226,7 +252,11 @@ public class UserTest {
     @DisplayName("사용자 생성 테스트")
     class RegisterUserServiceTest {
         UserRepository userRepository = mock(UserRepository.class);
-        RegisterUserService service = new RegisterUserService(userRepository, new UserMapper(mock(AddressHelper.class)), mock(PasswordEncoder.class), mock(ApplicationEventPublisher.class));
+        RegisterUserService service = new RegisterUserService(mock(RegisterUserValidator.class),
+                userRepository,
+                new UserMapper(mock(AddressHelper.class)),
+                mock(PasswordEncoder.class),
+                mock(ApplicationEventPublisher.class));
 
         @Test
         @DisplayName("사용자 생성")
@@ -239,26 +269,6 @@ public class UserTest {
                     .build();
 
             assertDoesNotThrow(()->{
-                service.register(registerUser);
-            });
-        }
-
-        @Test
-        @DisplayName("이미 가입한 아이디가 존재함")
-        void alreadyExistUser(){
-            when(userRepository.findByUserId(UserId.of("userid")))
-                    .thenReturn(Optional.of(mock(User.class)));
-
-            RegisterUser registerUser = RegisterUser.builder()
-                    .id("userid")
-                    .password("password")
-                    .nickname("nickname")
-                    // 임의 좌표값 이 좌표를 서울역 좌표로 가정함
-                    .lettitude(1.0)
-                    .longtitude(1.0)
-                    .build();
-
-            assertThrows(AlreadyExistUserException.class,()->{
                 service.register(registerUser);
             });
         }
@@ -289,7 +299,7 @@ public class UserTest {
             when(addressHelper.getAddressInfoFrom(Coordinate.withLattitudeLongtitude(1.0,1.1)))
                     .thenReturn(AddressInfo.withCityProvinceDong("서울특별시","용산구","남영동"));
 
-            User user = UserFixture.aUser().build();
+            User user = registeredUser("userid","password");
             when(userRepository.findByUserId(UserId.of("userid")))
                     .thenReturn(Optional.of(user));
 

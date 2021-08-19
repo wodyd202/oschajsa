@@ -1,5 +1,6 @@
 package com.ljy.oschajsa.oschajsa.user.command.domain;
 
+import com.ljy.oschajsa.oschajsa.user.command.domain.exception.InvalidPasswordException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
