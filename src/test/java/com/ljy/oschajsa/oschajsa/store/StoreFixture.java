@@ -2,7 +2,7 @@ package com.ljy.oschajsa.oschajsa.store;
 
 import com.ljy.oschajsa.oschajsa.core.object.Address;
 import com.ljy.oschajsa.oschajsa.core.object.Coordinate;
-import com.ljy.oschajsa.oschajsa.core.service.AddressHelper;
+import com.ljy.oschajsa.oschajsa.core.application.AddressHelper;
 import com.ljy.oschajsa.oschajsa.store.command.domain.*;
 
 import java.util.Arrays;

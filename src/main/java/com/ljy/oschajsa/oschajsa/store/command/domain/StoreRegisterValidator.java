@@ -1,7 +1,7 @@
 package com.ljy.oschajsa.oschajsa.store.command.domain;
 
-import com.ljy.oschajsa.oschajsa.store.command.service.StoreRepository;
-import com.ljy.oschajsa.oschajsa.store.command.service.StoreTagRepository;
+import com.ljy.oschajsa.oschajsa.store.command.application.StoreRepository;
+import com.ljy.oschajsa.oschajsa.store.command.application.StoreTagRepository;
 
 public class StoreRegisterValidator {
     private final StoreRepository storeRepository;

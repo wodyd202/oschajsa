@@ -2,9 +2,9 @@ package com.ljy.oschajsa.oschajsa;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ljy.oschajsa.oschajsa.user.command.domain.UserId;
-import com.ljy.oschajsa.oschajsa.user.command.service.RegisterUserService;
-import com.ljy.oschajsa.oschajsa.user.command.service.UserRepository;
-import com.ljy.oschajsa.oschajsa.user.command.service.model.RegisterUser;
+import com.ljy.oschajsa.oschajsa.user.command.application.RegisterUserService;
+import com.ljy.oschajsa.oschajsa.user.command.application.UserRepository;
+import com.ljy.oschajsa.oschajsa.user.command.application.model.RegisterUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;

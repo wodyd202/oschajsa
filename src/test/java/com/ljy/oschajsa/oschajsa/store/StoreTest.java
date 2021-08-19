@@ -1,13 +1,13 @@
 package com.ljy.oschajsa.oschajsa.store;
 
-import com.ljy.oschajsa.oschajsa.core.service.AddressHelper;
+import com.ljy.oschajsa.oschajsa.core.application.AddressHelper;
 import com.ljy.oschajsa.oschajsa.store.command.domain.*;
-import com.ljy.oschajsa.oschajsa.store.command.service.StoreMapper;
-import com.ljy.oschajsa.oschajsa.store.command.service.StoreRepository;
-import com.ljy.oschajsa.oschajsa.store.command.service.StoreTagRepository;
-import com.ljy.oschajsa.oschajsa.store.command.service.model.ChangeBusinessHour;
-import com.ljy.oschajsa.oschajsa.store.command.service.model.ChangeCoordinate;
-import com.ljy.oschajsa.oschajsa.store.command.service.model.RegisterStore;
+import com.ljy.oschajsa.oschajsa.store.command.application.StoreMapper;
+import com.ljy.oschajsa.oschajsa.store.command.application.StoreRepository;
+import com.ljy.oschajsa.oschajsa.store.command.application.StoreTagRepository;
+import com.ljy.oschajsa.oschajsa.store.command.application.model.ChangeBusinessHour;
+import com.ljy.oschajsa.oschajsa.store.command.application.model.ChangeCoordinate;
+import com.ljy.oschajsa.oschajsa.store.command.application.model.RegisterStore;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

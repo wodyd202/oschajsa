@@ -1,9 +1,9 @@
 package com.ljy.oschajsa.oschajsa.user;
 
 import com.ljy.oschajsa.oschajsa.ApiTest;
-import com.ljy.oschajsa.oschajsa.user.command.service.model.ChangeAddress;
-import com.ljy.oschajsa.oschajsa.user.command.service.model.RegisterUser;
-import com.ljy.oschajsa.oschajsa.user.command.service.model.WithdrawalUser;
+import com.ljy.oschajsa.oschajsa.user.command.application.model.ChangeAddress;
+import com.ljy.oschajsa.oschajsa.user.command.application.model.RegisterUser;
+import com.ljy.oschajsa.oschajsa.user.command.application.model.WithdrawalUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
