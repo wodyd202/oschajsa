@@ -2,17 +2,20 @@ package com.ljy.oschajsa.oschajsa.user.query.model;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+
 /**
  * User Query Model
  */
 @Entity
 @Table(name = "q_user")
+@DynamicUpdate
 @Getter
 public class QueryUser {
     @Id

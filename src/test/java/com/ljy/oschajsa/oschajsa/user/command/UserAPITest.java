@@ -22,8 +22,8 @@ public class UserAPITest extends ApiTest {
 
     @Test
     void accessToken() throws Exception {
-        createUser("userid","password");
-        String accessToken = obtainsAccessToken("userid", "password");
+        createUser("accesstoken","password");
+        String accessToken = obtainsAccessToken("accesstoken", "password");
         assertNotNull(accessToken);
     }
 
@@ -64,4 +64,5 @@ public class UserAPITest extends ApiTest {
                 .content(objectMapper.writeValueAsString(withdrawalUser)))
         .andExpect(status().isOk());
     }
+
 }

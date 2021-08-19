@@ -1,6 +1,7 @@
 package com.ljy.oschajsa.oschajsa.user.command.domain;
 
 import lombok.Builder;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import static java.util.Objects.isNull;
 
 @Entity
 @Table(name = "users")
+@DynamicUpdate
 public class User {
     /**
      * userId 사용자 아이디
