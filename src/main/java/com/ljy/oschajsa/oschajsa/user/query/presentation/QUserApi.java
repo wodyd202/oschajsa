@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.security.Principal;
 
@@ -17,7 +18,7 @@ public class QUserApi {
     private final QUserService userService;
 
     @GetMapping("address")
-    public ResponseEntity<QueryAddress> getAddress(Principal principal){
+    public ResponseEntity<QueryAddress> getAddress(@ApiIgnore Principal principal){
         QueryAddress address = userService.getAddress(principal.getName());
         return ResponseEntity.ok(address);
     }

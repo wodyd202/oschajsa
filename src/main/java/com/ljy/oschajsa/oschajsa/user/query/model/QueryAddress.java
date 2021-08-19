@@ -49,6 +49,17 @@ public class QueryAddress {
     }
 
     @Override
+    public String toString() {
+        return "QueryAddress{" +
+                "city='" + city + '\'' +
+                ", province='" + province + '\'' +
+                ", dong='" + dong + '\'' +
+                ", lettitude=" + lettitude +
+                ", longtitude=" + longtitude +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

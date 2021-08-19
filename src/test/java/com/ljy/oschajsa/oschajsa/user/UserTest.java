@@ -1,10 +1,10 @@
-package com.ljy.oschajsa.oschajsa.user.command;
+package com.ljy.oschajsa.oschajsa.user;
 
-import com.ljy.oschajsa.oschajsa.user.command.domain.*;
 import com.ljy.oschajsa.oschajsa.user.command.service.*;
 import com.ljy.oschajsa.oschajsa.user.command.service.model.ChangeAddress;
 import com.ljy.oschajsa.oschajsa.user.command.service.model.RegisterUser;
 import com.ljy.oschajsa.oschajsa.user.command.service.model.WithdrawalUser;
+import com.ljy.oschajsa.oschajsa.user.command.domain.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
-import static com.ljy.oschajsa.oschajsa.user.command.UserFixture.aUser;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -226,7 +225,7 @@ public class UserTest {
         when(addressHelper.getAddressInfoFrom(Coordinate.withLattitudeLongtitude(1.0,1.0)))
                 .thenReturn(AddressInfo.withCityProvinceDong("서울특별시","용산구","남영동"));
 
-        User user = aUser().build();
+        User user = UserFixture.aUser().build();
         user.changeAddress(Address.withCoodinate(Coordinate.withLattitudeLongtitude(1.0,1.0), addressHelper));
         assertNotNull(user.getAddress());
         assertEquals(user.getAddress().getAddressInfo().getCity(),"서울특별시");
@@ -237,7 +236,7 @@ public class UserTest {
     @Test
     @DisplayName("회원탈퇴")
     void withdrawal(){
-        User user = aUser()
+        User user = UserFixture.aUser()
                 .password(Password.of("password")).build();
         user.encodePassword(passwordEncoder);
         user.withdrawal(passwordEncoder, "password");
@@ -247,7 +246,7 @@ public class UserTest {
     @Test
     @DisplayName("회원탈퇴시 비밀번호가 일치하지 않으면 안됨")
     void notEqPasswordWhenWithdrawal(){
-        User user = aUser()
+        User user = UserFixture.aUser()
                 .password(Password.of("password")).build();
         user.encodePassword(passwordEncoder);
         assertThrows(InvalidPasswordException.class, ()->{
@@ -258,7 +257,7 @@ public class UserTest {
     @Test
     @DisplayName("이미 탈퇴한 회원은 주소지를 변경할 수 없음")
     void notAbleChangeAddressWhoAlreadyWithdrawalUser(){
-        User user = aUser()
+        User user = UserFixture.aUser()
                 .password(Password.of("password")).build();
         user.encodePassword(passwordEncoder);
         user.withdrawal(passwordEncoder, "password");
@@ -271,7 +270,7 @@ public class UserTest {
     @Test
     @DisplayName("비밀번호 암호화")
     void encodePassword(){
-        User user = aUser()
+        User user = UserFixture.aUser()
                 .password(Password.of("password")).build();
         PasswordEncoder delegatingPasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         user.encodePassword(delegatingPasswordEncoder);
@@ -345,7 +344,7 @@ public class UserTest {
             when(addressHelper.getAddressInfoFrom(Coordinate.withLattitudeLongtitude(1.0,1.1)))
                     .thenReturn(AddressInfo.withCityProvinceDong("서울특별시","용산구","남영동"));
 
-            User user = aUser().build();
+            User user = UserFixture.aUser().build();
             when(userRepository.findByUserId(UserId.of("userid")))
                     .thenReturn(Optional.of(user));
 
@@ -379,7 +378,7 @@ public class UserTest {
         @Test
         @DisplayName("회원 탈퇴")
         void withdrawal(){
-            User user = aUser().password(Password.of("password")).build();
+            User user = UserFixture.aUser().password(Password.of("password")).build();
             user.encodePassword(passwordEncoder);
             when(userRepository.findByUserId(UserId.of("userid")))
                     .thenReturn(Optional.of(user));

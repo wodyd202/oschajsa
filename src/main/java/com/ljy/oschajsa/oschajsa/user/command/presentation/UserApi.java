@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -27,7 +28,7 @@ public class UserApi {
 
     @PostMapping
     public ResponseEntity<UserModel> registerUser(@Valid @RequestBody RegisterUser registerUser,
-                                                  Errors errors){
+                                                  @ApiIgnore  Errors errors){
         verifyNotContainsError(errors);
         UserModel userModel = registerUserService.register(registerUser);
         return ResponseEntity.ok(userModel);
@@ -35,8 +36,8 @@ public class UserApi {
 
     @PutMapping("address")
     public ResponseEntity<UserModel> changeAddress(@Valid @RequestBody ChangeAddress changeAddress,
-                                                   Errors errors,
-                                                   Principal principal){
+                                                   @ApiIgnore Errors errors,
+                                                   @ApiIgnore Principal principal){
         verifyNotContainsError(errors);
         UserModel userModel = changeAddressService.changeAddress(changeAddress, UserId.of(principal.getName()));
         return ResponseEntity.ok(userModel);
@@ -45,8 +46,8 @@ public class UserApi {
     private final static String SUCCESS_WITHDRAWAL = "success withdrawal user";
     @DeleteMapping
     public ResponseEntity<String> withdrawal(@Valid @RequestBody WithdrawalUser withdrawalUser,
-                                             Errors errors,
-                                             Principal principal){
+                                             @ApiIgnore Errors errors,
+                                             @ApiIgnore Principal principal){
         verifyNotContainsError(errors);
         withdrawalService.withdrawal(withdrawalUser, UserId.of(principal.getName()));
         return ResponseEntity.ok(SUCCESS_WITHDRAWAL);

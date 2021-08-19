@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.oschajsa.user.command;
+package com.ljy.oschajsa.oschajsa.user;
 
 import com.ljy.oschajsa.oschajsa.ApiTest;
 import com.ljy.oschajsa.oschajsa.user.command.service.model.ChangeAddress;

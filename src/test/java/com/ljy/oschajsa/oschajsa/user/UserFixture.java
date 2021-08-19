@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.oschajsa.user.command;
+package com.ljy.oschajsa.oschajsa.user;
 
 import com.ljy.oschajsa.oschajsa.user.command.domain.User;
 import com.ljy.oschajsa.oschajsa.user.command.domain.NickName;

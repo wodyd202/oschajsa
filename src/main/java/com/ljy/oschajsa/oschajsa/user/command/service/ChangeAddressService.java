@@ -1,9 +1,9 @@
 package com.ljy.oschajsa.oschajsa.user.command.service;
 
-import com.ljy.oschajsa.oschajsa.user.command.domain.*;
 import com.ljy.oschajsa.oschajsa.user.command.domain.read.UserModel;
 import com.ljy.oschajsa.oschajsa.user.command.service.event.ChangedUserAddressEvent;
 import com.ljy.oschajsa.oschajsa.user.command.service.model.ChangeAddress;
+import com.ljy.oschajsa.oschajsa.user.command.domain.*;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

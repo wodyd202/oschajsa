@@ -4,6 +4,7 @@ import com.ljy.oschajsa.oschajsa.user.command.domain.AddressHelper;
 import com.ljy.oschajsa.oschajsa.user.command.domain.AddressInfo;
 import com.ljy.oschajsa.oschajsa.user.command.domain.Coordinate;
 import com.ljy.oschajsa.oschajsa.user.command.domain.InvalidAddressException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -32,9 +33,21 @@ public class KakaoMapAddressHelper implements AddressHelper {
     @Value("${kakao.openAPI.host}")
     private String host;
 
+    @Autowired
+    private RestTemplate restTpl;
+
+    private final String META = "meta";
+    private final String DOCUMENTS = "documents";
+    private final String TOTAL_COUNT = "total_count";
+    private final String ADDRESS = "address";
+    private final String REGION_1_DEPTH_NAME = "region_1depth_name";
+    private final String REGION_2_DEPTH_NAME = "region_2depth_name";
+    private final String REGION_3_DEPTH_NAME = "region_3depth_name";
+    private final String INVALID_COORDINATE = "invalid coordinate";
+    private final String REST_CLIENT_EXCEPTION = "rest client exception";
+
     @Override
     public AddressInfo getAddressInfoFrom(Coordinate coordinate) throws InvalidAddressException {
-        RestTemplate restTpl = new RestTemplate();
         HttpHeaders header = createHeader();
         MultiValueMap<String,String> params = createParams(coordinate);
 
@@ -49,20 +62,19 @@ public class KakaoMapAddressHelper implements AddressHelper {
             HashMap<?,?> response = restTpl.exchange(uri, HttpMethod.GET, new HttpEntity<>(header), HashMap.class)
                     .getBody();
 
-            HashMap<?, ?> meta = (HashMap<?, ?>) response.get("meta");
-            List<HashMap<?, ?>> documents = (List<HashMap<?, ?>>) response.get("documents");
-            int totalCount = Integer.parseInt(meta.get("total_count").toString());
+            HashMap<?, ?> meta = (HashMap<?, ?>) response.get(META);
+            List<HashMap<?, ?>> documents = (List<HashMap<?, ?>>) response.get(DOCUMENTS);
+            int totalCount = Integer.parseInt(meta.get(TOTAL_COUNT).toString());
             if(existResult(totalCount)){
-                HashMap<?, ?> address = (HashMap<?, ?>) documents.get(0).get("address");
-                String addressName = address.get("address_name").toString();
-                String region1DepthName = address.get("region_1depth_name").toString();
-                String region2DepthName = address.get("region_2depth_name").toString();
-                String region3DepthName = address.get("region_3depth_name").toString();
+                HashMap<?, ?> address = (HashMap<?, ?>) documents.get(0).get(ADDRESS);
+                String region1DepthName = address.get(REGION_1_DEPTH_NAME).toString();
+                String region2DepthName = address.get(REGION_2_DEPTH_NAME).toString();
+                String region3DepthName = address.get(REGION_3_DEPTH_NAME).toString();
                 return AddressInfo.withCityProvinceDong(region1DepthName, region2DepthName, region3DepthName);
             }
-            throw new InvalidAddressException("invalid coordinate");
+            throw new InvalidAddressException(INVALID_COORDINATE);
         }catch (RestClientException e){
-            throw new InvalidAddressException("rest client exception");
+            throw new InvalidAddressException(REST_CLIENT_EXCEPTION);
         }
     }
 
@@ -76,10 +88,12 @@ public class KakaoMapAddressHelper implements AddressHelper {
         return header;
     }
 
+    private final String X = "x";
+    private final String Y = "y";
     private MultiValueMap<String, String> createParams(Coordinate coordinate){
         MultiValueMap<String, String> params = new HttpHeaders();
-        params.add("x", Double.toString(coordinate.getLongtitude()));
-        params.add("y", Double.toString(coordinate.getLettitude()));
+        params.add(X, Double.toString(coordinate.getLongtitude()));
+        params.add(Y, Double.toString(coordinate.getLettitude()));
         return params;
     }
 }
