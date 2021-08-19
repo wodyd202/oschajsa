@@ -26,6 +26,8 @@ public class QueryUser {
     @Embedded
     private QueryAddress address;
 
+    private UserState state;
+
     // JPA에서 embedded로 사용시 기본 생성자 필요
     protected QueryUser(){userId=null; nickname=null;}
 
@@ -35,6 +37,15 @@ public class QueryUser {
         this.password = password;
         this.nickname = nickname;
         this.address = address;
+        state = UserState.ACTIVE;
+    }
+
+    public void changeAddress(QueryAddress address) {
+        this.address = address;
+    }
+
+    public void withdrawal() {
+        state = UserState.WITHDRAWAL;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////

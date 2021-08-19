@@ -364,7 +364,7 @@ public class UserTest {
     @Nested
     class WithdrawalServiceTest {
         UserRepository userRepository = mock(UserRepository.class);
-        WithdrawalService service = new WithdrawalService(userRepository, passwordEncoder);
+        WithdrawalService service = new WithdrawalService(userRepository, passwordEncoder, mock(ApplicationEventPublisher.class));
 
         @Test
         @DisplayName("회원 탈퇴시 해당 아이디가 존재하지 않으면 안됨")

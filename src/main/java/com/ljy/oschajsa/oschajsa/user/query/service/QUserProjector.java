@@ -1,6 +1,8 @@
 package com.ljy.oschajsa.oschajsa.user.query.service;
 
+import com.ljy.oschajsa.oschajsa.user.command.service.event.ChangedUserAddressEvent;
 import com.ljy.oschajsa.oschajsa.user.command.service.event.RegisteredUserEvent;
+import com.ljy.oschajsa.oschajsa.user.command.service.event.WithdrawaledUserEvent;
 import com.ljy.oschajsa.oschajsa.user.query.model.QueryAddress;
 import com.ljy.oschajsa.oschajsa.user.query.model.QueryUser;
 import org.springframework.context.event.EventListener;
@@ -43,5 +45,30 @@ public class QUserProjector {
                 .address(queryAddress)
                 .build();
         userRepository.save(queryUser);
+    }
+
+    @EventListener
+    void handle(ChangedUserAddressEvent event){
+        QueryUser queryUser = getUser(event.getId());
+        QueryAddress address = QueryAddress.builder()
+                .city(event.getAddress().getCity())
+                .dong(event.getAddress().getDong())
+                .province(event.getAddress().getProvince())
+                .longtitude(event.getAddress().getLongtitude())
+                .lettitude(event.getAddress().getLettitude())
+                .build();
+        queryUser.changeAddress(address);
+        userRepository.save(queryUser);
+    }
+
+    @EventListener
+    void handle(WithdrawaledUserEvent event){
+        QueryUser queryUser = getUser(event.getId());
+        queryUser.withdrawal();
+        userRepository.save(queryUser);
+    }
+
+    private QueryUser getUser(String id) {
+        return userRepository.findByUserId(id).get();
     }
 }

@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.oschajsa.user.query.infrastructure;
+package com.ljy.oschajsa.oschajsa.core.infrastructure;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
