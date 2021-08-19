@@ -1,6 +1,6 @@
 package com.ljy.oschajsa.oschajsa.core.object;
 
-import com.ljy.oschajsa.oschajsa.user.command.domain.AddressHelper;
+import com.ljy.oschajsa.oschajsa.core.service.AddressHelper;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;

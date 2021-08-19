@@ -1,14 +1,25 @@
 package com.ljy.oschajsa.oschajsa.store;
 
+import com.ljy.oschajsa.oschajsa.core.service.AddressHelper;
+import com.ljy.oschajsa.oschajsa.store.command.domain.*;
+import com.ljy.oschajsa.oschajsa.store.command.service.StoreMapper;
+import com.ljy.oschajsa.oschajsa.store.command.service.StoreRepository;
+import com.ljy.oschajsa.oschajsa.store.command.service.StoreTagRepository;
+import com.ljy.oschajsa.oschajsa.store.command.service.model.ChangeBusinessHour;
+import com.ljy.oschajsa.oschajsa.store.command.service.model.ChangeCoordinate;
+import com.ljy.oschajsa.oschajsa.store.command.service.model.RegisterStore;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Arrays;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 public class StoreTest {
@@ -184,6 +195,41 @@ public class StoreTest {
 
     @Test
     void mapFrom(){
-
+        RegisterStore registerStore = RegisterStore.builder()
+                .businessName("상호명")
+                .businessNumber("000-00-0000")
+                .businessTel("000-0000-0000")
+                .tags(Arrays.asList("태그1","태그2"))
+                .businessHour(ChangeBusinessHour.builder()
+                        .weekdayStart(9)
+                        .weekdayEnd(18)
+                        .weekendStart(9)
+                        .weekendEnd(18)
+                        .build())
+                .coordinate(ChangeCoordinate.builder()
+                        .lettitude(1.0)
+                        .longtitude(1.0)
+                        .build())
+                .build();
+        AddressHelper addressHelper = mock(AddressHelper.class);
+        StoreMapper mapper = new StoreMapper(addressHelper);
+        Store store = mapper.mapFrom(registerStore, OwnerId.of("owner"));
+        assertNotNull(store);
     }
+
+    @Test
+    void register(){
+        StoreRepository storeRepository = mock(StoreRepository.class);
+        StoreTagRepository storeTagRepository = mock(StoreTagRepository.class);
+
+        when(storeTagRepository.findByName(any()))
+                .thenReturn(Optional.of(mock(Tag.class)));
+
+        Store store = StoreFixture.aStore(mock(AddressHelper.class), OwnerId.of("owner")).build();
+        StoreRegisterValidator storeRegisterValidator = new StoreRegisterValidator(storeRepository, storeTagRepository);
+        store.register(storeRegisterValidator);
+        assertEquals(store.getState(), StoreState.OPEN);
+    }
+
+
 }

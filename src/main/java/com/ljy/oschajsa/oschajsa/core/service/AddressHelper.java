@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.oschajsa.user.command.domain;
+package com.ljy.oschajsa.oschajsa.core.service;
 
 import com.ljy.oschajsa.oschajsa.core.object.AddressInfo;
 import com.ljy.oschajsa.oschajsa.core.object.Coordinate;

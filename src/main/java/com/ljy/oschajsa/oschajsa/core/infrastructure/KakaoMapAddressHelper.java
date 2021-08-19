@@ -1,6 +1,6 @@
 package com.ljy.oschajsa.oschajsa.core.infrastructure;
 
-import com.ljy.oschajsa.oschajsa.user.command.domain.AddressHelper;
+import com.ljy.oschajsa.oschajsa.core.service.AddressHelper;
 import com.ljy.oschajsa.oschajsa.core.object.AddressInfo;
 import com.ljy.oschajsa.oschajsa.core.object.Coordinate;
 import com.ljy.oschajsa.oschajsa.core.object.InvalidAddressException;

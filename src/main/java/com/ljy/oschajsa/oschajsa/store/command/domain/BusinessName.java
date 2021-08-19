@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.oschajsa.store;
+package com.ljy.oschajsa.oschajsa.store.command.domain;
 
 import java.util.Objects;
 import java.util.regex.Pattern;

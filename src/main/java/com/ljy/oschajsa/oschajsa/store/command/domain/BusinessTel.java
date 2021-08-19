@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.oschajsa.store;
+package com.ljy.oschajsa.oschajsa.store.command.domain;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -20,7 +20,7 @@ public class BusinessTel {
     }
 
     private static final Pattern TEL_REGEX = Pattern.compile("[0-2]{2,3}-[\\d]{3,4}-[\\d]{4}");
-    public static final String INVALID_BUSINESS_TEL_MESSAGE = "please check your input, business tel format must be 000-000-0000,00-000-0000,000-0000-0000";
+    private static final String INVALID_BUSINESS_TEL_MESSAGE = "please check your input, business tel format must be 000-000-0000,00-000-0000,000-0000-0000";
     private void telValidation(String tel) {
         if(!TEL_REGEX.matcher(tel).matches()){
             throw new InvalidBusinessTelException(INVALID_BUSINESS_TEL_MESSAGE);
