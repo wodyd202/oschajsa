@@ -1,18 +1,25 @@
 package com.ljy.oschajsa.oschajsa.user.command.application.event;
 
+import com.ljy.oschajsa.oschajsa.core.object.AddressModel;
 import com.ljy.oschajsa.oschajsa.user.command.domain.User;
 
 import java.util.Objects;
 
 final public class ChangedUserAddressEvent extends AbstractMemberEvent {
-    private final Address address;
+    private final AddressModel address;
 
     public ChangedUserAddressEvent(User user) {
         super(user.getUserId().get());
-        address = new Address(user.getAddress());
+        address = AddressModel.builder()
+                .lettitude(user.getAddress().getCoordinate().getLettitude())
+                .longtitude(user.getAddress().getCoordinate().getLongtitude())
+                .city(user.getAddress().getAddressInfo().getCity())
+                .province(user.getAddress().getAddressInfo().getProvince())
+                .dong(user.getAddress().getAddressInfo().getDong())
+                .build();
     }
 
-    public Address getAddress() {
+    public AddressModel getAddress() {
         return address;
     }
 

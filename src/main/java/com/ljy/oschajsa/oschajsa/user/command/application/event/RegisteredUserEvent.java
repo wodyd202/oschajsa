@@ -1,5 +1,6 @@
 package com.ljy.oschajsa.oschajsa.user.command.application.event;
 
+import com.ljy.oschajsa.oschajsa.core.object.AddressModel;
 import com.ljy.oschajsa.oschajsa.user.command.domain.User;
 
 import java.util.Objects;
@@ -7,14 +8,20 @@ import java.util.Objects;
 final public class RegisteredUserEvent extends AbstractMemberEvent {
     private final String password;
     private final String nickname;
-    private final Address address;
+    private final AddressModel address;
 
     public RegisteredUserEvent(User user) {
         super(user.getUserId().get());
         this.password = user.getPassword().get();
         this.nickname = user.getNickname().get();
         if(!Objects.isNull(user.getAddress())){
-            address = new Address(user.getAddress());
+            address = AddressModel.builder()
+                    .province(user.getAddress().getAddressInfo().getProvince())
+                    .city(user.getAddress().getAddressInfo().getCity())
+                    .dong(user.getAddress().getAddressInfo().getDong())
+                    .longtitude(user.getAddress().getCoordinate().getLongtitude())
+                    .lettitude(user.getAddress().getCoordinate().getLettitude())
+                    .build();
         }else{
             address = null;
         }
@@ -28,7 +35,7 @@ final public class RegisteredUserEvent extends AbstractMemberEvent {
         return nickname;
     }
 
-    public Address getAddress() {
+    public AddressModel getAddress() {
         return address;
     }
 

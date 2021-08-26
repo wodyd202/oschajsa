@@ -2,17 +2,25 @@ package com.ljy.oschajsa.oschajsa.store.command.domain;
 
 import com.ljy.oschajsa.oschajsa.store.command.domain.exception.InvalidBusinessTelException;
 
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+@Embeddable
 public class BusinessTel {
     private final String tel;
+
+    // JPA에서 embedded로 사용시 기본 생성자 필요
+    protected BusinessTel(){
+        tel = null;
+    }
+
     private BusinessTel(String tel) {
         verifyNotEmptyTel(tel);
         telValidation(tel);
         this.tel = tel;
     }
-
 
     private static final String BUSINESS_TEL_MUST_NOT_BE_EMTPY = "business tel must not be emtpy";
     private void verifyNotEmptyTel(String tel) {

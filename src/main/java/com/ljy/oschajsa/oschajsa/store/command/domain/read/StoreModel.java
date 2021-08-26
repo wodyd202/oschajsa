@@ -7,6 +7,7 @@ import lombok.Builder;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class StoreModel {
@@ -79,5 +80,18 @@ public class StoreModel {
 
     public LocalDate getCreateDate() {
         return createDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StoreModel that = (StoreModel) o;
+        return Objects.equals(businessNumber, that.businessNumber) && Objects.equals(businessName, that.businessName) && Objects.equals(tags, that.tags) && Objects.equals(state, that.state) && Objects.equals(businessHour, that.businessHour) && Objects.equals(address, that.address) && Objects.equals(owner, that.owner) && Objects.equals(createDate, that.createDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(businessNumber, businessName, tags, state, businessHour, address, owner, createDate);
     }
 }

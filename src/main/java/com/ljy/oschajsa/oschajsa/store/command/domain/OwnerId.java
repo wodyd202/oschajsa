@@ -1,9 +1,16 @@
 package com.ljy.oschajsa.oschajsa.store.command.domain;
 
+import javax.persistence.Embeddable;
 import java.util.Objects;
 
+@Embeddable
 public class OwnerId {
     private final String id;
+
+    // JPA에서 embedded로 사용시 기본 생성자 필요
+    protected OwnerId(){
+        id = null;
+    }
 
     private OwnerId(String id) {
         this.id = id;

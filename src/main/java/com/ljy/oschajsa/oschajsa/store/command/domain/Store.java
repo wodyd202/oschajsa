@@ -4,21 +4,64 @@ import com.ljy.oschajsa.oschajsa.core.object.Address;
 import com.ljy.oschajsa.oschajsa.core.object.InvalidAddressException;
 import com.ljy.oschajsa.oschajsa.store.command.domain.exception.*;
 import lombok.Builder;
+import org.hibernate.annotations.DynamicUpdate;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Entity
+@Table(name = "stores")
+@DynamicUpdate
 public class Store {
+    /**
+     * businessNumber 사업자 번호
+     * businessName 상호명
+     * businessTel 전화번호
+     * tags 업체 태그 최대 3개
+     * state 업체 상태(영업중, 판매중단, 폐업)
+     * businessHour 영업 시간
+     * address 주소
+     * ownerId 업체 사장 아이디
+     * createDate 업체 등록일
+     */
+    @EmbeddedId
     private final BusinessNumber businessNumber;
+    @Embedded
     private BusinessName businessName;
+    @Embedded
     private BusinessTel businessTel;
+    @Embedded
     private Tags tags;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private StoreState state;
+
+    @Embedded
     private BusinessHour businessHour;
+
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(length = 50, nullable = true)),
+            @AttributeOverride(name = "dong", column = @Column(length = 50, nullable = true)),
+            @AttributeOverride(name = "province", column = @Column(length = 50, nullable = true)),
+            @AttributeOverride(name = "lettitude", column = @Column(nullable = true)),
+            @AttributeOverride(name = "longtitude", column = @Column(nullable = true))
+    })
     private Address address;
+
+    @Embedded
     private final OwnerId ownerId;
 
+    @Column(nullable = false)
     private final LocalDate createDate;
+
+    // JPA에서 embedded로 사용시 기본 생성자 필요
+    protected Store(){
+        businessNumber = null;
+        createDate = null;
+        ownerId = null;
+    }
 
     @Builder
     public Store(BusinessName businessName,
@@ -133,5 +176,18 @@ public class Store {
 
     public Tags getTags() {
         return tags;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Store store = (Store) o;
+        return Objects.equals(businessNumber, store.businessNumber) && Objects.equals(businessName, store.businessName) && Objects.equals(businessTel, store.businessTel) && Objects.equals(tags, store.tags) && state == store.state && Objects.equals(businessHour, store.businessHour) && Objects.equals(address, store.address) && Objects.equals(ownerId, store.ownerId) && Objects.equals(createDate, store.createDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(businessNumber, businessName, businessTel, tags, state, businessHour, address, ownerId, createDate);
     }
 }

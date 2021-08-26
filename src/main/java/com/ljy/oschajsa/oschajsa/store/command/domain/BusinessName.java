@@ -2,9 +2,11 @@ package com.ljy.oschajsa.oschajsa.store.command.domain;
 
 import com.ljy.oschajsa.oschajsa.store.command.domain.exception.InvalidBusinessNameException;
 
+import javax.persistence.Embeddable;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+@Embeddable
 public class BusinessName {
     private final String businessName;
 

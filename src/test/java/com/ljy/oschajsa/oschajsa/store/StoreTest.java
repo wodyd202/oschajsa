@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -248,7 +249,7 @@ public class StoreTest {
             when(addressHelper.getAddressInfoFrom(Coordinate.withLattitudeLongtitude(1.0,1.0)))
                     .thenReturn(AddressInfo.withCityProvinceDong("서울특별시","무슨구","무슨동"));
 
-            StoreOpenService storeOpenService = new StoreOpenService(storeRepository, storeOpenValidator, new StoreMapper(addressHelper));
+            StoreOpenService storeOpenService = new StoreOpenService(storeRepository, storeOpenValidator, new StoreMapper(addressHelper), mock(ApplicationEventPublisher.class));
             OpenStore openStore = OpenStore.builder()
                     .businessName("상호명")
                     .businessNumber("000-00-0000")

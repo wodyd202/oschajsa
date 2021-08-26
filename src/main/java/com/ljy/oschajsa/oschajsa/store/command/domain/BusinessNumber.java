@@ -2,11 +2,18 @@ package com.ljy.oschajsa.oschajsa.store.command.domain;
 
 import com.ljy.oschajsa.oschajsa.store.command.domain.exception.InvalidBusinessNumberException;
 
+import javax.persistence.Embeddable;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public class BusinessNumber {
+@Embeddable
+public class BusinessNumber implements Serializable {
     private final String number;
+
+    // JPA에서 embedded로 사용시 기본 생성자 필요
+    protected BusinessNumber(){number=null;}
+
     private BusinessNumber(String number) {
         verifyNotEmptyBusinessNumber(number);
         businessNumberValidation(number);

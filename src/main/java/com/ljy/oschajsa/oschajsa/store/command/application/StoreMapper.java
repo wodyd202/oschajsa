@@ -5,9 +5,11 @@ import com.ljy.oschajsa.oschajsa.core.object.Coordinate;
 import com.ljy.oschajsa.oschajsa.core.application.AddressHelper;
 import com.ljy.oschajsa.oschajsa.store.command.domain.*;
 import com.ljy.oschajsa.oschajsa.store.command.application.model.OpenStore;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+@Component
 final public class StoreMapper {
     private final AddressHelper addressHelper;
 

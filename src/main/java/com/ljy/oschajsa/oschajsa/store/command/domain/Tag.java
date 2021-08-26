@@ -2,10 +2,18 @@ package com.ljy.oschajsa.oschajsa.store.command.domain;
 
 import com.ljy.oschajsa.oschajsa.store.command.domain.exception.InvalidTagException;
 
+import javax.persistence.Embeddable;
 import java.util.Objects;
 
+@Embeddable
 public class Tag {
     private final String tag;
+
+    // JPA에서 embedded로 사용시 기본 생성자 필요
+    protected Tag(){
+        tag = null;
+    }
+
     private Tag(String tag) {
         verifyNotEmptyTag(tag);
         this.tag = tag;

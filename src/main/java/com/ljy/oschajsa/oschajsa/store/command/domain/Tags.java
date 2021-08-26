@@ -2,13 +2,21 @@ package com.ljy.oschajsa.oschajsa.store.command.domain;
 
 import com.ljy.oschajsa.oschajsa.store.command.domain.exception.InvalidTagException;
 
+import javax.persistence.ElementCollection;
+import javax.persistence.Embeddable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Embeddable
 public class Tags {
+    @ElementCollection
     private final Set<Tag> tags;
+
+    // JPA에서 embedded로 사용시 기본 생성자 필요
+    protected Tags(){tags = null;}
+
     private Tags(Set<Tag> tags) {
         tagsValidation(tags);
         this.tags = tags;

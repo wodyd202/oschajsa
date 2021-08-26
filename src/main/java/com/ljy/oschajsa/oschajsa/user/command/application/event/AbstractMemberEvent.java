@@ -5,7 +5,7 @@ import java.util.Objects;
 abstract public class AbstractMemberEvent {
     protected final String id;
 
-    public AbstractMemberEvent(String id) {
+    protected AbstractMemberEvent(String id) {
         this.id = id;
     }
 
