@@ -4,7 +4,7 @@ import com.ljy.oschajsa.oschajsa.core.object.Address;
 import com.ljy.oschajsa.oschajsa.core.object.Coordinate;
 import com.ljy.oschajsa.oschajsa.core.application.AddressHelper;
 import com.ljy.oschajsa.oschajsa.store.command.domain.*;
-import com.ljy.oschajsa.oschajsa.store.command.application.model.RegisterStore;
+import com.ljy.oschajsa.oschajsa.store.command.application.model.OpenStore;
 
 import java.util.stream.Collectors;
 
@@ -15,7 +15,7 @@ final public class StoreMapper {
         this.addressHelper = addressHelper;
     }
 
-    public Store mapFrom(RegisterStore registerStore, OwnerId ownerId) {
+    public Store mapFrom(OpenStore registerStore, OwnerId ownerId) {
         BusinessHour businessHour = mapBusinessHour(registerStore);
         Address address = mapAddress(registerStore);
         Tags tags = mapTags(registerStore);
@@ -30,18 +30,18 @@ final public class StoreMapper {
                 .build();
     }
 
-    private BusinessHour mapBusinessHour(RegisterStore registerStore) {
+    private BusinessHour mapBusinessHour(OpenStore registerStore) {
         return BusinessHour.weekdayStartWeekdayEndWeekendStartWeekendEnd(registerStore.getBusinessHour().getWeekdayStart(),
                 registerStore.getBusinessHour().getWeekdayEnd(),
                 registerStore.getBusinessHour().getWeekendStart(),
                 registerStore.getBusinessHour().getWeekendEnd());
     }
 
-    private Address mapAddress(RegisterStore registerStore) {
+    private Address mapAddress(OpenStore registerStore) {
         return Address.withCoodinate(Coordinate.withLattitudeLongtitude(registerStore.getCoordinate().getLettitude(), registerStore.getCoordinate().getLongtitude()), addressHelper);
     }
 
-    private Tags mapTags(RegisterStore registerStore) {
+    private Tags mapTags(OpenStore registerStore) {
         return Tags.withTags(registerStore.getTags().stream().map(Tag::of).collect(Collectors.toList()));
     }
 }

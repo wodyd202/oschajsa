@@ -3,11 +3,11 @@ package com.ljy.oschajsa.oschajsa.store.command.domain;
 import com.ljy.oschajsa.oschajsa.store.command.domain.exception.AlreadyExistStoreException;
 import com.ljy.oschajsa.oschajsa.store.command.domain.exception.TagNotFoundException;
 
-public class StoreRegisterValidator {
+public class StoreOpenValidator {
     private final StoreRepository storeRepository;
     private final StoreTagRepository storeTagRepository;
 
-    public StoreRegisterValidator(StoreRepository storeRepository, StoreTagRepository storeTagRepository) {
+    public StoreOpenValidator(StoreRepository storeRepository, StoreTagRepository storeTagRepository) {
         this.storeRepository = storeRepository;
         this.storeTagRepository = storeTagRepository;
     }

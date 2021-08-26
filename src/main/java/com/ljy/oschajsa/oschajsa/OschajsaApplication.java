@@ -10,4 +10,5 @@ public class OschajsaApplication {
         SpringApplication.run(OschajsaApplication.class, args);
     }
 
+
 }

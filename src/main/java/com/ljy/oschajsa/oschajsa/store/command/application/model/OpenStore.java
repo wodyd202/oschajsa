@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class RegisterStore {
+public class OpenStore {
     private String businessName;
     private String businessNumber;
     private String businessTel;

@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.oschajsa.user.command.domain.read;
+package com.ljy.oschajsa.oschajsa.core.object;
 
 import lombok.Builder;
 import lombok.Getter;

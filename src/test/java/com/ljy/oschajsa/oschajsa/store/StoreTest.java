@@ -1,15 +1,20 @@
 package com.ljy.oschajsa.oschajsa.store;
 
 import com.ljy.oschajsa.oschajsa.core.application.AddressHelper;
+import com.ljy.oschajsa.oschajsa.core.object.AddressInfo;
+import com.ljy.oschajsa.oschajsa.core.object.Coordinate;
+import com.ljy.oschajsa.oschajsa.store.command.application.StoreOpenService;
 import com.ljy.oschajsa.oschajsa.store.command.domain.*;
 import com.ljy.oschajsa.oschajsa.store.command.application.StoreMapper;
 import com.ljy.oschajsa.oschajsa.store.command.domain.StoreRepository;
 import com.ljy.oschajsa.oschajsa.store.command.domain.StoreTagRepository;
 import com.ljy.oschajsa.oschajsa.store.command.application.model.ChangeBusinessHour;
 import com.ljy.oschajsa.oschajsa.store.command.application.model.ChangeCoordinate;
-import com.ljy.oschajsa.oschajsa.store.command.application.model.RegisterStore;
+import com.ljy.oschajsa.oschajsa.store.command.application.model.OpenStore;
 import com.ljy.oschajsa.oschajsa.store.command.domain.exception.*;
+import com.ljy.oschajsa.oschajsa.store.command.domain.read.StoreModel;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -196,7 +201,7 @@ public class StoreTest {
 
     @Test
     void mapFrom(){
-        RegisterStore registerStore = RegisterStore.builder()
+        OpenStore registerStore = OpenStore.builder()
                 .businessName("상호명")
                 .businessNumber("000-00-0000")
                 .businessTel("000-0000-0000")
@@ -219,7 +224,7 @@ public class StoreTest {
     }
 
     @Test
-    void register(){
+    void register() {
         StoreRepository storeRepository = mock(StoreRepository.class);
         StoreTagRepository storeTagRepository = mock(StoreTagRepository.class);
 
@@ -227,9 +232,42 @@ public class StoreTest {
                 .thenReturn(Optional.of(mock(Tag.class)));
 
         Store store = StoreFixture.aStore(mock(AddressHelper.class), OwnerId.of("owner")).build();
-        StoreRegisterValidator storeRegisterValidator = new StoreRegisterValidator(storeRepository, storeTagRepository);
-        store.register(storeRegisterValidator);
+        StoreOpenValidator storeOpenValidator = new StoreOpenValidator(storeRepository, storeTagRepository);
+        store.open(storeOpenValidator);
         assertEquals(store.getState(), StoreState.OPEN);
+    }
+
+    @Nested
+    class StoreOpenServiceTest {
+
+        @Test
+        void register(){
+            StoreRepository storeRepository = mock(StoreRepository.class);
+            StoreOpenValidator storeOpenValidator = mock(StoreOpenValidator.class);
+            AddressHelper addressHelper = mock(AddressHelper.class);
+            when(addressHelper.getAddressInfoFrom(Coordinate.withLattitudeLongtitude(1.0,1.0)))
+                    .thenReturn(AddressInfo.withCityProvinceDong("서울특별시","무슨구","무슨동"));
+
+            StoreOpenService storeOpenService = new StoreOpenService(storeRepository, storeOpenValidator, new StoreMapper(addressHelper));
+            OpenStore openStore = OpenStore.builder()
+                    .businessName("상호명")
+                    .businessNumber("000-00-0000")
+                    .businessTel("000-0000-0000")
+                    .tags(Arrays.asList("태그1","태그2"))
+                    .businessHour(ChangeBusinessHour.builder()
+                            .weekdayStart(9)
+                            .weekdayEnd(18)
+                            .weekendStart(9)
+                            .weekendEnd(18)
+                            .build())
+                    .coordinate(ChangeCoordinate.builder()
+                            .lettitude(1.0)
+                            .longtitude(1.0)
+                            .build())
+                    .build();
+            StoreModel storeModel = storeOpenService.open(openStore, OwnerId.of("test"));
+            assertNotNull(storeModel);
+        }
     }
 
 

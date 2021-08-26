@@ -91,7 +91,7 @@ public class Store {
      * - 업체 등록전 등록이 가능한지 체크하는 validator
      * - 유효성 검사 후 state 변경
      */
-    public void register(StoreRegisterValidator storeRegisterValidator) {
+    public void open(StoreOpenValidator storeRegisterValidator) {
         storeRegisterValidator.validation(businessNumber, tags);
         state = StoreState.OPEN;
     }
@@ -131,4 +131,7 @@ public class Store {
         return createDate;
     }
 
+    public Tags getTags() {
+        return tags;
+    }
 }
