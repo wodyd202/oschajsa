@@ -1,7 +1,7 @@
 package com.ljy.oschajsa.oschajsa.user.query.application;
 
 import com.ljy.oschajsa.oschajsa.user.query.model.QUserRepository;
-import com.ljy.oschajsa.oschajsa.user.query.model.QueryAddress;
+import com.ljy.oschajsa.oschajsa.core.object.QueryAddress;
 import com.ljy.oschajsa.oschajsa.user.query.model.QueryUser;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

@@ -1,7 +1,7 @@
 package com.ljy.oschajsa.oschajsa.user.query.model;
 
+import com.ljy.oschajsa.oschajsa.core.object.QueryAddress;
 import lombok.Builder;
-import lombok.Getter;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Embedded;

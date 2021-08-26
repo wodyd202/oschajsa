@@ -1,5 +1,7 @@
 package com.ljy.oschajsa.oschajsa.user.query.model;
 
+import com.ljy.oschajsa.oschajsa.core.object.QueryAddress;
+
 import java.util.Optional;
 
 public interface QUserRepository {

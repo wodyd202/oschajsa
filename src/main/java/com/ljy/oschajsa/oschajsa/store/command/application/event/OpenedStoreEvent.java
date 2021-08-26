@@ -40,4 +40,37 @@ final public class OpenedStoreEvent extends AbstractStoreEvent{
         this.ownerId = store.getOwnerId().get();
         this.createDate = store.getCreateDate();
     }
+
+    @Override
+    public String getBusinessNumber() {
+        return businessNumber;
+    }
+
+    public String getBusinessName() {
+        return businessName;
+    }
+
+    public String getBusinessTel() {
+        return businessTel;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public AddressModel getAddress() {
+        return address;
+    }
+
+    public BusinessHourModel getBusinessHour() {
+        return businessHour;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public LocalDate getCreateDate() {
+        return createDate;
+    }
 }

@@ -1,6 +1,6 @@
 package com.ljy.oschajsa.oschajsa.user.query.presentation;
 
-import com.ljy.oschajsa.oschajsa.user.query.model.QueryAddress;
+import com.ljy.oschajsa.oschajsa.core.object.QueryAddress;
 import com.ljy.oschajsa.oschajsa.user.query.application.QUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -4,7 +4,7 @@ import com.ljy.oschajsa.oschajsa.user.command.application.event.ChangedUserAddre
 import com.ljy.oschajsa.oschajsa.user.command.application.event.RegisteredUserEvent;
 import com.ljy.oschajsa.oschajsa.user.command.application.event.WithdrawaledUserEvent;
 import com.ljy.oschajsa.oschajsa.user.query.model.QUserRepository;
-import com.ljy.oschajsa.oschajsa.user.query.model.QueryAddress;
+import com.ljy.oschajsa.oschajsa.core.object.QueryAddress;
 import com.ljy.oschajsa.oschajsa.user.query.model.QueryUser;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;

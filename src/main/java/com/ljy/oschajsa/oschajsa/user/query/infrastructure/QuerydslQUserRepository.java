@@ -1,7 +1,7 @@
 package com.ljy.oschajsa.oschajsa.user.query.infrastructure;
 
 import com.ljy.oschajsa.oschajsa.core.infrastructure.QuerydslRepository;
-import com.ljy.oschajsa.oschajsa.user.query.model.QueryAddress;
+import com.ljy.oschajsa.oschajsa.core.object.QueryAddress;
 import com.ljy.oschajsa.oschajsa.user.query.model.QueryUser;
 import com.ljy.oschajsa.oschajsa.user.query.model.UserState;
 import com.ljy.oschajsa.oschajsa.user.query.model.QUserRepository;

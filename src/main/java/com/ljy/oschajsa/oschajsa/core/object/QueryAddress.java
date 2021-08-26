@@ -1,7 +1,6 @@
-package com.ljy.oschajsa.oschajsa.user.query.model;
+package com.ljy.oschajsa.oschajsa.core.object;
 
 import lombok.Builder;
-import lombok.Getter;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
