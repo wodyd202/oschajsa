@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class StoreOpenService {
+public class OpenStoreService {
     private final StoreRepository storeRepository;
     private final StoreOpenValidator storeOpenValidator;
     private final StoreMapper storeMapper;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public StoreOpenService(StoreRepository storeRepository,
+    public OpenStoreService(StoreRepository storeRepository,
                             StoreOpenValidator storeOpenValidator,
                             StoreMapper storeMapper,
                             ApplicationEventPublisher applicationEventPublisher) {

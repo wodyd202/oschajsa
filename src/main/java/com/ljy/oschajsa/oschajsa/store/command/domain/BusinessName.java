@@ -40,7 +40,7 @@ public class BusinessName {
     }
 
     public static BusinessName of(String businessName){
-        return new BusinessName(Objects.requireNonNull(businessName));
+        return new BusinessName(businessName);
     }
 
     public String get() {
