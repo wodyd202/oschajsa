@@ -1,10 +1,12 @@
 package com.ljy.oschajsa.oschajsa.store.query.model;
 
 import lombok.Builder;
+import lombok.Getter;
 
 import javax.persistence.Embeddable;
 
 @Embeddable
+@Getter
 public class QueryBusinessHour {
     private int weekdayStart, weekdayEnd;
     private int weekendStart, weekendEnd;
