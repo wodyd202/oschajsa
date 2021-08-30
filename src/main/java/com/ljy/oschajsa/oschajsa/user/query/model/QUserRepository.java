@@ -10,4 +10,6 @@ public interface QUserRepository {
     Optional<QueryUser> findByUserId(String username);
 
     Optional<QueryAddress> findAddressByUserId(String userId);
+
+    Optional<QueryUser> login(String username);
 }

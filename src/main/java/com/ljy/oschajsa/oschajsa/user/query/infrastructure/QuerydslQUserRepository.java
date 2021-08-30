@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 import static com.ljy.oschajsa.oschajsa.user.query.model.QQueryUser.queryUser;
+import static com.querydsl.core.types.dsl.Expressions.asSimple;
 
 @Repository
 public class QuerydslQUserRepository extends QuerydslRepository<QueryUser> implements QUserRepository {
@@ -31,6 +32,15 @@ public class QuerydslQUserRepository extends QuerydslRepository<QueryUser> imple
                 .where(eqUserId(userId), eqState(UserState.ACTIVE))
                 .fetchFirst();
         return Optional.ofNullable(findUser.getAddress());
+    }
+
+    @Override
+    public Optional<QueryUser> login(String username) {
+        QueryUser findUser = jpaQueryFactory.select(Projections.constructor(QueryUser.class, asSimple(username),queryUser.password))
+                .from(queryUser)
+                .where(eqUserId(username), eqState(UserState.ACTIVE))
+                .fetchFirst();
+        return Optional.ofNullable(findUser);
     }
 
     private BooleanExpression eqState(UserState state) {

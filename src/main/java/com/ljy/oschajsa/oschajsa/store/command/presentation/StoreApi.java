@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -23,7 +24,9 @@ public class StoreApi {
     private final OpenStoreService openStoreService;
 
     @PostMapping
-    public ResponseEntity<StoreModel> open(@Valid @RequestBody OpenStore openStore, Errors errors, Principal principal){
+    public ResponseEntity<StoreModel> open(@Valid @RequestBody OpenStore openStore,
+                                           @ApiIgnore Errors errors,
+                                           @ApiIgnore Principal principal){
         verifyNotContainsError(errors);
         StoreModel storeModel = openStoreService.open(openStore, OwnerId.of(principal.getName()));
         return ResponseEntity.ok(storeModel);

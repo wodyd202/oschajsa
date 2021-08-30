@@ -32,8 +32,14 @@ public class QueryUser {
     protected QueryUser(){userId=null; nickname=null;}
 
     public QueryUser(QueryAddress address) {
-        this.userId = null; nickname = null;
+        this(null,null);
         this.address = address;
+    }
+
+    public QueryUser(String userId, String password){
+        this.userId = userId;
+        this.password = password;
+        nickname = null;
     }
 
     @Builder

@@ -3,10 +3,8 @@ package com.ljy.oschajsa.oschajsa.store.query.infrastructure;
 import com.ljy.oschajsa.oschajsa.core.infrastructure.QuerydslRepository;
 import com.ljy.oschajsa.oschajsa.core.object.QueryAddress;
 import com.ljy.oschajsa.oschajsa.store.query.application.StoreSearchDTO;
-import com.ljy.oschajsa.oschajsa.store.query.model.QStoreRepository;
-import com.ljy.oschajsa.oschajsa.store.query.model.QueryBusinessHour;
-import com.ljy.oschajsa.oschajsa.store.query.model.QueryStore;
-import com.ljy.oschajsa.oschajsa.store.query.model.StoreState;
+import com.ljy.oschajsa.oschajsa.store.query.model.*;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,30 +16,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+
+import static com.ljy.oschajsa.oschajsa.config.StoreDBColums.*;
+import static com.ljy.oschajsa.oschajsa.store.query.model.QQueryStore.queryStore;
 
 @Repository
 public class QuerydslQStoreRepository extends QuerydslRepository<QueryStore> implements QStoreRepository {
-
     @Autowired private JdbcTemplate jdbcTemplate;
 
     private final String SELECT_FROM_STORE = "SELECT * FROM q_store WHERE ";
-
-    // STORE DB Colums
-    private final String COL_BUSINESS_NAME = "business_name";
-    private final String COL_BUSINESS_TEL = "business_tel";
-
-    private final String COL_DONG = "dong";
-    private final String COL_PROVINCE = "province";
-    private final String COL_CITY = "city";
-
-    private final String COL_LETTITUDE = "lettitude";
-    private final String COL_LONGTITUDE = "longtitude";
-
-    private final String COL_WEEKDAY_START = "weekday_start";
-    private final String COL_WEEKDAY_END = "weekday_end";
-    private final String COL_WEEKEND_START = "weekend_start";
-    private final String COL_WEEKEND_END = "weekend_end";
-
     private final String CALCULATE_DIFFERENCE_COORDINATE = "(6371*ACOS(COS(RADIANS(?))*COS(RADIANS(lettitude))*COS(RADIANS(longtitude)- RADIANS(?))+SIN(RADIANS(?))*SIN(RADIANS(lettitude)))) <= ?\r";
     private final String EQUALS_CITY = COL_CITY + " = ?\r";
     private final String EQUALS_PROVINCE = COL_PROVINCE + " = ?\r";
@@ -67,8 +51,9 @@ public class QuerydslQStoreRepository extends QuerydslRepository<QueryStore> imp
             sqlBuilder.append(EQUALS_DONG);
             params.add(dto.getDong());
         }else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("invalid store search values");
         }
+        sqlBuilder.append("LIMIT " + (dto.getPage() * 10) + ", 10\r\n");
         List<QueryStore> list = jdbcTemplate.query(sqlBuilder.toString(), new RowMapper<QueryStore>() {
             @Override
             public QueryStore mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -109,5 +94,17 @@ public class QuerydslQStoreRepository extends QuerydslRepository<QueryStore> imp
 
     private boolean shouldDifferenceCoordinateCalculate(StoreSearchDTO dto){
         return !Objects.isNull(dto.getLettitude()) && !Objects.isNull(dto.getLongtitude()) && !Objects.isNull(dto.getDifferenceCoordinate());
+    }
+
+    @Override
+    public Optional<QueryStore> findByBusinessNumber(String businessNumber) {
+        QueryStore findStore = jpaQueryFactory.selectFrom(queryStore)
+                .where(eqBusinessNumber(businessNumber))
+                .fetchFirst();
+        return Optional.ofNullable(findStore);
+    }
+
+    private BooleanExpression eqBusinessNumber(String businessNumber) {
+        return queryStore.businessNumber.eq(businessNumber);
     }
 }

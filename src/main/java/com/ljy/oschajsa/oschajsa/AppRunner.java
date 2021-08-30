@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.oschajsa.runner;
+package com.ljy.oschajsa.oschajsa;
 
 import com.ljy.oschajsa.oschajsa.store.command.domain.StoreTagRepository;
 import com.ljy.oschajsa.oschajsa.store.command.domain.Tag;
