@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class QUserService implements UserDetailsService {
@@ -33,6 +34,11 @@ public class QUserService implements UserDetailsService {
     @Transactional(readOnly = true)
     public List<QueryStore> getStore(String userId) {
         return storeRepository.findByUserId(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public Set<String> getInterestStores(String userId) {
+        return userRepository.findInterestStoresByUserId(userId);
     }
 
     @Override

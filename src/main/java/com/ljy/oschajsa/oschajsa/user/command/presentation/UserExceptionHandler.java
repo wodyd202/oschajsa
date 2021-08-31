@@ -15,9 +15,16 @@ public class UserExceptionHandler {
             InvalidPasswordException.class,
             InvalidUserIdException.class,
             AlreadyExistUserException.class,
-            UserNotFoundException.class
+            StoreNotFoundException.class
     })
     public ResponseEntity<String> error(IllegalArgumentException e){
         return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ExceptionHandler({
+            UserNotFoundException.class
+    })
+    public ResponseEntity<Void> error(UserNotFoundException e){
+        return ResponseEntity.notFound().build();
     }
 }

@@ -4,11 +4,9 @@ import com.ljy.oschajsa.oschajsa.core.object.QueryAddress;
 import lombok.Builder;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 
 /**
@@ -27,6 +25,10 @@ public class QueryUser {
     private QueryAddress address;
 
     private UserState state;
+
+    @ElementCollection
+    @CollectionTable(name = "q_interest_store")
+    private Set<String> interestStores;
 
     // JPA에서 embedded로 사용시 기본 생성자 필요
     protected QueryUser(){userId=null; nickname=null;}
@@ -57,6 +59,10 @@ public class QueryUser {
 
     public void withdrawal() {
         state = UserState.WITHDRAWAL;
+    }
+
+    public void setInterestStores(Set<String> interestStores) {
+        this.interestStores = interestStores;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,4 +106,5 @@ public class QueryUser {
     public int hashCode() {
         return Objects.hash(userId, password, nickname, address);
     }
+
 }

@@ -1,6 +1,8 @@
 package com.ljy.oschajsa.oschajsa.user.command.presentation;
 
 import com.ljy.oschajsa.oschajsa.core.http.CommandException;
+import com.ljy.oschajsa.oschajsa.user.command.application.InterestStoreService;
+import com.ljy.oschajsa.oschajsa.user.command.domain.Store;
 import com.ljy.oschajsa.oschajsa.user.command.domain.UserId;
 import com.ljy.oschajsa.oschajsa.user.command.domain.read.UserModel;
 import com.ljy.oschajsa.oschajsa.user.command.application.ChangeAddressService;
@@ -25,6 +27,7 @@ public class UserApi {
     private final RegisterUserService registerUserService;
     private final ChangeAddressService changeAddressService;
     private final WithdrawalService withdrawalService;
+    private final InterestStoreService interestStoreService;
 
     @PostMapping
     public ResponseEntity<UserModel> registerUser(@Valid @RequestBody RegisterUser registerUser,
@@ -51,6 +54,13 @@ public class UserApi {
         verifyNotContainsError(errors);
         withdrawalService.withdrawal(withdrawalUser, UserId.of(principal.getName()));
         return ResponseEntity.ok(SUCCESS_WITHDRAWAL);
+    }
+
+    @PostMapping("interest/{store}")
+    public ResponseEntity<UserModel> interestStore(@PathVariable Store store,
+                                                   @ApiIgnore Principal principal){
+        UserModel userModel = interestStoreService.interest(store, UserId.of(principal.getName()));
+        return ResponseEntity.ok(userModel);
     }
 
     private void verifyNotContainsError(Errors errors){

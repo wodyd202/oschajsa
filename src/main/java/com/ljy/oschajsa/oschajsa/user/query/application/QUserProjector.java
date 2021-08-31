@@ -1,6 +1,7 @@
 package com.ljy.oschajsa.oschajsa.user.query.application;
 
 import com.ljy.oschajsa.oschajsa.user.command.application.event.ChangedUserAddressEvent;
+import com.ljy.oschajsa.oschajsa.user.command.application.event.InterestedStore;
 import com.ljy.oschajsa.oschajsa.user.command.application.event.RegisteredUserEvent;
 import com.ljy.oschajsa.oschajsa.user.command.application.event.WithdrawaledUserEvent;
 import com.ljy.oschajsa.oschajsa.user.query.model.QUserRepository;
@@ -66,6 +67,13 @@ public class QUserProjector {
     void handle(WithdrawaledUserEvent event){
         QueryUser queryUser = getUser(event.getId());
         queryUser.withdrawal();
+        userRepository.save(queryUser);
+    }
+
+    @EventListener
+    void handle(InterestedStore event){
+        QueryUser queryUser = getUser(event.getId());
+        queryUser.setInterestStores(event.getInterestStores());
         userRepository.save(queryUser);
     }
 

@@ -12,6 +12,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -29,5 +30,11 @@ public class QUserApi {
     public ResponseEntity<QueryAddress> getAddress(@ApiIgnore Principal principal){
         QueryAddress address = userService.getAddress(principal.getName());
         return ResponseEntity.ok(address);
+    }
+
+    @GetMapping("interest-store")
+    public ResponseEntity<Set<String>> getInterestStores(@ApiIgnore Principal principal){
+        Set<String> interestStores = userService.getInterestStores(principal.getName());
+        return ResponseEntity.ok(interestStores);
     }
 }

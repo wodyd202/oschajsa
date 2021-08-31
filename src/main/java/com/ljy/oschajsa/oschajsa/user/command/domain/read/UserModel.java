@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * User Command Model
@@ -19,9 +20,10 @@ public class UserModel {
     private String nickname;
     @JsonInclude(value = JsonInclude.Include.NON_NULL)
     private AddressModel address;
+    private Set<String> interestStores;
 
     @Builder
-    public UserModel(UserId userId, NickName nickname, Address address) {
+    public UserModel(UserId userId, NickName nickname, Address address, Set<String> interestStores) {
         this.userId = userId.get();
         this.nickname = nickname.get();
         if(!Objects.isNull(address)){
@@ -33,6 +35,7 @@ public class UserModel {
                     .longtitude(address.getCoordinate().getLongtitude())
                     .build();
         }
+        this.interestStores = interestStores;
     }
 
 }

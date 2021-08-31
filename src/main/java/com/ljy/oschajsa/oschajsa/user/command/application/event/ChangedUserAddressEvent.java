@@ -5,7 +5,7 @@ import com.ljy.oschajsa.oschajsa.user.command.domain.User;
 
 import java.util.Objects;
 
-final public class ChangedUserAddressEvent extends AbstractMemberEvent {
+final public class ChangedUserAddressEvent extends AbstractUserEvent {
     private final AddressModel address;
 
     public ChangedUserAddressEvent(User user) {

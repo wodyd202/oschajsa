@@ -10,6 +10,7 @@ import com.ljy.oschajsa.oschajsa.user.command.application.model.RegisterUser;
 import com.ljy.oschajsa.oschajsa.user.command.application.model.WithdrawalUser;
 import com.ljy.oschajsa.oschajsa.user.command.domain.*;
 import com.ljy.oschajsa.oschajsa.user.command.domain.exception.*;
+import com.ljy.oschajsa.oschajsa.user.command.domain.read.UserModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,9 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
+import java.util.Set;
 
+import static com.ljy.oschajsa.oschajsa.user.UserFixture.aUser;
 import static com.ljy.oschajsa.oschajsa.user.UserFixture.registeredUser;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -171,7 +174,7 @@ public class UserTest {
         UserRepository userRepository = mock(UserRepository.class);
         RegisterUserValidator registerUserValidator = new RegisterUserValidator(userRepository);
 
-        User user = UserFixture.aUser().build();
+        User user = aUser().build();
         user.register(registerUserValidator);
         assertEquals(user.getState(), UserState.ACTIVE);
     }
@@ -185,7 +188,7 @@ public class UserTest {
         when(userRepository.findByUserId(UserId.of("userid")))
                 .thenReturn(Optional.of(mock(User.class)));
 
-        User user = UserFixture.aUser().build();
+        User user = aUser().build();
 
         assertThrows(AlreadyExistUserException.class,()->{
             user.register(registerUserValidator);
@@ -241,11 +244,43 @@ public class UserTest {
     @Test
     @DisplayName("비밀번호 암호화")
     void encodePassword(){
-        User user = UserFixture.aUser()
-                .password(Password.of("password")).build();
+        User user = aUser().password(Password.of("password")).build();
         PasswordEncoder delegatingPasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         user.encodePassword(delegatingPasswordEncoder);
         assertTrue(delegatingPasswordEncoder.matches("password", user.getPassword().get()));
+    }
+
+    @Test
+    @DisplayName("관심 업체 등록")
+    void addInterestStore(){
+        User user = registeredUser("userid","password");
+        user.interestStore(mock(InterestStoreValidator.class),Store.of("000-00-0000"));
+        Set<Store> list = user.getInterestStores();
+        assertEquals(list.size(), 1);
+    }
+
+    @Test
+    @DisplayName("관심 업체 해제")
+    void removeInterestStore(){
+        User user = registeredUser("userid","password");
+        user.interestStore(mock(InterestStoreValidator.class),Store.of("000-00-0000"));
+        user.interestStore(mock(InterestStoreValidator.class),Store.of("000-00-0000"));
+        Set<Store> list = user.getInterestStores();
+        assertEquals(list.size(), 0);
+    }
+
+    @Test
+    @DisplayName("관심 업체 등록시 해당 사업자 번호의 업체가 존재해야함")
+    void notFoundStore(){
+        assertThrows(StoreNotFoundException.class,()->{
+            StoreRepository storeRepository = mock(StoreRepository.class);
+            when(storeRepository.findByBusinessNumber("000-00-0000"))
+                    .thenReturn(Optional.ofNullable(null));
+            InterestStoreValidator interestStoreValidator = new InterestStoreValidator(storeRepository);
+
+            User user = registeredUser("userid","password");
+            user.interestStore(interestStoreValidator,Store.of("000-00-0000"));
+        });
     }
 
     @Nested
@@ -333,7 +368,7 @@ public class UserTest {
         @Test
         @DisplayName("회원 탈퇴")
         void withdrawal(){
-            User user = UserFixture.aUser().password(Password.of("password")).build();
+            User user = aUser().password(Password.of("password")).build();
             user.encodePassword(passwordEncoder);
             when(userRepository.findByUserId(UserId.of("userid")))
                     .thenReturn(Optional.of(user));
@@ -345,6 +380,24 @@ public class UserTest {
             assertDoesNotThrow(()->{
                 service.withdrawal(withdrawalUser, userid);
             });
+        }
+    }
+
+    @Nested
+    class InterestStoreServiceTest {
+        UserRepository userRepository = mock(UserRepository.class);
+        InterestStoreValidator interestStoreValidator = mock(InterestStoreValidator.class);
+        InterestStoreService service = new InterestStoreService(userRepository, interestStoreValidator, mock(ApplicationEventPublisher.class));
+
+        @Test
+        @DisplayName("관심 업체 등록")
+        void interest(){
+            User mockUser = registeredUser("userid", "password");
+            when(userRepository.findByUserId(UserId.of("userid")))
+                    .thenReturn(Optional.of(mockUser));
+            UserModel userModel = service.interest(Store.of("000-000-0000"),UserId.of("userid"));
+            assertNotNull(userModel.getInterestStores());
+            assertEquals(userModel.getInterestStores().size(), 1);
         }
     }
 

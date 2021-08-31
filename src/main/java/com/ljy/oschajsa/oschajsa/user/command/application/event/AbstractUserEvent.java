@@ -2,10 +2,10 @@ package com.ljy.oschajsa.oschajsa.user.command.application.event;
 
 import java.util.Objects;
 
-abstract public class AbstractMemberEvent {
+abstract public class AbstractUserEvent {
     protected final String id;
 
-    protected AbstractMemberEvent(String id) {
+    protected AbstractUserEvent(String id) {
         this.id = id;
     }
 
@@ -17,7 +17,7 @@ abstract public class AbstractMemberEvent {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractMemberEvent that = (AbstractMemberEvent) o;
+        AbstractUserEvent that = (AbstractUserEvent) o;
         return Objects.equals(id, that.id);
     }
 

@@ -5,7 +5,7 @@ import com.ljy.oschajsa.oschajsa.user.command.domain.User;
 
 import java.util.Objects;
 
-final public class RegisteredUserEvent extends AbstractMemberEvent {
+final public class RegisteredUserEvent extends AbstractUserEvent {
     private final String password;
     private final String nickname;
     private final AddressModel address;

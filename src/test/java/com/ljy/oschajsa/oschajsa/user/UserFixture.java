@@ -7,8 +7,8 @@ import static org.mockito.Mockito.mock;
 public class UserFixture {
     public static User registeredUser(String userId, String password){
         User user = User.builder()
-                .userId(UserId.of("userid"))
-                .password(Password.of("password"))
+                .userId(UserId.of(userId))
+                .password(Password.of(password))
                 .nickName(NickName.of("nickname")).build();
         user.register(mock(RegisterUserValidator.class));
         return user;

@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import static java.util.Objects.isNull;
 
@@ -49,6 +50,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserState state;
 
+    @Embedded
+    private InterestStores interestStores;
+
     // JPA에서 embedded로 사용시 기본 생성자 필요
     protected User(){ createDateTime = null; nickname = null; userId = null; }
 
@@ -62,6 +66,7 @@ public class User {
         this.nickname = nickName;
         this.address = address;
         createDateTime = LocalDateTime.now();
+        interestStores = new InterestStores();
     }
 
     /**
@@ -129,6 +134,15 @@ public class User {
         password = password.encode(passwordEncoder);
     }
 
+    /**
+     * @param store 관심 업체 사업자 번호
+     * - 관심 업체 등록 및 제거
+     */
+    final public void interestStore(InterestStoreValidator addInterestStoreValidator, Store store) {
+        addInterestStoreValidator.validation(store, userId);
+        interestStores.interest(store);
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public UserId getUserId() {
@@ -155,4 +169,7 @@ public class User {
         return state;
     }
 
+    public Set<Store> getInterestStores() {
+        return interestStores.get();
+    }
 }
