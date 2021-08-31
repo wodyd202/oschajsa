@@ -35,6 +35,8 @@ public class QueryStore {
     private final String ownerId;
     private final LocalDate createDate;
 
+    private String logo;
+
     protected QueryStore() {
         this.businessNumber = null;
         this.ownerId = null;
@@ -50,7 +52,8 @@ public class QueryStore {
                       QueryBusinessHour businessHour,
                       QueryAddress address,
                       String ownerId,
-                      LocalDate createDate) {
+                      LocalDate createDate,
+                      String logo) {
         this.businessNumber = businessNumber;
         this.businessName = businessName;
         this.businessTel = businessTel;
@@ -60,5 +63,10 @@ public class QueryStore {
         this.address = address;
         this.ownerId = ownerId;
         this.createDate = createDate;
+        this.logo = logo;
+    }
+
+    public void changeLogo(String logo) {
+        this.logo = logo;
     }
 }

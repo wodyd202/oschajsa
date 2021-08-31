@@ -6,11 +6,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.Arrays;
 
 import static com.ljy.oschajsa.oschajsa.store.StoreFixture.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,17 +29,6 @@ public class StoreAPITest extends ApiTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(OpenStore.builder().build())))
                 .andExpect(status().isForbidden());
-    }
-
-    @Test
-    @DisplayName("업체 등록")
-    void open() throws Exception {
-        OpenStore openStore = aOpenStore().build();
-        mvc.perform(post("/api/v1/store")
-                        .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(openStore)))
-                .andExpect(status().isOk());
     }
 
     @Test
@@ -158,6 +148,17 @@ public class StoreAPITest extends ApiTest {
         assertBadRequestWhenOpenStore(openStore);
     }
 
+    @Test
+    @DisplayName("업체 등록")
+    void open() throws Exception {
+        OpenStore openStore = aOpenStore().build();
+        mvc.perform(post("/api/v1/store")
+                        .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(openStore)))
+                .andExpect(status().isOk());
+    }
+
     private void assertBadRequestWhenOpenStore(OpenStore openStore) throws Exception{
         mvc.perform(post("/api/v1/store")
                         .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
@@ -165,5 +166,22 @@ public class StoreAPITest extends ApiTest {
                         .content(objectMapper.writeValueAsString(openStore)))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
+    }
+
+    @Test
+    @DisplayName("로고 변경")
+    void changeLogo() throws Exception {
+        open();
+        MockMultipartFile file
+                = new MockMultipartFile(
+                "file",
+                "image.png",
+                MediaType.IMAGE_PNG_VALUE,
+                "test".getBytes()
+        );
+        mvc.perform(multipart("/api/v1/store/{businessNumber}/logo","000-00-0000")
+                    .file(file)
+                .header("X-AUTH-TOKEN", obtainsAccessToken("username","password")))
+                .andExpect(status().isOk());
     }
 }

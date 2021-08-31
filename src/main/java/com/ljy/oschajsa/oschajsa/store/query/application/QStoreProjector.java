@@ -1,6 +1,7 @@
 package com.ljy.oschajsa.oschajsa.store.query.application;
 
 import com.ljy.oschajsa.oschajsa.core.object.QueryAddress;
+import com.ljy.oschajsa.oschajsa.store.command.application.event.ChangedLogoEvent;
 import com.ljy.oschajsa.oschajsa.store.command.application.event.OpenedStoreEvent;
 import com.ljy.oschajsa.oschajsa.store.query.model.QStoreRepository;
 import com.ljy.oschajsa.oschajsa.store.query.model.QueryBusinessHour;
@@ -45,6 +46,13 @@ public class QStoreProjector {
                 .ownerId(openedStoreEvent.getOwnerId())
                 .createDate(openedStoreEvent.getCreateDate())
                 .build();
+        storeRepository.save(queryStore);
+    }
+
+    @EventListener
+    void handle(ChangedLogoEvent event){
+        QueryStore queryStore = storeRepository.findByBusinessNumber(event.getBusinessNumber()).get();
+        queryStore.changeLogo(event.getLogo());
         storeRepository.save(queryStore);
     }
 }

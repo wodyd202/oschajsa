@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 final public class OpenedStoreEvent extends AbstractStoreEvent{
-    private final String businessNumber;
     private final String businessName;
     private final String businessTel;
     private final List<String> tags;
@@ -20,7 +19,6 @@ final public class OpenedStoreEvent extends AbstractStoreEvent{
 
     public OpenedStoreEvent(Store store) {
         super(store.getBusinessNumber().get());
-        this.businessNumber = store.getBusinessNumber().get();
         this.businessName = store.getBusinessName().get();
         this.businessTel = store.getBusinessTel().get();
         this.tags = store.getTags().get().stream().map(c->c.get()).collect(Collectors.toList());
@@ -39,11 +37,6 @@ final public class OpenedStoreEvent extends AbstractStoreEvent{
                 .build();
         this.ownerId = store.getOwnerId().get();
         this.createDate = store.getCreateDate();
-    }
-
-    @Override
-    public String getBusinessNumber() {
-        return businessNumber;
     }
 
     public String getBusinessName() {

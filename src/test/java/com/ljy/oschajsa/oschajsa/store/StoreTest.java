@@ -1,9 +1,12 @@
 package com.ljy.oschajsa.oschajsa.store;
 
 import com.ljy.oschajsa.oschajsa.core.application.AddressHelper;
+import com.ljy.oschajsa.oschajsa.core.file.FileUploader;
 import com.ljy.oschajsa.oschajsa.core.object.AddressInfo;
 import com.ljy.oschajsa.oschajsa.core.object.Coordinate;
+import com.ljy.oschajsa.oschajsa.store.command.application.ChangeLogoService;
 import com.ljy.oschajsa.oschajsa.store.command.application.OpenStoreService;
+import com.ljy.oschajsa.oschajsa.store.command.application.model.ChangeLogo;
 import com.ljy.oschajsa.oschajsa.store.command.domain.*;
 import com.ljy.oschajsa.oschajsa.store.command.application.StoreMapper;
 import com.ljy.oschajsa.oschajsa.store.command.domain.StoreRepository;
@@ -19,10 +22,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.Arrays;
 import java.util.Optional;
 
+import static com.ljy.oschajsa.oschajsa.store.StoreFixture.aOpenedStore;
+import static com.ljy.oschajsa.oschajsa.store.StoreFixture.aStore;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -232,10 +238,25 @@ public class StoreTest {
         when(storeTagRepository.findByName(any()))
                 .thenReturn(Optional.of(mock(Tag.class)));
 
-        Store store = StoreFixture.aStore(mock(AddressHelper.class), OwnerId.of("owner")).build();
+        Store store = aStore(mock(AddressHelper.class), OwnerId.of("owner")).build();
         StoreOpenValidator storeOpenValidator = new StoreOpenValidator(storeRepository, storeTagRepository);
         store.open(storeOpenValidator);
         assertEquals(store.getState(), StoreState.OPEN);
+    }
+
+    @Test
+    void changeLogo() {
+        Store store = aStore(mock(AddressHelper.class), OwnerId.of("owner")).build();
+        store.changeLogo(new MockMultipartFile("image.png","image.png","image", new byte[]{}));
+        assertEquals(store.getLogo(), Logo.of("image.png"));
+    }
+
+    @Test
+    void invalidLogo(){
+        assertThrows(InvalidLogoException.class,()->{
+            Store store = aStore(mock(AddressHelper.class), OwnerId.of("owner")).build();
+            store.changeLogo(new MockMultipartFile("image.exe","image.exe","image", new byte[]{}));
+        });
     }
 
     @Nested
@@ -271,5 +292,23 @@ public class StoreTest {
         }
     }
 
+    @Nested
+    class ChangeLogoServiceTest {
+
+        @Test
+        void changeLogo(){
+            StoreRepository storeRepository = mock(StoreRepository.class);
+            FileUploader fileUploader = mock(FileUploader.class);
+
+            Store mockStore = aOpenedStore();
+            when(storeRepository.findByBusinessNumber(BusinessNumber.of("000-00-0000")))
+                    .thenReturn(Optional.of(mockStore));
+
+            ChangeLogoService service = new ChangeLogoService(storeRepository,fileUploader,mock(ApplicationEventPublisher.class));
+            ChangeLogo changeLogo = new ChangeLogo(new MockMultipartFile("image.png","image.png","image",new byte[]{}));
+            StoreModel storeModel = service.changeLogo(changeLogo, BusinessNumber.of("000-00-0000"),OwnerId.of("owner"));
+            assertEquals(storeModel.getLogo(), "image.png");
+        }
+    }
 
 }

@@ -15,9 +15,17 @@ public class StoreExceptionHandler {
             InvalidBusinessNumberException.class,
             InvalidBusinessTelException.class,
             InvalidTagException.class,
-            TagNotFoundException.class
+            TagNotFoundException.class,
+            InvalidLogoException.class
     })
     public ResponseEntity<String> error(IllegalArgumentException e){
         return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ExceptionHandler({
+        StoreNotFoundException.class
+    })
+    public ResponseEntity<Void> error(StoreNotFoundException e){
+        return ResponseEntity.notFound().build();
     }
 }

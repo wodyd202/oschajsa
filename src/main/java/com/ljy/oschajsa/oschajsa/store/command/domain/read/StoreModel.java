@@ -19,6 +19,7 @@ public class StoreModel {
     private AddressModel address;
     private String owner;
     private LocalDate createDate;
+    private String logo;
 
     @Builder
     public StoreModel(BusinessNumber businessNumber,
@@ -28,7 +29,8 @@ public class StoreModel {
                       BusinessHour businessHour,
                       Address address,
                       OwnerId owner,
-                      LocalDate createDate) {
+                      LocalDate createDate,
+                      Logo logo) {
         this.businessNumber = businessNumber.get();
         this.businessName = businessName.get();
         this.tags = tags.get().stream().map(c->c.get()).collect(Collectors.toList());
@@ -48,6 +50,9 @@ public class StoreModel {
                 .build();
         this.owner = owner.get();
         this.createDate = createDate;
+        if(!Objects.isNull(logo)){
+            this.logo = logo.getPath();
+        }
     }
 
     public String getBusinessNumber() {
@@ -74,12 +79,12 @@ public class StoreModel {
         return address;
     }
 
-    public String getOwner() {
-        return owner;
-    }
-
     public LocalDate getCreateDate() {
         return createDate;
+    }
+
+    public String getLogo() {
+        return logo;
     }
 
     @Override

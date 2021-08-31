@@ -3,8 +3,10 @@ package com.ljy.oschajsa.oschajsa.store.command.domain;
 import com.ljy.oschajsa.oschajsa.core.object.Address;
 import com.ljy.oschajsa.oschajsa.core.object.InvalidAddressException;
 import com.ljy.oschajsa.oschajsa.store.command.domain.exception.*;
+import com.ljy.oschajsa.oschajsa.store.command.domain.infra.LogoConverter;
 import lombok.Builder;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -40,6 +42,9 @@ public class Store {
 
     @Embedded
     private BusinessHour businessHour;
+
+    @Convert(converter = LogoConverter.class)
+    private Logo logo;
 
     @AttributeOverrides({
             @AttributeOverride(name = "city", column = @Column(length = 50, nullable = true)),
@@ -139,6 +144,22 @@ public class Store {
         state = StoreState.OPEN;
     }
 
+    /**
+     * @param image
+     * - 업체 로고 변경
+     */
+    public void changeLogo(MultipartFile image) {
+        verifyNotEmptyImage(image);
+        logo = Logo.of(image.getOriginalFilename());
+    }
+
+    private static final String IMAGE_MUST_NOT_BE_EMPTY = "image must not be empty";
+    private void verifyNotEmptyImage(MultipartFile image) {
+        if(Objects.isNull(image)){
+            throw new InvalidLogoException(IMAGE_MUST_NOT_BE_EMPTY);
+        }
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -178,6 +199,10 @@ public class Store {
         return tags;
     }
 
+    public Logo getLogo() {
+        return logo;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -190,4 +215,5 @@ public class Store {
     public int hashCode() {
         return Objects.hash(businessNumber, businessName, businessTel, tags, state, businessHour, address, ownerId, createDate);
     }
+
 }

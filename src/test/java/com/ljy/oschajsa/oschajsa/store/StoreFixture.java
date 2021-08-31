@@ -1,6 +1,7 @@
 package com.ljy.oschajsa.oschajsa.store;
 
 import com.ljy.oschajsa.oschajsa.core.object.Address;
+import com.ljy.oschajsa.oschajsa.core.object.AddressInfo;
 import com.ljy.oschajsa.oschajsa.core.object.Coordinate;
 import com.ljy.oschajsa.oschajsa.core.application.AddressHelper;
 import com.ljy.oschajsa.oschajsa.store.command.application.model.ChangeBusinessHour;
@@ -10,7 +11,19 @@ import com.ljy.oschajsa.oschajsa.store.command.domain.*;
 
 import java.util.Arrays;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public class StoreFixture {
+    public static Store aOpenedStore(){
+        AddressHelper addressHelper = mock(AddressHelper.class);
+        when(addressHelper.getAddressInfoFrom(Coordinate.withLattitudeLongtitude(1.0,1.0)))
+                .thenReturn(AddressInfo.withCityProvinceDong("A","B","C"));
+        Store store = aStore(addressHelper, OwnerId.of("owner")).build();
+        store.open(mock(StoreOpenValidator.class));
+        return store;
+    }
+
     public static Store.StoreBuilder aStore(AddressHelper addressHelper, OwnerId ownerId) {
         return Store.builder()
                 .businessName(BusinessName.of("상호명"))
