@@ -1,5 +1,5 @@
 file-upload:
-  url: /Users/lee-jaeyong/Desktop/file-upload
+  url: /Users/lee-jaeyong/Desktop/file-upload/
 
 jwt:
   secretkey: oschajsa
