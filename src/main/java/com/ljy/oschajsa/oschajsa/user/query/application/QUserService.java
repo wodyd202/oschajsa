@@ -1,10 +1,7 @@
 package com.ljy.oschajsa.oschajsa.user.query.application;
 
-import com.ljy.oschajsa.oschajsa.user.query.model.QStoreRepository;
-import com.ljy.oschajsa.oschajsa.user.query.model.QUserRepository;
+import com.ljy.oschajsa.oschajsa.user.query.model.*;
 import com.ljy.oschajsa.oschajsa.core.object.QueryAddress;
-import com.ljy.oschajsa.oschajsa.user.query.model.QueryStore;
-import com.ljy.oschajsa.oschajsa.user.query.model.QueryUser;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,10 +18,12 @@ import java.util.Set;
 public class QUserService implements UserDetailsService {
     private final QUserRepository userRepository;
     private final QStoreRepository storeRepository;
+    private final QInterestStoreRepository interestStoreRepository;
 
-    public QUserService(QUserRepository userRepository, QStoreRepository storeRepository) {
+    public QUserService(QUserRepository userRepository, QStoreRepository storeRepository, QInterestStoreRepository interestStoreRepository) {
         this.userRepository = userRepository;
         this.storeRepository = storeRepository;
+        this.interestStoreRepository = interestStoreRepository;
     }
 
     public QueryAddress getAddress(String userId) {
@@ -38,7 +37,7 @@ public class QUserService implements UserDetailsService {
 
     @Transactional(readOnly = true)
     public Set<String> getInterestStores(String userId) {
-        return userRepository.findInterestStoresByUserId(userId);
+        return interestStoreRepository.findByUserId(userId);
     }
 
     @Override

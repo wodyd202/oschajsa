@@ -1,6 +1,7 @@
 package com.ljy.oschajsa.oschajsa.store.command.presentation;
 
 import com.ljy.oschajsa.oschajsa.core.http.CommandException;
+import com.ljy.oschajsa.oschajsa.core.http.ControllerHelper;
 import com.ljy.oschajsa.oschajsa.store.command.application.ChangeLogoService;
 import com.ljy.oschajsa.oschajsa.store.command.application.OpenStoreService;
 import com.ljy.oschajsa.oschajsa.store.command.application.model.ChangeLogo;
@@ -16,6 +17,8 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.security.Principal;
+
+import static com.ljy.oschajsa.oschajsa.core.http.ControllerHelper.verifyNotContainsError;
 
 @RestController
 @RequestMapping("api/v1/store")
@@ -43,9 +46,4 @@ public class StoreApi {
         return ResponseEntity.ok(storeModel);
     }
 
-    private void verifyNotContainsError(Errors errors){
-        if(errors.hasErrors()){
-            throw new CommandException(errors);
-        }
-    }
 }

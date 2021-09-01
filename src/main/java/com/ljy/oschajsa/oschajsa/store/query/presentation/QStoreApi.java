@@ -1,6 +1,7 @@
 package com.ljy.oschajsa.oschajsa.store.query.presentation;
 
 import com.ljy.oschajsa.oschajsa.core.http.CommandException;
+import com.ljy.oschajsa.oschajsa.core.http.ControllerHelper;
 import com.ljy.oschajsa.oschajsa.store.query.application.QStoreService;
 import com.ljy.oschajsa.oschajsa.store.query.application.StoreSearchDTO;
 import com.ljy.oschajsa.oschajsa.store.query.model.QueryStore;
@@ -15,6 +16,8 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.List;
+
+import static com.ljy.oschajsa.oschajsa.core.http.ControllerHelper.verifyNotContainsError;
 
 @RestController
 @AllArgsConstructor
@@ -31,11 +34,5 @@ public class QStoreApi {
     public ResponseEntity<List<QueryStore>> findAll(@Valid StoreSearchDTO dto, @ApiIgnore Errors errors){
         verifyNotContainsError(errors);
         return ResponseEntity.ok(service.findAll(dto));
-    }
-
-    private void verifyNotContainsError(Errors errors){
-        if(errors.hasErrors()){
-            throw new CommandException(errors);
-        }
     }
 }

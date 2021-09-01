@@ -1,6 +1,5 @@
 package com.ljy.oschajsa.oschajsa.user.command.presentation;
 
-import com.ljy.oschajsa.oschajsa.core.http.CommandException;
 import com.ljy.oschajsa.oschajsa.user.command.application.InterestStoreService;
 import com.ljy.oschajsa.oschajsa.user.command.domain.Store;
 import com.ljy.oschajsa.oschajsa.user.command.domain.UserId;
@@ -19,6 +18,9 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Set;
+
+import static com.ljy.oschajsa.oschajsa.core.http.ControllerHelper.verifyNotContainsError;
 
 @RestController
 @AllArgsConstructor
@@ -57,15 +59,10 @@ public class UserApi {
     }
 
     @PostMapping("interest/{store}")
-    public ResponseEntity<UserModel> interestStore(@PathVariable Store store,
-                                                   @ApiIgnore Principal principal){
-        UserModel userModel = interestStoreService.interest(store, UserId.of(principal.getName()));
+    public ResponseEntity<Set<Store>> interestStore(@PathVariable Store store,
+                                                    @ApiIgnore Principal principal){
+        Set<Store> userModel = interestStoreService.interest(store, UserId.of(principal.getName()));
         return ResponseEntity.ok(userModel);
     }
 
-    private void verifyNotContainsError(Errors errors){
-        if(errors.hasErrors()){
-            throw new CommandException(errors);
-        }
-    }
 }

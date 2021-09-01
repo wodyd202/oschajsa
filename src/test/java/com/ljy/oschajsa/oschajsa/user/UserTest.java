@@ -10,7 +10,6 @@ import com.ljy.oschajsa.oschajsa.user.command.application.model.RegisterUser;
 import com.ljy.oschajsa.oschajsa.user.command.application.model.WithdrawalUser;
 import com.ljy.oschajsa.oschajsa.user.command.domain.*;
 import com.ljy.oschajsa.oschajsa.user.command.domain.exception.*;
-import com.ljy.oschajsa.oschajsa.user.command.domain.read.UserModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -26,8 +25,7 @@ import java.util.Set;
 import static com.ljy.oschajsa.oschajsa.user.UserFixture.aUser;
 import static com.ljy.oschajsa.oschajsa.user.UserFixture.registeredUser;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class UserTest {
 
@@ -385,19 +383,24 @@ public class UserTest {
 
     @Nested
     class InterestStoreServiceTest {
-        UserRepository userRepository = mock(UserRepository.class);
+        InterestStoreRepository interestStoreRepository = mock(InterestStoreRepository.class);
         InterestStoreValidator interestStoreValidator = mock(InterestStoreValidator.class);
-        InterestStoreService service = new InterestStoreService(userRepository, interestStoreValidator, mock(ApplicationEventPublisher.class));
+        InterestStoreService service = new InterestStoreService(interestStoreRepository, interestStoreValidator, mock(ApplicationEventPublisher.class));
 
         @Test
         @DisplayName("관심 업체 등록")
         void interest(){
-            User mockUser = registeredUser("userid", "password");
-            when(userRepository.findByUserId(UserId.of("userid")))
-                    .thenReturn(Optional.of(mockUser));
-            UserModel userModel = service.interest(Store.of("000-000-0000"),UserId.of("userid"));
-            assertNotNull(userModel.getInterestStores());
-            assertEquals(userModel.getInterestStores().size(), 1);
+            service.interest(Store.of("000-00-0000"),UserId.of("userid"));
+            verify(interestStoreRepository,times(1)).interestStore(Store.of("000-00-0000"), UserId.of("userid"));
+        }
+
+        @Test
+        @DisplayName("관심 업체 등록 해제")
+        void deInterest(){
+            when(interestStoreRepository.existByStoreAndUserId(Store.of("000-00-0000"), UserId.of("userid")))
+                    .thenReturn(true);
+            service.interest(Store.of("000-00-0000"),UserId.of("userid"));
+            verify(interestStoreRepository,times(1)).deInterestStore(Store.of("000-00-0000"), UserId.of("userid"));
         }
     }
 

@@ -1,9 +1,7 @@
 package com.ljy.oschajsa.oschajsa.user.query.application;
 
-import com.ljy.oschajsa.oschajsa.user.command.application.event.ChangedUserAddressEvent;
-import com.ljy.oschajsa.oschajsa.user.command.application.event.InterestedStore;
-import com.ljy.oschajsa.oschajsa.user.command.application.event.RegisteredUserEvent;
-import com.ljy.oschajsa.oschajsa.user.command.application.event.WithdrawaledUserEvent;
+import com.ljy.oschajsa.oschajsa.user.command.application.event.*;
+import com.ljy.oschajsa.oschajsa.user.query.model.QInterestStoreRepository;
 import com.ljy.oschajsa.oschajsa.user.query.model.QUserRepository;
 import com.ljy.oschajsa.oschajsa.core.object.QueryAddress;
 import com.ljy.oschajsa.oschajsa.user.query.model.QueryUser;
@@ -23,9 +21,11 @@ import java.util.Objects;
 @Transactional
 public class QUserProjector {
     private final QUserRepository userRepository;
+    private final QInterestStoreRepository interestStoreRepository;
 
-    public QUserProjector(QUserRepository userRepository) {
+    public QUserProjector(QUserRepository userRepository, QInterestStoreRepository interestStoreRepository) {
         this.userRepository = userRepository;
+        this.interestStoreRepository = interestStoreRepository;
     }
 
     @EventListener
@@ -71,10 +71,13 @@ public class QUserProjector {
     }
 
     @EventListener
-    void handle(InterestedStore event){
-        QueryUser queryUser = getUser(event.getId());
-        queryUser.setInterestStores(event.getInterestStores());
-        userRepository.save(queryUser);
+    void handle(InterestedEvent event){
+        interestStoreRepository.interest(event.getBusinessNumber(), event.getId());
+    }
+
+    @EventListener
+    void handle(DeInterestedEvent event){
+        interestStoreRepository.deInterest(event.getBusinessNumber(), event.getId());
     }
 
     private QueryUser getUser(String id) {

@@ -20,6 +20,7 @@ public class UserModel {
     private String nickname;
     @JsonInclude(value = JsonInclude.Include.NON_NULL)
     private AddressModel address;
+    @JsonInclude(value = JsonInclude.Include.NON_NULL)
     private Set<String> interestStores;
 
     @Builder
