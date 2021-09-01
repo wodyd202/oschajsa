@@ -151,12 +151,11 @@ public class StoreAPITest extends ApiTest {
     @Test
     @DisplayName("업체 등록")
     void open() throws Exception {
-        OpenStore openStore = aOpenStore().build();
+        OpenStore openStore = aOpenStore().businessNumber("123-45-6789").build();
         mvc.perform(post("/api/v1/store")
                         .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(openStore)))
-                .andExpect(status().isOk());
+                        .content(objectMapper.writeValueAsString(openStore)));
     }
 
     private void assertBadRequestWhenOpenStore(OpenStore openStore) throws Exception{
@@ -179,9 +178,10 @@ public class StoreAPITest extends ApiTest {
                 MediaType.IMAGE_PNG_VALUE,
                 "test".getBytes()
         );
-        mvc.perform(multipart("/api/v1/store/{businessNumber}/logo","000-00-0000")
+        mvc.perform(multipart("/api/v1/store/{businessNumber}/logo","123-45-6789")
                     .file(file)
                 .header("X-AUTH-TOKEN", obtainsAccessToken("username","password")))
                 .andExpect(status().isOk());
     }
+
 }
