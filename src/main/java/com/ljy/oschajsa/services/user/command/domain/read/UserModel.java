@@ -1,0 +1,42 @@
+package com.ljy.oschajsa.services.user.command.domain.read;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ljy.oschajsa.core.object.Address;
+import com.ljy.oschajsa.core.object.AddressModel;
+import com.ljy.oschajsa.services.user.command.domain.NickName;
+import com.ljy.oschajsa.services.user.command.domain.UserId;
+import lombok.Builder;
+import lombok.Getter;
+
+import java.util.Objects;
+import java.util.Set;
+
+/**
+ * User Command Model
+ */
+@Getter
+public class UserModel {
+    private String userId;
+    private String nickname;
+    @JsonInclude(value = JsonInclude.Include.NON_NULL)
+    private AddressModel address;
+    @JsonInclude(value = JsonInclude.Include.NON_NULL)
+    private Set<String> interestStores;
+
+    @Builder
+    public UserModel(UserId userId, NickName nickname, Address address, Set<String> interestStores) {
+        this.userId = userId.get();
+        this.nickname = nickname.get();
+        if(!Objects.isNull(address)){
+            this.address = AddressModel.builder()
+                    .city(address.getAddressInfo().getCity())
+                    .dong(address.getAddressInfo().getDong())
+                    .province(address.getAddressInfo().getProvince())
+                    .lettitude(address.getCoordinate().getLettitude())
+                    .longtitude(address.getCoordinate().getLongtitude())
+                    .build();
+        }
+        this.interestStores = interestStores;
+    }
+
+}
