@@ -2,11 +2,8 @@ package com.ljy.oschajsa.services.user.domain.event;
 
 import com.ljy.oschajsa.core.object.Address;
 import com.ljy.oschajsa.core.object.AddressModel;
-import com.ljy.oschajsa.services.user.domain.User;
-import com.ljy.oschajsa.services.user.domain.UserId;
+import com.ljy.oschajsa.services.user.domain.value.UserId;
 import lombok.Getter;
-
-import java.util.Objects;
 
 @Getter
 public class ChangedUserAddressEvent extends AbstractUserEvent {

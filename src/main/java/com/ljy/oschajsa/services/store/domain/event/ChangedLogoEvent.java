@@ -1,8 +1,7 @@
 package com.ljy.oschajsa.services.store.domain.event;
 
-import com.ljy.oschajsa.services.store.domain.BusinessNumber;
-import com.ljy.oschajsa.services.store.domain.Logo;
-import com.ljy.oschajsa.services.store.domain.Store;
+import com.ljy.oschajsa.services.store.domain.value.BusinessNumber;
+import com.ljy.oschajsa.services.store.domain.value.Logo;
 import lombok.Getter;
 
 @Getter

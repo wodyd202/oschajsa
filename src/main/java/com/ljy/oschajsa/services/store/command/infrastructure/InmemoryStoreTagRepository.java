@@ -1,7 +1,7 @@
 package com.ljy.oschajsa.services.store.command.infrastructure;
 
-import com.ljy.oschajsa.services.store.domain.StoreTagRepository;
-import com.ljy.oschajsa.services.store.domain.Tag;
+import com.ljy.oschajsa.services.store.domain.value.StoreTagRepository;
+import com.ljy.oschajsa.services.store.domain.value.Tag;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

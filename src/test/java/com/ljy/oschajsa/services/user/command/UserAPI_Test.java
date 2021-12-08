@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.services.user;
+package com.ljy.oschajsa.services.user.command;
 
 import com.ljy.oschajsa.ApiTest;
 import com.ljy.oschajsa.services.user.command.application.model.ChangeAddress;
@@ -42,7 +42,7 @@ public class UserAPI_Test extends ApiTest {
     @DisplayName("사용자 생성")
     void registerUser() throws Exception{
         RegisterUser registerUser = RegisterUser.builder()
-                .id("userid")
+                .id("newuserid")
                 .password("password")
                 .nickname("nickname")
                 .build();

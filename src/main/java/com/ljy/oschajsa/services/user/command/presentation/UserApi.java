@@ -1,7 +1,7 @@
 package com.ljy.oschajsa.services.user.command.presentation;
 
 import com.ljy.oschajsa.core.http.ControllerHelper;
-import com.ljy.oschajsa.services.user.domain.UserId;
+import com.ljy.oschajsa.services.user.domain.value.UserId;
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
 import com.ljy.oschajsa.services.user.command.application.ChangeAddressService;
 import com.ljy.oschajsa.services.user.command.application.RegisterUserService;
@@ -18,6 +18,9 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.validation.Valid;
 import java.security.Principal;
 
+/**
+ * 사용자 API
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/user")

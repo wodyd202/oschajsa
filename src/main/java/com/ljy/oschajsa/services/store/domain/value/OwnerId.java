@@ -1,16 +1,15 @@
-package com.ljy.oschajsa.services.store.domain;
+package com.ljy.oschajsa.services.store.domain.value;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OwnerId {
-    private final String id;
-
-    // JPA에서 embedded로 사용시 기본 생성자 필요
-    protected OwnerId(){
-        id = null;
-    }
+    private String id;
 
     private OwnerId(String id) {
         this.id = id;

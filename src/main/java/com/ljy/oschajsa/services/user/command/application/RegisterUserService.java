@@ -1,8 +1,8 @@
 package com.ljy.oschajsa.services.user.command.application;
 
 import com.ljy.oschajsa.services.user.command.application.exception.AlreadyExistUserException;
-import com.ljy.oschajsa.services.user.domain.User;
-import com.ljy.oschajsa.services.user.domain.UserId;
+import com.ljy.oschajsa.services.user.domain.value.User;
+import com.ljy.oschajsa.services.user.domain.value.UserId;
 import com.ljy.oschajsa.services.user.domain.UserRepository;
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
 import com.ljy.oschajsa.services.user.command.application.model.RegisterUser;

@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.services.store.domain;
+package com.ljy.oschajsa.services.store.domain.value;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;

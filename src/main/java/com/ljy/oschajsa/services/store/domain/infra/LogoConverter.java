@@ -1,6 +1,6 @@
 package com.ljy.oschajsa.services.store.domain.infra;
 
-import com.ljy.oschajsa.services.store.domain.Logo;
+import com.ljy.oschajsa.services.store.domain.value.Logo;
 
 import javax.persistence.AttributeConverter;
 import java.util.Objects;

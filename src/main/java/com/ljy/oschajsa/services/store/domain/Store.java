@@ -2,10 +2,11 @@ package com.ljy.oschajsa.services.store.domain;
 
 import com.ljy.oschajsa.core.object.Address;
 import com.ljy.oschajsa.core.object.InvalidAddressException;
-import com.ljy.oschajsa.services.store.domain.event.ChangedLogoEvent;
-import com.ljy.oschajsa.services.store.domain.event.OpenedStoreEvent;
+import com.ljy.oschajsa.services.store.domain.event.*;
 import com.ljy.oschajsa.services.store.domain.infra.LogoConverter;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
+import com.ljy.oschajsa.services.store.domain.value.*;
+import io.lettuce.core.ScriptOutputType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -180,9 +181,7 @@ public class Store extends AbstractAggregateRoot<Store> {
      * @param image
      */
     public void changeLogo(OwnerId changer, MultipartFile image) {
-        if(!isMyStore(changer)){
-            throw new IllegalStateException("자신의 업체가 아닙니다.");
-        }
+        verifyIsMyStore(changer);
         setLogo(image);
         registerEvent(new ChangedLogoEvent(businessNumber, logo));
     }
@@ -203,10 +202,48 @@ public class Store extends AbstractAggregateRoot<Store> {
         }
     }
 
+    /**
+     * @param closer
+     * # 업체 운영 종료
+     */
+    public void close(OwnerId closer) {
+        verifyIsMyStore(closer);
+        this.state = StoreState.CLOSE;
+        registerEvent(new ClosedStoreEvent(businessNumber));
+    }
+
+    /**
+     * @param businessName
+     * @param changer
+     * # 업체명 변경
+     */
+    public void changeBusinessName(BusinessName businessName, OwnerId changer) {
+        verifyIsMyStore(changer);
+        setBusinessName(businessName);
+        registerEvent(new ChangedBusinessNameEvent(businessNumber, businessName));
+    }
+
+    /**
+     * @param businessTel
+     * @param changer
+     */
+    public void changeTel(BusinessTel businessTel, OwnerId changer) {
+        verifyIsMyStore(changer);
+        setBusinessTel(businessTel);
+        registerEvent(new ChangedBusinessTelEvent(businessNumber, businessTel));
+    }
+
+    private void verifyIsMyStore(OwnerId ownerId) {
+        if(!isMyStore(ownerId)){
+            throw new IllegalStateException("자신의 업체가 아닙니다.");
+        }
+    }
+
     public StoreModel toModel() {
         return StoreModel.builder()
                 .businessNumber(businessNumber.get())
                 .businessName(businessName.get())
+                .tel(businessTel.get())
                 .tags(tags.get().stream().map(Tag::get).collect(Collectors.toList()))
                 .state(state)
                 .businessHour(businessHour.toModel())

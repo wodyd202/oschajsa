@@ -1,10 +1,10 @@
 package com.ljy.oschajsa.services.store.command.application;
 
 import com.ljy.oschajsa.services.store.command.application.model.OpenStore;
-import com.ljy.oschajsa.services.store.domain.OwnerId;
+import com.ljy.oschajsa.services.store.domain.value.OwnerId;
 import com.ljy.oschajsa.services.store.domain.Store;
-import com.ljy.oschajsa.services.store.domain.StoreOpenValidator;
-import com.ljy.oschajsa.services.store.domain.StoreRepository;
+import com.ljy.oschajsa.services.store.domain.value.StoreOpenValidator;
+import com.ljy.oschajsa.services.store.domain.value.StoreRepository;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

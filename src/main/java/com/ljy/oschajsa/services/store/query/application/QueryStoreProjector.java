@@ -1,8 +1,7 @@
 package com.ljy.oschajsa.services.store.query.application;
 
-import com.ljy.oschajsa.services.store.domain.StoreState;
-import com.ljy.oschajsa.services.store.domain.event.ChangedLogoEvent;
-import com.ljy.oschajsa.services.store.domain.event.OpenedStoreEvent;
+import com.ljy.oschajsa.services.store.domain.event.*;
+import com.ljy.oschajsa.services.store.domain.value.StoreState;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -35,6 +34,31 @@ public class QueryStoreProjector {
     void handle(ChangedLogoEvent event){
         StoreModel storeModel = storeRepository.findById(event.getBusinessNumber()).get();
         storeModel.on(event);
+
+        storeRepository.save(storeModel);
+    }
+
+    @EventListener
+    void handle(ClosedStoreEvent event){
+        StoreModel storeModel = storeRepository.findById(event.getBusinessNumber()).get();
+        storeModel.on(event);
+
+        storeRepository.save(storeModel);
+    }
+
+    @EventListener
+    void handle(ChangedBusinessNameEvent event){
+        StoreModel storeModel = storeRepository.findById(event.getBusinessNumber()).get();
+        storeModel.on(event);
+
+        storeRepository.save(storeModel);
+    }
+
+    @EventListener
+    void handle(ChangedBusinessTelEvent event){
+        StoreModel storeModel = storeRepository.findById(event.getBusinessNumber()).get();
+        storeModel.on(event);
+
         storeRepository.save(storeModel);
     }
 }

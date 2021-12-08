@@ -1,7 +1,7 @@
 package com.ljy.oschajsa;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ljy.oschajsa.services.user.domain.UserId;
+import com.ljy.oschajsa.services.user.domain.value.UserId;
 import com.ljy.oschajsa.services.user.command.application.RegisterUserService;
 import com.ljy.oschajsa.services.user.domain.UserRepository;
 import com.ljy.oschajsa.services.user.command.application.model.RegisterUser;

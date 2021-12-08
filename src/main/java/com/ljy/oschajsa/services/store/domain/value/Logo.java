@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.services.store.domain;
+package com.ljy.oschajsa.services.store.domain.value;
 
 import java.util.Arrays;
 import java.util.List;

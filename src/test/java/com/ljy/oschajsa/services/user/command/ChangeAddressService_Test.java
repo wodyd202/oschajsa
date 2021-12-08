@@ -3,7 +3,7 @@ package com.ljy.oschajsa.services.user.command;
 import com.ljy.oschajsa.services.user.UserAPITest;
 import com.ljy.oschajsa.services.user.command.application.ChangeAddressService;
 import com.ljy.oschajsa.services.user.command.application.model.ChangeAddress;
-import com.ljy.oschajsa.services.user.domain.UserId;
+import com.ljy.oschajsa.services.user.domain.value.UserId;
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

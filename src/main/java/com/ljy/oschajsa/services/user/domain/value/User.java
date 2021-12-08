@@ -1,6 +1,7 @@
-package com.ljy.oschajsa.services.user.domain;
+package com.ljy.oschajsa.services.user.domain.value;
 
 import com.ljy.oschajsa.core.object.Address;
+import com.ljy.oschajsa.services.user.domain.UserState;
 import com.ljy.oschajsa.services.user.domain.event.ChangedUserAddressEvent;
 import com.ljy.oschajsa.services.user.domain.event.RegisteredUserEvent;
 import com.ljy.oschajsa.services.user.domain.event.WithdrawaledUserEvent;

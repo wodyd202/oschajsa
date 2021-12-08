@@ -2,26 +2,16 @@ package com.ljy.oschajsa.services.store.domain;
 
 import com.ljy.oschajsa.StubAddressHelper;
 import com.ljy.oschajsa.core.application.AddressHelper;
-import com.ljy.oschajsa.core.file.FileUploader;
-import com.ljy.oschajsa.core.object.AddressInfo;
-import com.ljy.oschajsa.core.object.Coordinate;
-import com.ljy.oschajsa.services.store.command.application.ChangeLogoService;
-import com.ljy.oschajsa.services.store.command.application.OpenStoreService;
-import com.ljy.oschajsa.services.store.command.application.model.ChangeLogo;
 import com.ljy.oschajsa.services.store.command.application.StoreMapper;
-import com.ljy.oschajsa.services.store.domain.StoreRepository;
-import com.ljy.oschajsa.services.store.domain.StoreTagRepository;
+import com.ljy.oschajsa.services.store.domain.value.*;
 import com.ljy.oschajsa.services.store.command.application.model.ChangeBusinessHour;
 import com.ljy.oschajsa.services.store.command.application.model.ChangeCoordinate;
 import com.ljy.oschajsa.services.store.command.application.model.OpenStore;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
-import com.ljy.oschajsa.services.store.domain.*;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.Arrays;

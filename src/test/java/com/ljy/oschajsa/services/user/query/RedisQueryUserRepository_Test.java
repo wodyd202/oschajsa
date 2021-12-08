@@ -1,6 +1,6 @@
 package com.ljy.oschajsa.services.user.query;
 
-import com.ljy.oschajsa.services.user.domain.User;
+import com.ljy.oschajsa.services.user.domain.value.User;
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
 import com.ljy.oschajsa.services.user.query.infrastructure.RedisQueryUserRepository;
 import org.junit.jupiter.api.DisplayName;

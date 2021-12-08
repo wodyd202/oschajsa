@@ -1,10 +1,8 @@
-package com.ljy.oschajsa.services.store.domain;
+package com.ljy.oschajsa.services.store.domain.value;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Embeddable
@@ -33,6 +31,6 @@ public class Tags {
     }
 
     public Set<Tag> get() {
-        return tags;
+        return tags == null ? Collections.EMPTY_SET : tags;
     }
 }

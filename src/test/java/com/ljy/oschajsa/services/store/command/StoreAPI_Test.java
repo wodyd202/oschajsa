@@ -1,6 +1,7 @@
-package com.ljy.oschajsa.services.store;
+package com.ljy.oschajsa.services.store.command;
 
 import com.ljy.oschajsa.ApiTest;
+import com.ljy.oschajsa.services.store.StoreFixture;
 import com.ljy.oschajsa.services.store.command.application.model.OpenStore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

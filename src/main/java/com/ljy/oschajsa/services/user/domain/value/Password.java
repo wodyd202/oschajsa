@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.services.user.domain;
+package com.ljy.oschajsa.services.user.domain.value;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

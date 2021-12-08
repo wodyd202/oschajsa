@@ -1,16 +1,14 @@
 package com.ljy.oschajsa.services.store.command.application;
 
 import com.ljy.oschajsa.core.file.FileUploader;
-import com.ljy.oschajsa.services.store.domain.event.ChangedLogoEvent;
 import com.ljy.oschajsa.services.store.command.application.model.ChangeLogo;
-import com.ljy.oschajsa.services.store.domain.BusinessNumber;
-import com.ljy.oschajsa.services.store.domain.OwnerId;
+import com.ljy.oschajsa.services.store.domain.value.BusinessNumber;
+import com.ljy.oschajsa.services.store.domain.value.OwnerId;
 import com.ljy.oschajsa.services.store.domain.Store;
-import com.ljy.oschajsa.services.store.domain.StoreRepository;
+import com.ljy.oschajsa.services.store.domain.value.StoreRepository;
 import com.ljy.oschajsa.services.store.domain.exception.StoreNotFoundException;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
 import lombok.AllArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

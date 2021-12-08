@@ -8,6 +8,7 @@ import com.ljy.oschajsa.services.store.command.application.model.ChangeBusinessH
 import com.ljy.oschajsa.services.store.command.application.model.ChangeCoordinate;
 import com.ljy.oschajsa.services.store.command.application.model.OpenStore;
 import com.ljy.oschajsa.services.store.domain.*;
+import com.ljy.oschajsa.services.store.domain.value.*;
 
 import java.util.Arrays;
 

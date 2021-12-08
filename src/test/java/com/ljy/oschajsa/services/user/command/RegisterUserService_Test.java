@@ -4,7 +4,7 @@ import com.ljy.oschajsa.services.user.UserAPITest;
 import com.ljy.oschajsa.services.user.command.application.RegisterUserService;
 import com.ljy.oschajsa.services.user.command.application.exception.AlreadyExistUserException;
 import com.ljy.oschajsa.services.user.command.application.model.RegisterUser;
-import com.ljy.oschajsa.services.user.domain.UserId;
+import com.ljy.oschajsa.services.user.domain.value.UserId;
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

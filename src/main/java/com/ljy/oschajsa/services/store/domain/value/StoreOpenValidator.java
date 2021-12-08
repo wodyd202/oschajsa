@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.services.store.domain;
+package com.ljy.oschajsa.services.store.domain.value;
 
 import com.ljy.oschajsa.services.store.domain.exception.TagNotFoundException;
 import lombok.AllArgsConstructor;

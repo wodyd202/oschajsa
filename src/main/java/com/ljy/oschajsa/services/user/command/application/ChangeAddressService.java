@@ -5,12 +5,10 @@ import com.ljy.oschajsa.core.object.Address;
 import com.ljy.oschajsa.core.object.Coordinate;
 import com.ljy.oschajsa.services.user.domain.UserRepository;
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
-import com.ljy.oschajsa.services.user.domain.event.ChangedUserAddressEvent;
 import com.ljy.oschajsa.services.user.command.application.model.ChangeAddress;
-import com.ljy.oschajsa.services.user.domain.User;
-import com.ljy.oschajsa.services.user.domain.UserId;
+import com.ljy.oschajsa.services.user.domain.value.User;
+import com.ljy.oschajsa.services.user.domain.value.UserId;
 import lombok.AllArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
