@@ -1,48 +1,35 @@
 package com.ljy.oschajsa.services.store.command.application;
 
-import com.ljy.oschajsa.services.store.command.application.event.OpenedStoreEvent;
 import com.ljy.oschajsa.services.store.command.application.model.OpenStore;
 import com.ljy.oschajsa.services.store.domain.OwnerId;
 import com.ljy.oschajsa.services.store.domain.Store;
 import com.ljy.oschajsa.services.store.domain.StoreOpenValidator;
 import com.ljy.oschajsa.services.store.domain.StoreRepository;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
-import org.springframework.context.ApplicationEventPublisher;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 업체 개설 서비스
+ */
 @Service
+@AllArgsConstructor
+@Transactional
 public class OpenStoreService {
-    private final StoreRepository storeRepository;
-    private final StoreOpenValidator storeOpenValidator;
-    private final StoreMapper storeMapper;
-    private final ApplicationEventPublisher applicationEventPublisher;
+    private StoreRepository storeRepository;
+    private StoreOpenValidator storeOpenValidator;
+    private StoreMapper storeMapper;
 
-    public OpenStoreService(StoreRepository storeRepository,
-                            StoreOpenValidator storeOpenValidator,
-                            StoreMapper storeMapper,
-                            ApplicationEventPublisher applicationEventPublisher) {
-        this.storeRepository = storeRepository;
-        this.storeOpenValidator = storeOpenValidator;
-        this.storeMapper = storeMapper;
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
-
-    @Transactional
+    /**
+     * @param openStore
+     * @param ownerId
+     * # 업체 개설
+     */
     public StoreModel open(OpenStore openStore, OwnerId ownerId) {
         Store store = storeMapper.mapFrom(openStore, ownerId);
         store.open(storeOpenValidator);
         storeRepository.save(store);
-        applicationEventPublisher.publishEvent(new OpenedStoreEvent(store));
-        return StoreModel.builder()
-                .businessNumber(store.getBusinessNumber())
-                .businessName(store.getBusinessName())
-                .tags(store.getTags())
-                .state(store.getState())
-                .businessHour(store.getBusinessHour())
-                .address(store.getAddress())
-                .owner(store.getOwnerId())
-                .createDate(store.getCreateDate())
-                .build();
+        return store.toModel();
     }
 }

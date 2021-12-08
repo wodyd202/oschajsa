@@ -1,9 +1,8 @@
 package com.ljy.oschajsa.services.store.query.presentation;
 
 import com.ljy.oschajsa.core.http.ControllerHelper;
-import com.ljy.oschajsa.services.store.query.application.QStoreService;
+import com.ljy.oschajsa.services.store.query.application.QueryStoreService;
 import com.ljy.oschajsa.services.store.query.application.StoreSearchDTO;
-import com.ljy.oschajsa.services.store.query.model.QueryStore;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -20,16 +19,16 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/api/v1/store")
 public class QStoreApi {
-    private final QStoreService service;
-
-    @GetMapping("{businessNumber}")
-    public ResponseEntity<QueryStore> findByBusinessNumber(@PathVariable String businessNumber){
-        return ResponseEntity.ok(service.findByBusinessNumber(businessNumber));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<QueryStore>> findAll(@Valid StoreSearchDTO dto, @ApiIgnore Errors errors){
-        ControllerHelper.verifyNotContainsError(errors);
-        return ResponseEntity.ok(service.findAll(dto));
-    }
+    private final QueryStoreService service;
+//
+//    @GetMapping("{businessNumber}")
+//    public ResponseEntity<QueryStore> findByBusinessNumber(@PathVariable String businessNumber){
+//        return ResponseEntity.ok(service.findByBusinessNumber(businessNumber));
+//    }
+//
+//    @GetMapping
+//    public ResponseEntity<List<QueryStore>> findAll(@Valid StoreSearchDTO dto, @ApiIgnore Errors errors){
+//        ControllerHelper.verifyNotContainsError(errors);
+//        return ResponseEntity.ok(service.findAll(dto));
+//    }
 }

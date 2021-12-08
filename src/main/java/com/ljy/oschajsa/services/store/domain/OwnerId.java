@@ -36,8 +36,4 @@ public class OwnerId {
     public int hashCode() {
         return Objects.hash(id);
     }
-
-    public boolean isMyStore(Store store) {
-        return equals(store.getOwnerId());
-    }
 }

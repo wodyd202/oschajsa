@@ -1,4 +1,4 @@
-package com.ljy.oschajsa;
+package com.ljy.oschajsa.services.user;
 
 import com.ljy.oschajsa.services.user.domain.User;
 import com.ljy.oschajsa.services.user.domain.UserRepository;

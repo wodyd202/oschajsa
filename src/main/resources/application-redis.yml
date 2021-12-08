@@ -7,3 +7,4 @@ spring:
 redis:
   key:
     user: "oschajsa:user"
+    store: "oschajsa:store"

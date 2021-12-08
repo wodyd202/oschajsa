@@ -1,6 +1,6 @@
 package com.ljy.oschajsa.services.user.command;
 
-import com.ljy.oschajsa.UserAPITest;
+import com.ljy.oschajsa.services.user.UserAPITest;
 import com.ljy.oschajsa.services.user.command.application.WithdrawalService;
 import com.ljy.oschajsa.services.user.command.application.model.WithdrawalUser;
 import com.ljy.oschajsa.services.user.domain.Password;

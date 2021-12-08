@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.services.store.command.application.event;
+package com.ljy.oschajsa.services.store.domain.event;
 
 import java.util.Objects;
 

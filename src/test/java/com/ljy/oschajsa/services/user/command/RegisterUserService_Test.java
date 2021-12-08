@@ -1,6 +1,6 @@
 package com.ljy.oschajsa.services.user.command;
 
-import com.ljy.oschajsa.UserAPITest;
+import com.ljy.oschajsa.services.user.UserAPITest;
 import com.ljy.oschajsa.services.user.command.application.RegisterUserService;
 import com.ljy.oschajsa.services.user.command.application.exception.AlreadyExistUserException;
 import com.ljy.oschajsa.services.user.command.application.model.RegisterUser;

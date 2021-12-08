@@ -1,5 +1,6 @@
 package com.ljy.oschajsa.services.store.domain;
 
+import com.ljy.oschajsa.services.store.domain.model.BusinessHourModel;
 import lombok.Getter;
 
 import javax.persistence.Embeddable;
@@ -89,5 +90,14 @@ public class BusinessHour {
                 ", weekendStart=" + weekendStart +
                 ", weekendEnd=" + weekendEnd +
                 '}';
+    }
+
+    public BusinessHourModel toModel() {
+        return BusinessHourModel.builder()
+                .weekdayStart(weekdayStart)
+                .weekdayEnd(weekdayEnd)
+                .weekendStart(weekendStart)
+                .weekendEnd(weekendEnd)
+                .build();
     }
 }

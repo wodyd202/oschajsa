@@ -1,7 +1,9 @@
 package com.ljy.oschajsa.services.store.domain.model;
 
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class BusinessHourModel {
     private int weekdayStart, weekdayEnd;
     private int weekendStart, weekendEnd;
@@ -17,19 +19,13 @@ public class BusinessHourModel {
         this.weekendStart = weekendStart;
     }
 
-    public int getWeekendStart() {
-        return weekendStart;
-    }
-
-    public int getWeekendEnd() {
-        return weekendEnd;
-    }
-
-    public int getWeekdayStart() {
-        return weekdayStart;
-    }
-
-    public int getWeekdayEnd() {
-        return weekdayEnd;
+    @Override
+    public String toString() {
+        return "BusinessHourModel{" +
+                "weekdayStart=" + weekdayStart +
+                ", weekdayEnd=" + weekdayEnd +
+                ", weekendStart=" + weekendStart +
+                ", weekendEnd=" + weekendEnd +
+                '}';
     }
 }

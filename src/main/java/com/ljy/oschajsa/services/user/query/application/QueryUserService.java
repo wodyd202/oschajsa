@@ -1,6 +1,5 @@
 package com.ljy.oschajsa.services.user.query.application;
 
-import com.ljy.oschajsa.services.store.query.model.QStoreRepository;
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

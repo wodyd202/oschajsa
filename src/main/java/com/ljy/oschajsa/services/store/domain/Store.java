@@ -2,20 +2,31 @@ package com.ljy.oschajsa.services.store.domain;
 
 import com.ljy.oschajsa.core.object.Address;
 import com.ljy.oschajsa.core.object.InvalidAddressException;
-import com.ljy.oschajsa.services.store.domain.exception.*;
+import com.ljy.oschajsa.services.store.domain.event.ChangedLogoEvent;
+import com.ljy.oschajsa.services.store.domain.event.OpenedStoreEvent;
 import com.ljy.oschajsa.services.store.domain.infra.LogoConverter;
+import com.ljy.oschajsa.services.store.domain.model.StoreModel;
+import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
+/**
+ * 업체 도메인
+ */
 @Entity
 @Table(name = "stores")
 @DynamicUpdate
-public class Store {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Store extends AbstractAggregateRoot<Store> {
+
     /**
      * businessNumber 사업자 번호
      * businessName 상호명
@@ -28,7 +39,7 @@ public class Store {
      * createDate 업체 등록일
      */
     @EmbeddedId
-    private final BusinessNumber businessNumber;
+    private BusinessNumber businessNumber;
     @Embedded
     private BusinessName businessName;
     @Embedded
@@ -56,17 +67,10 @@ public class Store {
     private Address address;
 
     @Embedded
-    private final OwnerId ownerId;
+    private OwnerId ownerId;
 
     @Column(nullable = false)
-    private final LocalDate createDate;
-
-    // JPA에서 embedded로 사용시 기본 생성자 필요
-    protected Store(){
-        businessNumber = null;
-        createDate = null;
-        ownerId = null;
-    }
+    private LocalDate createDate;
 
     @Builder
     public Store(BusinessName businessName,
@@ -76,20 +80,47 @@ public class Store {
                  Tags tags,
                  Address address,
                  OwnerId ownerId) {
-        verifyNotNullBusinessName(businessName);
-        verifyNotNullBusinessNumber(businessNumber);
-        verifyNotNullBusinessTel(businessTel);
-        verifyNotNullBusinessHour(businessHour);
-        verifyNotNullAddress(address);
-        verifyNotNullTags(tags);
-        this.tags = tags;
-        this.businessName = businessName;
-        this.businessNumber = businessNumber;
-        this.businessTel = businessTel;
-        this.businessHour = businessHour;
-        this.address = address;
+        setTags(tags);
+        setBusinessName(businessName);
+        setAddress(address);
+        setBusinessNumber(businessNumber);
+        setBusinessTel(businessTel);
+        setBusinessHour(businessHour);
+
         this.ownerId = ownerId;
         this.createDate = LocalDate.now();
+
+        registerEvent(new OpenedStoreEvent(businessNumber, businessName, tags, businessTel, businessHour, address, ownerId, createDate));
+    }
+
+    private void setBusinessHour(BusinessHour businessHour) {
+        verifyNotNullBusinessHour(businessHour);
+        this.businessHour = businessHour;
+    }
+
+    private void setBusinessTel(BusinessTel businessTel) {
+        verifyNotNullBusinessTel(businessTel);
+        this.businessTel = businessTel;
+    }
+
+    private void setBusinessNumber(BusinessNumber businessNumber) {
+        verifyNotNullBusinessNumber(businessNumber);
+        this.businessNumber = businessNumber;
+    }
+
+    private void setAddress(Address address) {
+        verifyNotNullAddress(address);
+        this.address = address;
+    }
+
+    private void setTags(Tags tags) {
+        verifyNotNullTags(tags);
+        this.tags = tags;
+    }
+
+    private void setBusinessName(BusinessName businessName) {
+        verifyNotNullBusinessName(businessName);
+        this.businessName = businessName;
     }
 
     private static final String BUSINESS_NAME_MUST_NOT_BE_EMPTY = "business name must not be empty";
@@ -145,10 +176,22 @@ public class Store {
     }
 
     /**
+     * @param changer
      * @param image
-     * - 업체 로고 변경
      */
-    public void changeLogo(MultipartFile image) {
+    public void changeLogo(OwnerId changer, MultipartFile image) {
+        if(!isMyStore(changer)){
+            throw new IllegalStateException("자신의 업체가 아닙니다.");
+        }
+        setLogo(image);
+        registerEvent(new ChangedLogoEvent(businessNumber, logo));
+    }
+
+    private boolean isMyStore(OwnerId changer) {
+        return ownerId.equals(changer);
+    }
+
+    private void setLogo(MultipartFile image) {
         verifyNotEmptyImage(image);
         logo = Logo.of(image.getOriginalFilename());
     }
@@ -160,47 +203,18 @@ public class Store {
         }
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    public BusinessName getBusinessName() {
-        return businessName;
-    }
-
-    public BusinessNumber getBusinessNumber() {
-        return businessNumber;
-    }
-
-    public BusinessTel getBusinessTel() {
-        return businessTel;
-    }
-
-    public StoreState getState() {
-        return state;
-    }
-
-    public BusinessHour getBusinessHour() {
-        return businessHour;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public OwnerId getOwnerId() {
-        return ownerId;
-    }
-
-    public LocalDate getCreateDate() {
-        return createDate;
-    }
-
-    public Tags getTags() {
-        return tags;
-    }
-
-    public Logo getLogo() {
-        return logo;
+    public StoreModel toModel() {
+        return StoreModel.builder()
+                .businessNumber(businessNumber.get())
+                .businessName(businessName.get())
+                .tags(tags.get().stream().map(Tag::get).collect(Collectors.toList()))
+                .state(state)
+                .businessHour(businessHour.toModel())
+                .address(address.toModel())
+                .owner(ownerId.get())
+                .createDate(createDate)
+                .logo(logo == null ? null : logo.getPath())
+                .build();
     }
 
     @Override
@@ -215,5 +229,4 @@ public class Store {
     public int hashCode() {
         return Objects.hash(businessNumber, businessName, businessTel, tags, state, businessHour, address, ownerId, createDate);
     }
-
 }

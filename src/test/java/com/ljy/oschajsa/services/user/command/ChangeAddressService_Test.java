@@ -1,7 +1,6 @@
 package com.ljy.oschajsa.services.user.command;
 
-import com.ljy.oschajsa.UserAPITest;
-import com.ljy.oschajsa.services.user.UserFixture;
+import com.ljy.oschajsa.services.user.UserAPITest;
 import com.ljy.oschajsa.services.user.command.application.ChangeAddressService;
 import com.ljy.oschajsa.services.user.command.application.model.ChangeAddress;
 import com.ljy.oschajsa.services.user.domain.UserId;
