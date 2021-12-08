@@ -24,7 +24,7 @@ public class OpenStoreService_Test extends StoreAPITest {
     @DisplayName("업체 개설 테스트")
     void open(){
         // given
-        OpenStore openStore = aOpenStore().build();
+        OpenStore openStore = aOpenStore().businessNumber("111-22-3333").build();
 
         // when
         StoreModel storeModel = openStoreService.open(openStore, OwnerId.of("ownerId"));

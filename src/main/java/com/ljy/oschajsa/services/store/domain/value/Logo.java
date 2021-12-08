@@ -17,7 +17,7 @@ public class Logo {
         }
     }
 
-    private static final String ONLY_IMAGE_FILES_ARE_ACCEPTED_FOR_LOGOS = "only image files are accepted for logos";
+    private static final String ONLY_IMAGE_FILES_ARE_ACCEPTED_FOR_LOGOS = "업체 로고은 이미지 파일만 허용합니다.";
     private static final List<String> ALLOWED_EXTENTIONS = Arrays.asList(".png",".jpg",".jpeg");
     private void verifyImageFile(String path) {
         String extention = getExtention(path);

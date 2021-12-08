@@ -81,12 +81,12 @@ public class Store extends AbstractAggregateRoot<Store> {
                  Tags tags,
                  Address address,
                  OwnerId ownerId) {
-        setTags(tags);
         setBusinessName(businessName);
         setAddress(address);
         setBusinessNumber(businessNumber);
         setBusinessTel(businessTel);
         setBusinessHour(businessHour);
+        setTags(tags);
 
         this.ownerId = ownerId;
         this.createDate = LocalDate.now();
@@ -116,6 +116,7 @@ public class Store extends AbstractAggregateRoot<Store> {
 
     private void setTags(Tags tags) {
         verifyNotNullTags(tags);
+        tags.setStore(this);
         this.tags = tags;
     }
 
@@ -124,42 +125,42 @@ public class Store extends AbstractAggregateRoot<Store> {
         this.businessName = businessName;
     }
 
-    private static final String BUSINESS_NAME_MUST_NOT_BE_EMPTY = "business name must not be empty";
+    private static final String BUSINESS_NAME_MUST_NOT_BE_EMPTY = "업체명을 입력해주세요.";
     private void verifyNotNullBusinessName(BusinessName businessName) {
         if(Objects.isNull(businessName)){
             throw new IllegalArgumentException(BUSINESS_NAME_MUST_NOT_BE_EMPTY);
         }
     }
 
-    private static final String BUSINESS_NUMBER_MUST_NOT_BE_EMPTY = "business number must not be empty";
+    private static final String BUSINESS_NUMBER_MUST_NOT_BE_EMPTY = "업체 사업자번호를 입력해주세요.";
     private void verifyNotNullBusinessNumber(BusinessNumber businessNumber) {
         if(Objects.isNull(businessNumber)){
             throw new IllegalArgumentException(BUSINESS_NUMBER_MUST_NOT_BE_EMPTY);
         }
     }
 
-    private static final String BUSINESS_TEL_MUST_NOT_BE_EMPTY = "business tel must not be empty";
+    private static final String BUSINESS_TEL_MUST_NOT_BE_EMPTY = "업체 전화번호를 입력해주세요.";
     private void verifyNotNullBusinessTel(BusinessTel businessTel) {
         if(Objects.isNull(businessTel)){
             throw new IllegalArgumentException(BUSINESS_TEL_MUST_NOT_BE_EMPTY);
         }
     }
 
-    private static final String BUSINESS_HOUR_MUST_NOT_BE_EMPTY = "business hour must not be empty";
+    private static final String BUSINESS_HOUR_MUST_NOT_BE_EMPTY = "업체 운영 시간을 입력해주세요.";
     private void verifyNotNullBusinessHour(BusinessHour businessHour) {
         if(Objects.isNull(businessHour)){
             throw new IllegalArgumentException(BUSINESS_HOUR_MUST_NOT_BE_EMPTY);
         }
     }
 
-    private static final String ADDRESS_MUST_NOT_BE_EMPTY = "address must not be empty";
+    private static final String ADDRESS_MUST_NOT_BE_EMPTY = "업체 주소를 입력해주세요.";
     private void verifyNotNullAddress(Address address) {
         if(Objects.isNull(address)){
             throw new InvalidAddressException(ADDRESS_MUST_NOT_BE_EMPTY);
         }
     }
 
-    private static final String TAGS_MUST_NOT_BE_EMPTY = "tags must not be empty";
+    private static final String TAGS_MUST_NOT_BE_EMPTY = "업체 태그를 입력해주세요.";
     private void verifyNotNullTags(Tags tags) {
         if(Objects.isNull(tags)){
             throw new IllegalArgumentException(TAGS_MUST_NOT_BE_EMPTY);
@@ -195,7 +196,7 @@ public class Store extends AbstractAggregateRoot<Store> {
         logo = Logo.of(image.getOriginalFilename());
     }
 
-    private static final String IMAGE_MUST_NOT_BE_EMPTY = "image must not be empty";
+    private static final String IMAGE_MUST_NOT_BE_EMPTY = "업체 로고 이미지를 입력해주세요.";
     private void verifyNotEmptyImage(MultipartFile image) {
         if(Objects.isNull(image)){
             throw new IllegalArgumentException(IMAGE_MUST_NOT_BE_EMPTY);
@@ -226,11 +227,45 @@ public class Store extends AbstractAggregateRoot<Store> {
     /**
      * @param businessTel
      * @param changer
+     * # 업체 전화번호 변경
      */
     public void changeTel(BusinessTel businessTel, OwnerId changer) {
         verifyIsMyStore(changer);
         setBusinessTel(businessTel);
         registerEvent(new ChangedBusinessTelEvent(businessNumber, businessTel));
+    }
+
+    /**
+     * @param businessHour
+     * @param changer
+     * # 업체 운영시간 변경
+     */
+    public void changeBusinessHour(BusinessHour businessHour, OwnerId changer) {
+        verifyIsMyStore(changer);
+        setBusinessHour(businessHour);
+        registerEvent(new ChangedBusinessHourEvent(businessNumber, businessHour));
+    }
+
+    /**
+     * @param tag
+     * @param remover
+     * # 업체 태그 제거
+     */
+    public void removeTag(Tag tag, OwnerId remover) {
+        verifyIsMyStore(remover);
+        tags.remove(tag);
+        registerEvent(new RemovedTagEvent(businessNumber, tag));
+    }
+
+    /**
+     * @param tag
+     * @param adder
+     * # 업체 태그 추가
+     */
+    public void addTag(Tag tag, OwnerId adder) {
+        verifyIsMyStore(adder);
+        tags.add(tag, this);
+        registerEvent(new AddedTagEvent(businessNumber, tag));
     }
 
     private void verifyIsMyStore(OwnerId ownerId) {

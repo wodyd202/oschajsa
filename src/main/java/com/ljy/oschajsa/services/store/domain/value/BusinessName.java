@@ -22,7 +22,7 @@ public class BusinessName {
         this.businessName = businessName;
     }
 
-    private final static String BUSINESS_NAME_MUST_NOT_BE_EMTPY = "business name must not be emtpy";
+    private final static String BUSINESS_NAME_MUST_NOT_BE_EMTPY = "업체명을 입력해주세요.";
     private void verifyNotEmptyBusinessName(String businessName) {
         if(businessName.isEmpty()){
             throw new IllegalArgumentException(BUSINESS_NAME_MUST_NOT_BE_EMTPY);
@@ -30,7 +30,7 @@ public class BusinessName {
     }
 
     private final static Pattern BUSINESS_NAME_REGEX = Pattern.compile("^[가-힣a-zA-Z]{1,20}$");
-    private final static String BUSINESS_NAME_CAN_USE_HANGUL_NUMBER_ALPHABETS_AND_THE_LENGTH_MUST_BE_BETWEEN_1_AND_20_CHARACTERS = "business name can use hangul, number, alphabets, and the length must be between 1 and 20 characters.";
+    private final static String BUSINESS_NAME_CAN_USE_HANGUL_NUMBER_ALPHABETS_AND_THE_LENGTH_MUST_BE_BETWEEN_1_AND_20_CHARACTERS = "업체명은 [한글, 영어(대소문자)] 조합으로 1자 이상 20자 이하로 입력해주세요.";
     private void businessNameValidation(String businessName) {
         if(!BUSINESS_NAME_REGEX.matcher(businessName).matches()){
             throw new IllegalArgumentException(BUSINESS_NAME_CAN_USE_HANGUL_NUMBER_ALPHABETS_AND_THE_LENGTH_MUST_BE_BETWEEN_1_AND_20_CHARACTERS);

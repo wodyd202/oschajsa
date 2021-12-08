@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class StoreAPI_Test extends ApiTest {
+public class OpenStoreAPI_Test extends ApiTest {
 
     @BeforeEach
     void setUp(){
@@ -26,7 +26,7 @@ public class StoreAPI_Test extends ApiTest {
     @Test
     @DisplayName("업체 등록 요청시 토큰을 포함시켜 요청해야함")
     void open_403() throws Exception {
-        mvc.perform(post("/api/v1/store")
+        mockMvc.perform(post("/api/v1/store")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(OpenStore.builder().build())))
                 .andExpect(status().isForbidden());
@@ -152,37 +152,26 @@ public class StoreAPI_Test extends ApiTest {
     @Test
     @DisplayName("업체 등록")
     void open() throws Exception {
-        OpenStore openStore = aOpenStore().businessNumber("123-45-6789").build();
-        mvc.perform(post("/api/v1/store")
+        // given
+        OpenStore openStore = aOpenStore().businessNumber("123-12-1234").build();
+
+        // when
+        mockMvc.perform(post("/api/v1/store")
                         .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(openStore)));
+                        .content(objectMapper.writeValueAsString(openStore)))
+
+        // then
+        .andExpect(status().isOk());
     }
 
     private void assertBadRequestWhenOpenStore(OpenStore openStore) throws Exception{
-        mvc.perform(post("/api/v1/store")
+        mockMvc.perform(post("/api/v1/store")
                         .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(openStore)))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
-    }
-
-    @Test
-    @DisplayName("로고 변경")
-    void changeLogo() throws Exception {
-        open();
-        MockMultipartFile file
-                = new MockMultipartFile(
-                "file",
-                "image.png",
-                MediaType.IMAGE_PNG_VALUE,
-                "test".getBytes()
-        );
-        mvc.perform(multipart("/api/v1/store/{businessNumber}/logo","123-45-6789")
-                    .file(file)
-                .header("X-AUTH-TOKEN", obtainsAccessToken("username","password")))
-                .andExpect(status().isOk());
     }
 
 }

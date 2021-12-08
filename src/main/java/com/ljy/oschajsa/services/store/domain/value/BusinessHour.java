@@ -31,8 +31,8 @@ public class BusinessHour {
         this.weekendEnd = weekendEnd;
     }
 
-    private static final String INVALID_WEEKEND_HOUR_MESSAGE = "please enter the business hours between 0 and 24 on weekends.";
-    private static final String WEEKEND_HOUR_START_TIME_MUST_BE_LESS_THAN_END_TIME = "weekend hour start time must be less than end time.";
+    private static final String INVALID_WEEKEND_HOUR_MESSAGE = "업체 운영시간을 0시 부터 24시 사이로 입력해주세요.";
+    private static final String WEEKEND_HOUR_START_TIME_MUST_BE_LESS_THAN_END_TIME = "업체 시작 시간을 종료시간보다 작아야합니다.";
     private void weekendHourValidation(Integer weekendStart, Integer weekendEnd) {
         if(weekendStart < 0 || weekendStart > 24){
             throw new IllegalArgumentException(INVALID_WEEKEND_HOUR_MESSAGE);
@@ -45,8 +45,8 @@ public class BusinessHour {
         }
     }
 
-    private static final String INVALID_WEEKDAY_HOUR_MESSAGE = "please enter the business hours between 0 and 24 on weekdays.";
-    private static final String WEEKDAY_HOUR_START_TIME_MUST_BE_LESS_THAN_END_TIME = "weekday hour start time must be less than end time.";
+    private static final String INVALID_WEEKDAY_HOUR_MESSAGE = "업체 운영시간을 0시 부터 24시 사이로 입력해주세요.";
+    private static final String WEEKDAY_HOUR_START_TIME_MUST_BE_LESS_THAN_END_TIME = "업체 시작 시간을 종료시간보다 작아야합니다.";
     private void weekdayHourValidation(Integer weekdayStart, Integer weekdayEnd) {
         if(weekdayStart < 0 || weekdayEnd > 24){
             throw new IllegalArgumentException(INVALID_WEEKDAY_HOUR_MESSAGE);
@@ -59,14 +59,14 @@ public class BusinessHour {
         }
     }
 
-    private static final String EMPTY_WEEKDAY_HOUR_MESSAGE = "weekday start and end hour must not be empty";
+    private static final String EMPTY_WEEKDAY_HOUR_MESSAGE = "업체 운영시간을 입력해주세요.";
     private void verifyNotEmptyWeekdayHour(Integer weekdayStart, Integer weekdayEnd) {
         if(Objects.isNull(weekdayStart) || Objects.isNull(weekdayEnd)){
             throw new IllegalArgumentException(EMPTY_WEEKDAY_HOUR_MESSAGE);
         }
     }
 
-    private static final String EMPTY_WEEKEND_HOUR_MESSAGE = "weekend start and end hour must not be empty";
+    private static final String EMPTY_WEEKEND_HOUR_MESSAGE = "업체 운영시간을 입력해주세요.";
     private void verifyNotEmptyWeekendHour(Integer weekendStart, Integer weekendEnd) {
         if(Objects.isNull(weekendStart) || Objects.isNull(weekendEnd)){
             throw new IllegalArgumentException(EMPTY_WEEKEND_HOUR_MESSAGE);

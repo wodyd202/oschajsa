@@ -1,18 +1,22 @@
 package com.ljy.oschajsa.services.user.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ljy.oschajsa.core.object.AddressModel;
 import com.ljy.oschajsa.services.user.domain.UserState;
 import com.ljy.oschajsa.services.user.domain.event.ChangedUserAddressEvent;
 import com.ljy.oschajsa.services.user.domain.event.WithdrawaledUserEvent;
 import com.ljy.oschajsa.services.user.query.application.external.Store;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class UserModel {
     private String userId;
@@ -43,10 +47,12 @@ public class UserModel {
         this.state = state;
     }
 
+    @JsonIgnore
     public void on(ChangedUserAddressEvent event) {
         this.address = event.getAddress();
     }
 
+    @JsonIgnore
     public void on(WithdrawaledUserEvent event) {
         this.state = UserState.WITHDRAWAL;
     }
@@ -62,10 +68,12 @@ public class UserModel {
                 '}';
     }
 
+    @JsonIgnore
     public boolean isWithdrawal() {
         return state.equals(UserState.WITHDRAWAL);
     }
 
+    @JsonIgnore
     public void emptyPassword() {
         this.password = null;
     }

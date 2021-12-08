@@ -1,9 +1,12 @@
 package com.ljy.oschajsa.services.store.domain.model;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BusinessHourModel {
     private int weekdayStart, weekdayEnd;
     private int weekendStart, weekendEnd;

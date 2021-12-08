@@ -8,6 +8,9 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 @Component
 @Async("storeExecutor")
 @AllArgsConstructor
@@ -30,35 +33,17 @@ public class QueryStoreProjector {
         storeRepository.save(storeModel);
     }
 
+    private final String ON = "on";
     @EventListener
-    void handle(ChangedLogoEvent event){
+    void handle(AbstractStoreEvent event) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         StoreModel storeModel = storeRepository.findById(event.getBusinessNumber()).get();
-        storeModel.on(event);
-
+        invoke(event, storeModel);
         storeRepository.save(storeModel);
     }
 
-    @EventListener
-    void handle(ClosedStoreEvent event){
-        StoreModel storeModel = storeRepository.findById(event.getBusinessNumber()).get();
-        storeModel.on(event);
-
-        storeRepository.save(storeModel);
-    }
-
-    @EventListener
-    void handle(ChangedBusinessNameEvent event){
-        StoreModel storeModel = storeRepository.findById(event.getBusinessNumber()).get();
-        storeModel.on(event);
-
-        storeRepository.save(storeModel);
-    }
-
-    @EventListener
-    void handle(ChangedBusinessTelEvent event){
-        StoreModel storeModel = storeRepository.findById(event.getBusinessNumber()).get();
-        storeModel.on(event);
-
-        storeRepository.save(storeModel);
+    private void invoke(AbstractStoreEvent event, StoreModel storeModel) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Method declaredMethod = StoreModel.class.getDeclaredMethod(ON, event.getClass());
+        declaredMethod.setAccessible(true);
+        declaredMethod.invoke(storeModel, event);
     }
 }

@@ -9,8 +9,8 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class ChangeLogo {
-    @NotNull(message = "file must not be empty")
-    private final MultipartFile file;
+    @NotNull(message = "로고 파일을 입력해주세요.")
+    private MultipartFile file;
 
     public ChangeLogo(MultipartFile file) {
         this.file = file;

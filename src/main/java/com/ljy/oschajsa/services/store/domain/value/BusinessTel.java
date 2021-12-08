@@ -19,7 +19,7 @@ public class BusinessTel {
         this.tel = tel;
     }
 
-    private static final String BUSINESS_TEL_MUST_NOT_BE_EMTPY = "business tel must not be emtpy";
+    private static final String BUSINESS_TEL_MUST_NOT_BE_EMTPY = "업체 전화번호를 입력해주세요.";
     private void verifyNotEmptyTel(String tel) {
         if(tel.isEmpty()){
             throw new IllegalArgumentException(BUSINESS_TEL_MUST_NOT_BE_EMTPY);
@@ -27,7 +27,7 @@ public class BusinessTel {
     }
 
     private static final Pattern TEL_REGEX = Pattern.compile("[0-2]{2,3}-[\\d]{3,4}-[\\d]{4}");
-    private static final String INVALID_BUSINESS_TEL_MESSAGE = "please check your input, business tel format must be 000-000-0000,00-000-0000,000-0000-0000";
+    private static final String INVALID_BUSINESS_TEL_MESSAGE = "업체 전화번호 형식은 [000-000-0000,00-000-0000,000-0000-0000] 형식만 허용합니다.";
     private void telValidation(String tel) {
         if(!TEL_REGEX.matcher(tel).matches()){
             throw new IllegalArgumentException(INVALID_BUSINESS_TEL_MESSAGE);

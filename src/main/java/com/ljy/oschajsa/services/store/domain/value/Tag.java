@@ -1,23 +1,35 @@
 package com.ljy.oschajsa.services.store.domain.value;
 
-import javax.persistence.Embeddable;
+import com.ljy.oschajsa.services.store.domain.Store;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.util.Objects;
 
-@Embeddable
+/**
+ * 업체 태그
+ */
+@Entity
+@Table(name = "store_tags")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tag {
-    private final String tag;
 
-    // JPA에서 embedded로 사용시 기본 생성자 필요
-    protected Tag(){
-        tag = null;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long seq;
+
+    private String tag;
+
+    @ManyToOne
+    private Store store;
 
     private Tag(String tag) {
         verifyNotEmptyTag(tag);
         this.tag = tag;
     }
 
-    private static final String TAG_MUST_NOT_BE_EMPTY = "tag must not be empty";
+    private static final String TAG_MUST_NOT_BE_EMPTY = "업체 태그를 입력해주세요.";
     private void verifyNotEmptyTag(String tag) {
         if(tag.isEmpty()){
             throw new IllegalArgumentException(TAG_MUST_NOT_BE_EMPTY);
@@ -35,7 +47,9 @@ public class Tag {
     @Override
     public String toString() {
         return "Tag{" +
-                "tag='" + tag + '\'' +
+                "seq=" + seq +
+                ", tag='" + tag + '\'' +
+                ", store=" + store +
                 '}';
     }
 
@@ -50,5 +64,9 @@ public class Tag {
     @Override
     public int hashCode() {
         return Objects.hash(tag);
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
     }
 }

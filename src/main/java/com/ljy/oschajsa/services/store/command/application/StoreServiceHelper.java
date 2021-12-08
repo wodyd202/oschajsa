@@ -1,4 +1,4 @@
-package com.ljy.oschajsa.services.store.command;
+package com.ljy.oschajsa.services.store.command.application;
 
 import com.ljy.oschajsa.services.store.domain.Store;
 import com.ljy.oschajsa.services.store.domain.exception.StoreNotFoundException;

@@ -1,18 +1,18 @@
 package com.ljy.oschajsa.services.store.domain.model;
 
 import com.ljy.oschajsa.core.object.AddressModel;
-import com.ljy.oschajsa.services.store.domain.event.ChangedBusinessNameEvent;
-import com.ljy.oschajsa.services.store.domain.event.ChangedBusinessTelEvent;
-import com.ljy.oschajsa.services.store.domain.event.ClosedStoreEvent;
+import com.ljy.oschajsa.services.store.domain.event.*;
 import com.ljy.oschajsa.services.store.domain.value.StoreState;
-import com.ljy.oschajsa.services.store.domain.event.ChangedLogoEvent;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StoreModel {
     private String businessNumber;
     private String businessName;
@@ -48,21 +48,29 @@ public class StoreModel {
         this.logo = logo;
     }
 
-    public void on(ChangedLogoEvent event) {
+    protected void on(ChangedLogoEvent event) {
         this.logo = event.getLogo();
     }
 
-    public void on(ClosedStoreEvent event) {
+    protected void on(ClosedStoreEvent event) {
         this.state = StoreState.CLOSE;
     }
 
-    public void on(ChangedBusinessNameEvent event) {
+    protected void on(ChangedBusinessNameEvent event) {
         this.businessName = event.getBusinessName();
     }
 
-    public void on(ChangedBusinessTelEvent event) {
+    protected void on(ChangedBusinessTelEvent event) {
         this.tel = event.getBusinessTel();
     }
+
+    protected void on(ChangedBusinessHourEvent event){
+        this.businessHour = event.getBusinessHour();
+    }
+
+    protected void on(RemovedTagEvent event){ this.tags.remove(event.getTag()); }
+
+    protected void on(AddedTagEvent event){ this.tags.add(event.getTag()); }
 
     @Override
     public String toString() {

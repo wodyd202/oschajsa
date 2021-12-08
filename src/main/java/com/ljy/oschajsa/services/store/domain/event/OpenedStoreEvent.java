@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-public class OpenedStoreEvent extends AbstractStoreEvent{
+public class OpenedStoreEvent {
+    private String businessNumber;
     private String businessName;
     private String businessTel;
     private List<String> tags;
@@ -28,7 +29,7 @@ public class OpenedStoreEvent extends AbstractStoreEvent{
                             Address address,
                             OwnerId ownerId,
                             LocalDate createDate) {
-        super(businessNumber.get());
+        this.businessNumber = businessNumber.get();
         this.businessName = businessName.get();
         this.tags = tags.get().stream().map(Tag::get).collect(Collectors.toList());
         this.businessTel = businessTel.get();

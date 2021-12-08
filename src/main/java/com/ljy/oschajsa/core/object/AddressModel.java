@@ -1,12 +1,15 @@
 package com.ljy.oschajsa.core.object;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * Address Command Model
  */
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AddressModel {
     private String city, dong, province;
     private Double lettitude, longtitude;

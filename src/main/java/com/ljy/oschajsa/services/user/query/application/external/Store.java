@@ -3,6 +3,7 @@ package com.ljy.oschajsa.services.user.query.application.external;
 import com.ljy.oschajsa.services.store.domain.value.StoreState;
 import lombok.Builder;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 public class Store {

@@ -2,6 +2,7 @@ package com.ljy.oschajsa.services.store.command;
 
 import com.ljy.oschajsa.core.application.AddressHelper;
 import com.ljy.oschajsa.services.store.StoreAPITest;
+import com.ljy.oschajsa.services.store.command.application.CloseStoreService;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
 import com.ljy.oschajsa.services.store.domain.value.BusinessNumber;
 import com.ljy.oschajsa.services.store.domain.value.OwnerId;
@@ -17,7 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * 업체 운영 종료 서비스 테스트
  */
 public class CloseStoreService_Test extends StoreAPITest {
-    @Autowired CloseStoreService closeStoreService;
+    @Autowired
+    CloseStoreService closeStoreService;
     @Autowired AddressHelper addressHelper;
 
     @Test

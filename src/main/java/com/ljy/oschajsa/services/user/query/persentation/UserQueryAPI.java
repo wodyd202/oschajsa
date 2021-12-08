@@ -2,6 +2,7 @@ package com.ljy.oschajsa.services.user.query.persentation;
 
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
 import com.ljy.oschajsa.services.user.query.application.QueryUserService;
+import io.lettuce.core.ScriptOutputType;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -7,12 +7,10 @@ import com.ljy.oschajsa.services.store.domain.value.StoreOpenValidator;
 import com.ljy.oschajsa.services.store.domain.value.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.mockito.Mockito.mock;
 
 @SpringBootTest
-@Transactional
 public class StoreAPITest {
     @Autowired
     StoreRepository storeRepository;

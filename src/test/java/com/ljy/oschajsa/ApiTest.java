@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ApiTest {
-    @Autowired protected MockMvc mvc;
+    @Autowired protected MockMvc mockMvc;
     @Autowired protected ObjectMapper objectMapper;
     @Autowired protected RegisterUserService registerUserService;
     @Autowired private UserRepository userRepository;
@@ -33,7 +33,7 @@ public class ApiTest {
     }
 
     protected String obtainsAccessToken(String username, String password) throws Exception {
-        return mvc.perform(post("/oauth/token")
+        return mockMvc.perform(post("/oauth/token")
                 .param("username",username)
                 .param("password",password))
                 .andReturn().getResponse().getContentAsString();
