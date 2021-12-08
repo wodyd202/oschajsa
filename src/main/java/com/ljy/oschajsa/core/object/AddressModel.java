@@ -19,4 +19,15 @@ public class AddressModel {
         this.lettitude = lettitude;
         this.longtitude = longtitude;
     }
+
+    @Override
+    public String toString() {
+        return "AddressModel{" +
+                "city='" + city + '\'' +
+                ", dong='" + dong + '\'' +
+                ", province='" + province + '\'' +
+                ", lettitude=" + lettitude +
+                ", longtitude=" + longtitude +
+                '}';
+    }
 }

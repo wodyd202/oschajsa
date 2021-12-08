@@ -1,0 +1,3 @@
+spring:
+  profiles:
+    include: fileupload, hibernate, jwt, kakaomap, redis

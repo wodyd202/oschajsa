@@ -1,46 +1,41 @@
 package com.ljy.oschajsa.services.user.command.application;
 
-import com.ljy.oschajsa.services.user.command.domain.RegisterUserValidator;
-import com.ljy.oschajsa.services.user.command.domain.User;
-import com.ljy.oschajsa.services.user.command.domain.UserRepository;
-import com.ljy.oschajsa.services.user.command.domain.read.UserModel;
-import com.ljy.oschajsa.services.user.command.application.event.RegisteredUserEvent;
+import com.ljy.oschajsa.services.user.command.application.exception.AlreadyExistUserException;
+import com.ljy.oschajsa.services.user.domain.User;
+import com.ljy.oschajsa.services.user.domain.UserId;
+import com.ljy.oschajsa.services.user.domain.UserRepository;
+import com.ljy.oschajsa.services.user.domain.model.UserModel;
 import com.ljy.oschajsa.services.user.command.application.model.RegisterUser;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 사용자 등록 서비스
+ */
 @Service
 @Transactional
+@AllArgsConstructor
 public class RegisterUserService {
-    private final RegisterUserValidator registerUserValidator;
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
-    private final ApplicationEventPublisher eventPublisher;
+    private UserRepository userRepository;
+    private UserMapper userMapper;
 
-    public RegisterUserService(RegisterUserValidator registerUserValidator, UserRepository userRepository,
-                               UserMapper userMapper,
-                               PasswordEncoder passwordEncoder,
-                               ApplicationEventPublisher publisher) {
-        this.registerUserValidator = registerUserValidator;
-        this.userRepository = userRepository;
-        this.userMapper = userMapper;
-        this.passwordEncoder = passwordEncoder;
-        this.eventPublisher = publisher;
+    /**
+     * @param registerUser
+     * # 사용자 등록
+     */
+    public UserModel register(RegisterUser registerUser) {
+        verifyNotExistUser(registerUser.getId());
+        User user = userMapper.mapFrom(registerUser);
+
+        userRepository.save(user);
+
+        return user.toModel();
     }
 
-    public UserModel register(RegisterUser registerUser) {
-        User user = userMapper.mapFrom(registerUser);
-        user.register(registerUserValidator);
-        user.encodePassword(passwordEncoder);
-        userRepository.save(user);
-        eventPublisher.publishEvent(new RegisteredUserEvent(user));
-        return UserModel.builder()
-                .userId(user.getUserId())
-                .nickname(user.getNickname())
-                .address(user.getAddress())
-                .build();
+    private void verifyNotExistUser(String id) {
+        if(userRepository.findById(UserId.of(id)).isPresent()){
+            throw new AlreadyExistUserException();
+        }
     }
 }

@@ -1,8 +1,8 @@
 package com.ljy.oschajsa.services.store.command.application.event;
 
 import com.ljy.oschajsa.core.object.AddressModel;
-import com.ljy.oschajsa.services.store.command.domain.Store;
-import com.ljy.oschajsa.services.store.command.domain.read.BusinessHourModel;
+import com.ljy.oschajsa.services.store.domain.Store;
+import com.ljy.oschajsa.services.store.domain.model.BusinessHourModel;
 
 import java.time.LocalDate;
 import java.util.List;

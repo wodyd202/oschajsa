@@ -6,6 +6,7 @@ import com.ljy.oschajsa.core.object.Coordinate;
 import com.ljy.oschajsa.core.object.InvalidAddressException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,6 +20,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 
+@Profile("!test")
 @Component
 public class KakaoMapAddressHelper implements AddressHelper {
     @Value("${kakao.openAPI.service-key}")

@@ -4,21 +4,21 @@ import com.ljy.oschajsa.core.application.AddressHelper;
 import com.ljy.oschajsa.core.object.Address;
 import com.ljy.oschajsa.core.object.Coordinate;
 import com.ljy.oschajsa.services.user.command.application.model.RegisterUser;
-import com.ljy.oschajsa.services.user.command.domain.NickName;
-import com.ljy.oschajsa.services.user.command.domain.Password;
-import com.ljy.oschajsa.services.user.command.domain.User;
-import com.ljy.oschajsa.services.user.command.domain.UserId;
+import com.ljy.oschajsa.services.user.domain.NickName;
+import com.ljy.oschajsa.services.user.domain.Password;
+import com.ljy.oschajsa.services.user.domain.User;
+import com.ljy.oschajsa.services.user.domain.UserId;
+import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
 @Component
+@AllArgsConstructor
 final public class UserMapper {
-    private final AddressHelper addressHelper;
-
-    public UserMapper(AddressHelper addressHelper) {
-        this.addressHelper = addressHelper;
-    }
+    private AddressHelper addressHelper;
+    private PasswordEncoder passwordEncoder;
 
     public User mapFrom(RegisterUser registerUser) {
         Address address = null;
@@ -28,7 +28,7 @@ final public class UserMapper {
         }
         return User.builder()
                 .userId(UserId.of(registerUser.getId()))
-                .password(Password.of(registerUser.getPassword()))
+                .password(Password.of(registerUser.getPassword(), passwordEncoder))
                 .nickName(NickName.of(registerUser.getNickname()))
                 .address(address)
                 .build();

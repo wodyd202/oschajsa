@@ -1,7 +1,7 @@
 package com.ljy.oschajsa;
 
-import com.ljy.oschajsa.services.store.command.domain.StoreTagRepository;
-import com.ljy.oschajsa.services.store.command.domain.Tag;
+import com.ljy.oschajsa.services.store.domain.StoreTagRepository;
+import com.ljy.oschajsa.services.store.domain.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

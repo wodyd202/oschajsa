@@ -1,9 +1,9 @@
 package com.ljy.oschajsa;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ljy.oschajsa.services.user.command.domain.UserId;
+import com.ljy.oschajsa.services.user.domain.UserId;
 import com.ljy.oschajsa.services.user.command.application.RegisterUserService;
-import com.ljy.oschajsa.services.user.command.domain.UserRepository;
+import com.ljy.oschajsa.services.user.domain.UserRepository;
 import com.ljy.oschajsa.services.user.command.application.model.RegisterUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,7 +21,7 @@ public class ApiTest {
     @Autowired private UserRepository userRepository;
 
     protected void createUser(String username, String password){
-        if(userRepository.findByUserId(UserId.of(username)).isPresent()){
+        if(userRepository.findById(UserId.of(username)).isPresent()){
             return;
         }
         RegisterUser registerUser = RegisterUser.builder()

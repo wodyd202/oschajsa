@@ -1,7 +1,6 @@
 package com.ljy.oschajsa.services.store.command.presentation;
 
-import com.ljy.oschajsa.oschajsa.store.command.domain.exception.*;
-import com.ljy.oschajsa.services.store.command.domain.exception.*;
+import com.ljy.oschajsa.services.store.domain.exception.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -10,16 +9,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class StoreExceptionHandler {
 
     @ExceptionHandler({
-            AlreadyExistStoreException.class,
-            InvalidBusinessHourException.class,
-            InvalidBusinessNameException.class,
-            InvalidBusinessNumberException.class,
-            InvalidBusinessTelException.class,
-            InvalidTagException.class,
+            IllegalStateException.class,
+            IllegalArgumentException.class,
             TagNotFoundException.class,
-            InvalidLogoException.class
     })
-    public ResponseEntity<String> error(IllegalArgumentException e){
+    public ResponseEntity<String> error(RuntimeException e){
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 

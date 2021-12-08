@@ -2,11 +2,11 @@ package com.ljy.oschajsa.services.store.command.application;
 
 import com.ljy.oschajsa.services.store.command.application.event.OpenedStoreEvent;
 import com.ljy.oschajsa.services.store.command.application.model.OpenStore;
-import com.ljy.oschajsa.services.store.command.domain.OwnerId;
-import com.ljy.oschajsa.services.store.command.domain.Store;
-import com.ljy.oschajsa.services.store.command.domain.StoreOpenValidator;
-import com.ljy.oschajsa.services.store.command.domain.StoreRepository;
-import com.ljy.oschajsa.services.store.command.domain.read.StoreModel;
+import com.ljy.oschajsa.services.store.domain.OwnerId;
+import com.ljy.oschajsa.services.store.domain.Store;
+import com.ljy.oschajsa.services.store.domain.StoreOpenValidator;
+import com.ljy.oschajsa.services.store.domain.StoreRepository;
+import com.ljy.oschajsa.services.store.domain.model.StoreModel;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

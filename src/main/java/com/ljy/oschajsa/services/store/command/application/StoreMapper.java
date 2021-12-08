@@ -4,7 +4,7 @@ import com.ljy.oschajsa.core.application.AddressHelper;
 import com.ljy.oschajsa.core.object.Address;
 import com.ljy.oschajsa.core.object.Coordinate;
 import com.ljy.oschajsa.services.store.command.application.model.OpenStore;
-import com.ljy.oschajsa.services.store.command.domain.*;
+import com.ljy.oschajsa.services.store.domain.*;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;

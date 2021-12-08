@@ -1,0 +1,6 @@
+kakao:
+  openAPI:
+    path: /v2/local/geo/coord2address.json
+    service-key: KakaoAK d40c82c42db0892f356fd71c6c36c7a0
+    protocol: https
+    host: dapi.kakao.com

@@ -1,33 +1,4 @@
-file-upload:
-  url: /Users/lee-jaeyong/Desktop/file-upload/
-
-jwt:
-  secretkey: oschajsa
-  expire: 600000
-
 spring:
-  h2:
-    console:
-      enabled: true
-      settings:
-        trace: true
-      path: /h2-console
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        format_sql: true
-    generate-ddl: true
-    database-platform: org.hibernate.dialect.H2Dialect
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:test
-
-kakao:
-  openAPI:
-    path: /v2/local/geo/coord2address.json
-    service-key: KakaoAK d40c82c42db0892f356fd71c6c36c7a0
-    protocol: https
-    host: dapi.kakao.com
+  profiles:
+    include: hibernate, jwt, redis, fileupload
+    active: test

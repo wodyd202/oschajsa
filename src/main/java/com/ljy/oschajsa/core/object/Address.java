@@ -52,6 +52,16 @@ public class Address {
         return Objects.hash(coordinate, addressInfo);
     }
 
+    public AddressModel toModel() {
+        return AddressModel.builder()
+                .longtitude(coordinate.getLongtitude())
+                .lettitude(coordinate.getLettitude())
+                .dong(getAddressInfo().getDong())
+                .province(getAddressInfo().getProvince())
+                .city(getAddressInfo().getCity())
+                .build();
+    }
+
     @Override
     public String toString() {
         return "Address{" +

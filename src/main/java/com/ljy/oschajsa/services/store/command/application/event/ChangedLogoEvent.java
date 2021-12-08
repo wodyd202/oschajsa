@@ -1,6 +1,6 @@
 package com.ljy.oschajsa.services.store.command.application.event;
 
-import com.ljy.oschajsa.services.store.command.domain.Store;
+import com.ljy.oschajsa.services.store.domain.Store;
 import lombok.Getter;
 
 @Getter

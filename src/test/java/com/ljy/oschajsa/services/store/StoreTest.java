@@ -8,15 +8,14 @@ import com.ljy.oschajsa.services.store.command.application.ChangeLogoService;
 import com.ljy.oschajsa.services.store.command.application.OpenStoreService;
 import com.ljy.oschajsa.services.store.command.application.model.ChangeLogo;
 import com.ljy.oschajsa.services.store.command.application.StoreMapper;
-import com.ljy.oschajsa.services.store.command.domain.StoreRepository;
-import com.ljy.oschajsa.services.store.command.domain.StoreTagRepository;
+import com.ljy.oschajsa.services.store.domain.StoreRepository;
+import com.ljy.oschajsa.services.store.domain.StoreTagRepository;
 import com.ljy.oschajsa.services.store.command.application.model.ChangeBusinessHour;
 import com.ljy.oschajsa.services.store.command.application.model.ChangeCoordinate;
 import com.ljy.oschajsa.services.store.command.application.model.OpenStore;
-import com.ljy.oschajsa.oschajsa.store.command.domain.exception.*;
-import com.ljy.oschajsa.services.store.command.domain.read.StoreModel;
-import com.ljy.oschajsa.services.store.command.domain.*;
-import com.ljy.oschajsa.services.store.command.domain.exception.*;
+import com.ljy.oschajsa.services.store.domain.model.StoreModel;
+import com.ljy.oschajsa.services.store.domain.*;
+import com.ljy.oschajsa.services.store.domain.exception.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -47,7 +46,7 @@ public class StoreTest {
     @Test
     @DisplayName("상호명은 빈값을 허용하지 않음")
     void emptyBusinessName() {
-        assertThrows(InvalidBusinessNameException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             BusinessName.of("");
         });
     }
@@ -63,7 +62,7 @@ public class StoreTest {
             "ㅌㅅㅌ"
     })
     void invalidBusinessName(String businessName) {
-        assertThrows(InvalidBusinessNameException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             BusinessName.of(businessName);
         });
     }
@@ -79,7 +78,7 @@ public class StoreTest {
     @Test
     @DisplayName("사업자 번호 양식은 000-00-0000 만을 허용함")
     void invalidBusinessNumber() {
-        assertThrows(InvalidBusinessNumberException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             BusinessNumber.of("000000000");
         });
     }
@@ -87,7 +86,7 @@ public class StoreTest {
     @Test
     @DisplayName("사업자 번호는 빈값을 허용하지 않음")
     void emptyBusinessNumber() {
-        assertThrows(InvalidBusinessNumberException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             BusinessNumber.of("");
         });
     }
@@ -103,7 +102,7 @@ public class StoreTest {
     @Test
     @DisplayName("업체 태그는 빈값을 허용하지 않음")
     void emptyTag() {
-        assertThrows(InvalidTagException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             Tag.of("");
         });
     }
@@ -119,7 +118,7 @@ public class StoreTest {
     @Test
     @DisplayName("업체 태그는 최대 3개까지만 입력 가능")
     void tagLimit3() {
-        assertThrows(InvalidTagException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             Tags.withTags(Arrays.asList(Tag.of("태그1"), Tag.of("태그2"), Tag.of("태그3"), Tag.of("태그4")));
         });
     }
@@ -127,7 +126,7 @@ public class StoreTest {
     @Test
     @DisplayName("업체 태그는 하나 이상 입력해야함")
     void invalidTags() {
-        assertThrows(InvalidTagException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             Tags.withTags(Arrays.asList());
         });
     }
@@ -135,7 +134,7 @@ public class StoreTest {
     @Test
     @DisplayName("업체 전화번호는 빈값을 허용하지 않음")
     void emptyBusinessTel() {
-        assertThrows(InvalidBusinessTelException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             BusinessTel.of("");
         });
     }
@@ -144,7 +143,7 @@ public class StoreTest {
     @ParameterizedTest
     @ValueSource(strings = {"aa-aaa-aaaa", "aaa-aaa-aaaa", "0000-0000-0000", "0-000-0000", "00-0-0000"})
     void invalidTel(String tel) {
-        assertThrows(InvalidBusinessTelException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             BusinessTel.of(tel);
         });
     }
@@ -160,7 +159,7 @@ public class StoreTest {
     @Test
     @DisplayName("업체 평일 운영시간은 모두 입력해야함")
     void emptyWeekdayHour() {
-        assertThrows(InvalidBusinessHourException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             BusinessHour.weekdayStartWeekdayEndWeekendStartWeekendEnd(null, null, 9, 18);
         });
     }
@@ -168,7 +167,7 @@ public class StoreTest {
     @Test
     @DisplayName("업체 주말 운영시간은 모두 입력해야함")
     void emptyWeekendHour(){
-        assertThrows(InvalidBusinessHourException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             BusinessHour.weekdayStartWeekdayEndWeekendStartWeekendEnd(9, 18, null, null);
         });
     }
@@ -176,7 +175,7 @@ public class StoreTest {
     @Test
     @DisplayName("업체 평일 운영시간은 0~24 사이의 값만 입력해야함")
     void invalidTimeWeekdayHour(){
-        assertThrows(InvalidBusinessHourException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             BusinessHour.weekdayStartWeekdayEndWeekendStartWeekendEnd(9, 26, 9, 18);
         });
     }
@@ -184,7 +183,7 @@ public class StoreTest {
     @Test
     @DisplayName("업체 주말 운영시간은 0~24 사이의 값만 입력해야함")
     void invalidTimeWeekendHour(){
-        assertThrows(InvalidBusinessHourException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             BusinessHour.weekdayStartWeekdayEndWeekendStartWeekendEnd(9, 18, 9, 27);
         });
     }
@@ -192,7 +191,7 @@ public class StoreTest {
     @Test
     @DisplayName("업체 평일 운영 시작시간은 종료시간보다 작아야함")
     void invalidWeekdayHour(){
-        assertThrows(InvalidBusinessHourException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             BusinessHour.weekdayStartWeekdayEndWeekendStartWeekendEnd(18, 9, 9, 18);
         });
     }
@@ -200,7 +199,7 @@ public class StoreTest {
     @Test
     @DisplayName("업체 주말 운영 시작시간은 종료시간보다 작아야함")
     void invalidWeekendHour(){
-        assertThrows(InvalidBusinessHourException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             BusinessHour.weekdayStartWeekdayEndWeekendStartWeekendEnd(9, 18, 18, 9);
         });
     }
@@ -252,7 +251,7 @@ public class StoreTest {
 
     @Test
     void invalidLogo(){
-        assertThrows(InvalidLogoException.class,()->{
+        assertThrows(IllegalArgumentException.class,()->{
             Store store = StoreFixture.aStore(mock(AddressHelper.class), OwnerId.of("owner")).build();
             store.changeLogo(new MockMultipartFile("image.exe","image.exe","image", new byte[]{}));
         });

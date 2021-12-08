@@ -7,7 +7,7 @@ import com.ljy.oschajsa.core.object.Coordinate;
 import com.ljy.oschajsa.services.store.command.application.model.ChangeBusinessHour;
 import com.ljy.oschajsa.services.store.command.application.model.ChangeCoordinate;
 import com.ljy.oschajsa.services.store.command.application.model.OpenStore;
-import com.ljy.oschajsa.services.store.command.domain.*;
+import com.ljy.oschajsa.services.store.domain.*;
 
 import java.util.Arrays;
 

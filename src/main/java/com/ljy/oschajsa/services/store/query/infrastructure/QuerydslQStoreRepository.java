@@ -4,10 +4,7 @@ import com.ljy.oschajsa.config.StoreDBColums;
 import com.ljy.oschajsa.core.infrastructure.QuerydslRepository;
 import com.ljy.oschajsa.core.object.QueryAddress;
 import com.ljy.oschajsa.services.store.query.application.StoreSearchDTO;
-import com.ljy.oschajsa.services.store.query.model.QStoreRepository;
-import com.ljy.oschajsa.services.store.query.model.QueryBusinessHour;
-import com.ljy.oschajsa.services.store.query.model.QueryStore;
-import com.ljy.oschajsa.services.store.query.model.StoreState;
+import com.ljy.oschajsa.services.store.query.model.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,7 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.ljy.oschajsa.oschajsa.store.query.model.QQueryStore.queryStore;
+import static com.ljy.oschajsa.services.store.query.model.QQueryStore.queryStore;
 
 @Repository
 public class QuerydslQStoreRepository extends QuerydslRepository<QueryStore> implements QStoreRepository {
