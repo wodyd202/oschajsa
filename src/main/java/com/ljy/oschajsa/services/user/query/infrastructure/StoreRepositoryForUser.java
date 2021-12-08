@@ -1,7 +1,7 @@
 package com.ljy.oschajsa.services.user.query.infrastructure;
 
 import com.ljy.oschajsa.services.store.query.application.QueryStoreCacheRepository;
-import com.ljy.oschajsa.services.user.query.application.external.ExternalStoreRepository;
+import com.ljy.oschajsa.services.user.query.application.external.StoreRepository;
 import com.ljy.oschajsa.services.user.query.application.external.Store;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Repository
 @AllArgsConstructor
-public class ExternalQuerydslStoreRepository implements ExternalStoreRepository {
+public class StoreRepositoryForUser implements StoreRepository {
     private QueryStoreCacheRepository storeCacheRepository;
 
     @Override
     public List<Store> getStore(String userId) {
-        log.info("load external store into redis : {}", userId);
+        log.info("load external store for user into redis : {}", userId);
         return storeCacheRepository.findByUserId(userId).stream()
                 .map(obj->Store.builder()
                         .businessNumber(obj.getBusinessNumber())

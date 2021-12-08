@@ -2,10 +2,8 @@ package com.ljy.oschajsa.services.user.query.application;
 
 import com.ljy.oschajsa.services.user.domain.exception.UserNotFoundException;
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
-import com.ljy.oschajsa.services.user.query.application.external.ExternalStoreRepository;
-import com.ljy.oschajsa.services.user.query.application.external.Store;
+import com.ljy.oschajsa.services.user.query.application.external.StoreRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,8 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static java.util.Arrays.asList;
 
@@ -28,7 +24,7 @@ public class QueryUserService implements UserDetailsService {
     private QueryUserRepository userRepository;
 
     // 외부 모듈
-    private ExternalStoreRepository storeRepository;
+    private StoreRepository storeRepository;
 
     public UserModel getUserModel(String userId) {
         UserModel userModel = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
