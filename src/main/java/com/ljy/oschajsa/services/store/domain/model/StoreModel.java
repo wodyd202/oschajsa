@@ -1,5 +1,7 @@
 package com.ljy.oschajsa.services.store.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ljy.oschajsa.core.object.AddressModel;
 import com.ljy.oschajsa.services.store.domain.event.*;
 import com.ljy.oschajsa.services.store.domain.value.StoreState;

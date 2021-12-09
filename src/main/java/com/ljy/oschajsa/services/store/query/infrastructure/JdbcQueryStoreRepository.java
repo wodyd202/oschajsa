@@ -23,11 +23,13 @@ import java.util.Objects;
 public class JdbcQueryStoreRepository implements QueryStoreRepository {
     @Autowired private JdbcTemplate jdbcTemplate;
 
-    private final String SELECT_FROM_STORE = "SELECT * FROM q_store WHERE ";
+    private final String SELECT_FROM_STORE = "SELECT * FROM stores WHERE ";
     private final String CALCULATE_DIFFERENCE_COORDINATE = "(6371*ACOS(COS(RADIANS(?))*COS(RADIANS(lettitude))*COS(RADIANS(longtitude)- RADIANS(?))+SIN(RADIANS(?))*SIN(RADIANS(lettitude)))) <= ?\r";
     private final String EQUALS_CITY = StoreDBColums.COL_CITY + " = ?\r";
     private final String EQUALS_PROVINCE = StoreDBColums.COL_PROVINCE + " = ?\r";
     private final String EQUALS_DONG = StoreDBColums.COL_DONG + " = ?\r";
+
+
 
     @Override
     public List<StoreModel> findAll(StoreSearchDTO dto) {
@@ -49,8 +51,9 @@ public class JdbcQueryStoreRepository implements QueryStoreRepository {
             sqlBuilder.append(EQUALS_DONG);
             params.add(dto.getDong());
         }else {
-            throw new IllegalArgumentException("invalid store search values");
+            throw new IllegalArgumentException("invalid stores search values");
         }
+
         sqlBuilder.append("LIMIT " + (dto.getPage() * 10) + ", 10\r\n");
         List<StoreModel> list = jdbcTemplate.query(sqlBuilder.toString(), new RowMapper<StoreModel>() {
             @Override
@@ -76,6 +79,38 @@ public class JdbcQueryStoreRepository implements QueryStoreRepository {
             }
         },params.toArray());
         return list;
+    }
+
+    private final String COUNT_QUERY = "SELECT count(*) FROM stores WHERE ";
+    @Override
+    public long countAll(StoreSearchDTO storeSearchDTO) {
+        List<Object> params = new ArrayList<>();
+        StringBuilder sqlBuilder = new StringBuilder(COUNT_QUERY);
+        if(shouldDifferenceCoordinateCalculate(storeSearchDTO)){
+            sqlBuilder.append(CALCULATE_DIFFERENCE_COORDINATE);
+            params.add(storeSearchDTO.getLettitude());
+            params.add(storeSearchDTO.getLongtitude());
+            params.add(storeSearchDTO.getLettitude());
+            params.add(storeSearchDTO.getDifferenceCoordinate());
+        }else if(haveCity(storeSearchDTO)){
+            sqlBuilder.append(EQUALS_CITY);
+            params.add(storeSearchDTO.getCity());
+        }else if(haveProvince(storeSearchDTO)){
+            sqlBuilder.append(EQUALS_PROVINCE);
+            params.add(storeSearchDTO.getProvince());
+        }else if(haveDong(storeSearchDTO)){
+            sqlBuilder.append(EQUALS_DONG);
+            params.add(storeSearchDTO.getDong());
+        }else {
+            throw new IllegalArgumentException("invalid stores search values");
+        }
+
+        return jdbcTemplate.queryForObject(sqlBuilder.toString(), new RowMapper<Long>() {
+            @Override
+            public Long mapRow(ResultSet resultSet, int i) throws SQLException {
+                return resultSet.getLong(1);
+            }
+        },params.toArray());
     }
 
     private boolean haveDong(StoreSearchDTO dto) {

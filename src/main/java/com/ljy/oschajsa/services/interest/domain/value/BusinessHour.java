@@ -1,32 +1,29 @@
-package com.ljy.oschajsa.services.store.domain.model;
+package com.ljy.oschajsa.services.interest.domain.value;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ljy.oschajsa.services.store.domain.model.BusinessHourModel;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Embeddable;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
-@Getter
+@Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BusinessHourModel {
+public class BusinessHour {
     private int weekdayStart, weekdayEnd;
     private int weekendStart, weekendEnd;
 
     @Builder
-    public BusinessHourModel(int weekdayStart,
-                        int weekdayEnd,
-                        int weekendStart,
-                        int weekendEnd){
-        this.weekdayEnd = weekdayEnd;
+    public BusinessHour(int weekdayStart, int weekdayEnd, int weekendStart, int weekendEnd) {
         this.weekdayStart = weekdayStart;
-        this.weekendEnd = weekendEnd;
+        this.weekdayEnd = weekdayEnd;
         this.weekendStart = weekendStart;
+        this.weekendEnd = weekendEnd;
     }
 
-    @JsonIgnore
     public boolean isCurrentOpen() {
         // 현재 요일
         LocalDateTime now = LocalDateTime.now();
@@ -43,13 +40,12 @@ public class BusinessHourModel {
         }
     }
 
-    @Override
-    public String toString() {
-        return "BusinessHourModel{" +
-                "weekdayStart=" + weekdayStart +
-                ", weekdayEnd=" + weekdayEnd +
-                ", weekendStart=" + weekendStart +
-                ", weekendEnd=" + weekendEnd +
-                '}';
+    public BusinessHourModel toModel() {
+        return BusinessHourModel.builder()
+                .weekdayStart(weekdayStart)
+                .weekdayEnd(weekdayEnd)
+                .weekendStart(weekendStart)
+                .weekendEnd(weekendEnd)
+                .build();
     }
 }

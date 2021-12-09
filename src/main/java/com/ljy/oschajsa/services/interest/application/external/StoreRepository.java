@@ -1,5 +1,7 @@
 package com.ljy.oschajsa.services.interest.application.external;
 
+import com.ljy.oschajsa.services.interest.domain.value.StoreInfo;
+
 public interface StoreRepository {
-    Store getStore(String businessNumber);
+    StoreInfo getStore(String businessNumber);
 }

@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface QueryStoreRepository {
     List<StoreModel> findAll(StoreSearchDTO storeSearchDTO);
+    long countAll(StoreSearchDTO storeSearchDTO);
 }
