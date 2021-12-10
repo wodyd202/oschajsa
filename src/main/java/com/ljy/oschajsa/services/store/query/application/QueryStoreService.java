@@ -17,15 +17,19 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Transactional(readOnly = true)
 public class QueryStoreService {
-    private QueryStoreRepository queryStoreRepository;
-    private QueryStoreCacheRepository queryStoreCacheRepository;
+    private QueryStoreRepository storeRepository;
+    private CacheQueryStoreRepository cacheStoreRepository;
 
     /**
      * @param businessNumber
      * # 업체 단건 조회
      */
     public StoreResponse getStoreModel(String businessNumber) {
-        StoreModel storeModel = queryStoreCacheRepository.findById(businessNumber).orElseThrow(StoreNotFoundException::new);
+        StoreModel storeModel = cacheStoreRepository.findById(businessNumber).orElseGet(()->{
+            StoreModel storeModelFromDB = storeRepository.findById(businessNumber).orElseThrow(StoreNotFoundException::new);
+            cacheStoreRepository.save(storeModelFromDB);
+            return storeModelFromDB;
+        });
         return new StoreResponse(storeModel);
     }
 
@@ -34,7 +38,7 @@ public class QueryStoreService {
      * # 업체 리스트 데이터 조회
      */
     public List<StoreResponse> getStoreModels(StoreSearchDTO storeSearchDTO) {
-        List<StoreModel> storeModels = queryStoreRepository.findAll(storeSearchDTO);
+        List<StoreModel> storeModels = storeRepository.findAll(storeSearchDTO);
         return storeModels.stream().map(StoreResponse::new).collect(Collectors.toList());
     }
 
@@ -43,6 +47,6 @@ public class QueryStoreService {
      * # 업체 개수 조회
      */
     public long getCountStoreModel(StoreSearchDTO storeSearchDTO) {
-        return queryStoreRepository.countAll(storeSearchDTO);
+        return storeRepository.countAll(storeSearchDTO);
     }
 }

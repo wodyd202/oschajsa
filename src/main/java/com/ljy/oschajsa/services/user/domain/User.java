@@ -1,11 +1,13 @@
-package com.ljy.oschajsa.services.user.domain.value;
+package com.ljy.oschajsa.services.user.domain;
 
 import com.ljy.oschajsa.core.object.Address;
-import com.ljy.oschajsa.services.user.domain.UserState;
 import com.ljy.oschajsa.services.user.domain.event.ChangedUserAddressEvent;
 import com.ljy.oschajsa.services.user.domain.event.RegisteredUserEvent;
 import com.ljy.oschajsa.services.user.domain.event.WithdrawaledUserEvent;
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
+import com.ljy.oschajsa.services.user.domain.value.NickName;
+import com.ljy.oschajsa.services.user.domain.value.Password;
+import com.ljy.oschajsa.services.user.domain.value.UserId;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;

@@ -2,7 +2,7 @@ package com.ljy.oschajsa.services.user;
 
 import com.ljy.oschajsa.services.user.domain.value.NickName;
 import com.ljy.oschajsa.services.user.domain.value.Password;
-import com.ljy.oschajsa.services.user.domain.value.User;
+import com.ljy.oschajsa.services.user.domain.User;
 import com.ljy.oschajsa.services.user.domain.value.UserId;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

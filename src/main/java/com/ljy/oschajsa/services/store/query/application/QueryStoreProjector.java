@@ -4,6 +4,7 @@ import com.ljy.oschajsa.services.store.domain.event.*;
 import com.ljy.oschajsa.services.store.domain.value.StoreState;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ import java.lang.reflect.Method;
 @Async("storeExecutor")
 @AllArgsConstructor
 public class QueryStoreProjector {
-    private QueryStoreCacheRepository storeRepository;
+    private CacheQueryStoreRepository storeRepository;
 
     @EventListener
     void handle(OpenedStoreEvent event){

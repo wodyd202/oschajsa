@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Async("userExecutor")
 @AllArgsConstructor
 public class QueryUserProjector {
-    private QueryUserRepository userRepository;
+    private CacheQueryUserRepository userRepository;
 
     /**
      * @param event

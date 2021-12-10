@@ -6,7 +6,7 @@ import com.ljy.oschajsa.core.object.Coordinate;
 import com.ljy.oschajsa.services.user.command.application.model.RegisterUser;
 import com.ljy.oschajsa.services.user.domain.value.NickName;
 import com.ljy.oschajsa.services.user.domain.value.Password;
-import com.ljy.oschajsa.services.user.domain.value.User;
+import com.ljy.oschajsa.services.user.domain.User;
 import com.ljy.oschajsa.services.user.domain.value.UserId;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

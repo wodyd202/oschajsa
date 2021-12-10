@@ -5,33 +5,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.Scope;
-import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import redis.embedded.RedisServer;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import redis.embedded.RedisServer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.util.List;
 import java.util.Optional;
 
-//@Configuration
-@Profile("!test")
-public class RedisConfig {
+@Configuration
+public class EmbeddedRedisConfig {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Value("${spring.redis.cluster.nodes}")
-    private List<String> clusterNodes;
+    private RedisServer redisServer;
+
+    @PreDestroy
+    public void destroy() {
+        Optional.ofNullable(redisServer).ifPresent(RedisServer::stop);
+    }
+
+    @PostConstruct
+    public void afterPropertiesSet() {
+        redisServer = new RedisServer(6379);
+        try{
+            redisServer.start();
+        }catch (Exception e){
+        }
+    }
 
     @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
-        RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration(clusterNodes);
-        return new LettuceConnectionFactory(redisClusterConfiguration);
+    RedisConnectionFactory redisConnectionFactory(){
+        return new LettuceConnectionFactory("localhost", 6379);
     }
 
     @Bean

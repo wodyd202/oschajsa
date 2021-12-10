@@ -9,4 +9,3 @@ redis:
     user: "oschajsa:user"
     store: "oschajsa:store"
     user-store: "oschajsa:user-store"
-    store-location: "oschajsa:store-location"

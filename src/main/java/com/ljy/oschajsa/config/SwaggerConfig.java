@@ -52,9 +52,12 @@ public class SwaggerConfig {
                 .select()
                 .apis(
                         Predicates.or(
-                                RequestHandlerSelectors.basePackage("com.ljy.oschajsa.oschajsa.config.security"),
-                                RequestHandlerSelectors.basePackage("com.ljy.oschajsa.oschajsa.user.command.presentation"),
-                                RequestHandlerSelectors.basePackage("com.ljy.oschajsa.oschajsa.user.query.presentation")
+                                RequestHandlerSelectors.basePackage("com.ljy.oschajsa.config.security"),
+                                RequestHandlerSelectors.basePackage("com.ljy.oschajsa.services.user.command.presentation"),
+                                RequestHandlerSelectors.basePackage("com.ljy.oschajsa.services.user.query.presentation"),
+                                RequestHandlerSelectors.basePackage("com.ljy.oschajsa.services.store.command.presentation"),
+                                RequestHandlerSelectors.basePackage("com.ljy.oschajsa.services.store.query.presentation"),
+                                RequestHandlerSelectors.basePackage("com.ljy.oschajsa.services.interest.presentation")
                         )
                 )
                 .paths(PathSelectors.ant("/**"))

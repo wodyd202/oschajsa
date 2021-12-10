@@ -9,7 +9,6 @@ import com.ljy.oschajsa.services.user.command.application.*;
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
 import com.ljy.oschajsa.services.user.domain.value.NickName;
 import com.ljy.oschajsa.services.user.domain.value.Password;
-import com.ljy.oschajsa.services.user.domain.value.User;
 import com.ljy.oschajsa.services.user.domain.value.UserId;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
