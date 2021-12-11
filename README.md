@@ -31,7 +31,7 @@ mvn clean spring-boot:run
 ![KakaoTalk_Photo_2021-12-11-16-52-43](https://user-images.githubusercontent.com/77535935/145669083-17f2239e-6f60-46b3-8807-4e153ad5305c.jpeg)
 
 해당 이미지는 업체 기준의 아키텍처를 그린 이미지입니다. 서비스가 CQRS로 분리되어있기 때문에 조회를 제외한 사용자의 요청은 Command Layer에서 처리하게 됩니다.
-Command Layer에서 생성, 수정, 삭제 프로세스를 거친 후 도메인 이벤트가 publish되어 query layer 및 다른 도메인이 해당 이벤트를 consume하고 그에 맞게 처리하게 됩니다.
+Command Layer에서 생성, 수정, 삭제 프로세스를 거친 후 도메인 이벤트가 publish되어 Query layer 및 다른 도메인이 해당 이벤트를 consume하고 그에 맞게 처리하게 됩니다.
 
 Command Layer에서는 Mysql DB로 데이터를 처리하였고, 이벤트를 받아 처리하는  Query layer에서는 Redis를 사용해 데이터를 처리하였습니다.
 
