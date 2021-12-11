@@ -2,6 +2,7 @@ package com.ljy.oschajsa.services.user.query.application;
 
 import com.ljy.oschajsa.services.user.domain.exception.UserNotFoundException;
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
+import com.ljy.oschajsa.services.user.query.application.external.InterestRepository;
 import com.ljy.oschajsa.services.user.query.application.external.StoreRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,6 +27,7 @@ public class QueryUserService implements UserDetailsService {
 
     // 외부 모듈
     private StoreRepository storeRepository;
+    private InterestRepository interestRepository;
 
     public UserModel getUserModel(String userId) {
         // 레디스에서 먼저 조회 후 없으면 DB에서 조회
@@ -34,6 +36,9 @@ public class QueryUserService implements UserDetailsService {
 
         // 자신의 업체 정보 추가
         userModel.addStoreInfo(storeRepository.getStore(userId));
+
+        // 관심업체 10개 추가
+        userModel.addTop10InterestStores(interestRepository.getInterests(userId));
 
         // 비밀번호 제거
         userModel.emptyPassword();

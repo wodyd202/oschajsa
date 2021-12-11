@@ -3,7 +3,7 @@ package com.ljy.oschajsa.services.interest.application;
 import com.ljy.oschajsa.services.interest.application.external.StoreRepository;
 import com.ljy.oschajsa.services.interest.domain.Interest;
 import com.ljy.oschajsa.services.interest.domain.model.InterestModel;
-import com.ljy.oschajsa.services.interest.domain.value.UserId;
+import com.ljy.oschajsa.services.interest.domain.value.Registrant;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +22,7 @@ public class InterestStoreService {
     private StoreRepository storeRepository;
     private InterestRepository interestRepository;
 
-    public void interest(String businessNumber, UserId userId){
+    public void interest(String businessNumber, Registrant userId){
         Optional<Interest> optionalInterest = interestRepository.findByUserIdAndBusinessNumber(userId, businessNumber);
         // 이미 존재할 경우 제거
         if(optionalInterest.isPresent()){
@@ -30,13 +30,13 @@ public class InterestStoreService {
         }else{
             Interest interest = Interest.builder()
                     .storeInfo(storeRepository.getStore(businessNumber))
-                    .userId(userId)
+                    .registrant(userId)
                     .build();
             interestRepository.save(interest);
         }
     }
 
-    public List<InterestModel> getInterestModels(UserId userId) {
+    public List<InterestModel> getInterestModels(Registrant userId) {
         return interestRepository.findByUserId(userId).stream().map(Interest::toModel).collect(Collectors.toList());
     }
 }

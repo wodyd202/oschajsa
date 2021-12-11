@@ -7,15 +7,15 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserId {
+public class Registrant {
     private String id;
 
-    private UserId(String id) {
+    private Registrant(String id) {
         this.id = id;
     }
 
-    public static UserId of(String id){
-        return new UserId(id);
+    public static Registrant of(String id){
+        return new Registrant(id);
     }
 
     public String get() {

@@ -27,6 +27,12 @@ public class StoreModel {
     private LocalDate createDate;
     private String logo;
 
+    private long intestTotalCount;
+
+    public void addInterestTotalCount(long intestTotalCount) {
+        this.intestTotalCount = intestTotalCount;
+    }
+
     @Builder
     public StoreModel(String businessNumber,
                       String businessName,

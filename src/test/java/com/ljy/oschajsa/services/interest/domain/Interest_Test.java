@@ -2,8 +2,8 @@ package com.ljy.oschajsa.services.interest.domain;
 
 import com.ljy.oschajsa.services.interest.domain.model.InterestModel;
 import com.ljy.oschajsa.services.interest.domain.value.BusinessHour;
+import com.ljy.oschajsa.services.interest.domain.value.Registrant;
 import com.ljy.oschajsa.services.interest.domain.value.StoreInfo;
-import com.ljy.oschajsa.services.interest.domain.value.UserId;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,7 +17,7 @@ public class Interest_Test {
     void newInterest(){
         // when
         Interest interest = Interest.builder()
-                .userId(UserId.of("userid"))
+                .registrant(Registrant.of("userid"))
                 .storeInfo(StoreInfo.builder()
                         .businessHour(BusinessHour.builder()
                                 .weekendStart(1)

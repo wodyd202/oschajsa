@@ -3,7 +3,7 @@ package com.ljy.oschajsa.services.interest.infrastructure;
 import com.ljy.oschajsa.services.interest.application.InterestRepository;
 import com.ljy.oschajsa.services.interest.domain.Interest;
 import com.ljy.oschajsa.services.interest.domain.QInterest;
-import com.ljy.oschajsa.services.interest.domain.value.UserId;
+import com.ljy.oschajsa.services.interest.domain.value.Registrant;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -23,18 +23,18 @@ public class QuerydslInterestRepository implements InterestRepository {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Interest> findByUserIdAndBusinessNumber(UserId userId, String businessNumber) {
+    public Optional<Interest> findByUserIdAndBusinessNumber(Registrant userId, String businessNumber) {
         Interest interest = jpaQueryFactory.selectFrom(QInterest.interest)
-                .where(QInterest.interest.userId().eq(userId).and(QInterest.interest.storeInfo().businessNumber.eq(businessNumber)))
+                .where(QInterest.interest.registrant().eq(userId).and(QInterest.interest.storeInfo().businessNumber.eq(businessNumber)))
                 .fetchFirst();
         return Optional.ofNullable(interest);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Interest> findByUserId(UserId userId) {
+    public List<Interest> findByUserId(Registrant userId) {
         return jpaQueryFactory.selectFrom(interest)
-                .where(interest.userId().eq(userId))
+                .where(interest.registrant().eq(userId))
                 .fetch();
     }
 

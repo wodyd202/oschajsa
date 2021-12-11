@@ -2,6 +2,7 @@ package com.ljy.oschajsa.services.store.query.application;
 
 import com.ljy.oschajsa.services.store.domain.exception.StoreNotFoundException;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
+import com.ljy.oschajsa.services.store.query.application.external.InterestRepository;
 import com.ljy.oschajsa.services.store.query.model.StoreResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,9 @@ public class QueryStoreService {
     private QueryStoreRepository storeRepository;
     private CacheQueryStoreRepository cacheStoreRepository;
 
+    // 외부 모듈
+    private InterestRepository interestRepository;
+
     /**
      * @param businessNumber
      * # 업체 단건 조회
@@ -30,6 +34,7 @@ public class QueryStoreService {
             cacheStoreRepository.save(storeModelFromDB);
             return storeModelFromDB;
         });
+        storeModel.addInterestTotalCount(interestRepository.getIntestTotalCount(businessNumber));
         return new StoreResponse(storeModel);
     }
 

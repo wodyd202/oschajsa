@@ -6,6 +6,7 @@ import com.ljy.oschajsa.core.object.AddressModel;
 import com.ljy.oschajsa.services.user.domain.UserState;
 import com.ljy.oschajsa.services.user.domain.event.ChangedUserAddressEvent;
 import com.ljy.oschajsa.services.user.domain.event.WithdrawaledUserEvent;
+import com.ljy.oschajsa.services.user.query.application.external.Interest;
 import com.ljy.oschajsa.services.user.query.application.external.Store;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -27,9 +28,14 @@ public class UserModel {
     private UserState state;
 
     private List<Store> stores;
+    private List<Interest> interestStores;
 
     public void addStoreInfo(List<Store> stores) {
         this.stores = stores;
+    }
+
+    public void addTop10InterestStores(List<Interest> interestStores) {
+        this.interestStores = interestStores;
     }
 
     @Builder

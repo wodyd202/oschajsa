@@ -170,6 +170,7 @@
                         <exclude>com/ljy/oschajsa/core/**</exclude>
                         <exclude>com/ljy/oschajsa/**/external/**</exclude>
                         <exclude>*Application.*</exclude>
+                        <exclude>*Runner.*</exclude>
                         <exclude>**/*Builder.*</exclude>
                         <exclude>**/Q*.*</exclude>
                     </excludes>
