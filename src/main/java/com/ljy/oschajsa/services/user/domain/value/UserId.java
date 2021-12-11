@@ -1,5 +1,7 @@
 package com.ljy.oschajsa.services.user.domain.value;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Embeddable;
@@ -8,11 +10,9 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 @Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserId implements Serializable {
-    private final String id;
-
-    // JPA에서 embedded로 사용시 기본 생성자 필요
-    protected UserId(){id = null;}
+    private String id;
 
     private UserId(String id) {
         verifyNotEmptyUserId(id);
@@ -47,13 +47,6 @@ public class UserId implements Serializable {
 
     public String get() {
         return id;
-    }
-
-    @Override
-    public String toString() {
-        return "UserId{" +
-                "id='" + id + '\'' +
-                '}';
     }
 
     @Override

@@ -15,7 +15,7 @@ public class StoreOpenValidator {
         verifyAllExistTags(tags);
     }
 
-    private final String ALREADY_EXIST_STORE_MESSAGE = "already exist store";
+    private final String ALREADY_EXIST_STORE_MESSAGE = "이미 해당 사업자번호의 업체가 존재합니다.";
     private void verifyNotExistStore(BusinessNumber businessNumber) {
         if(storeRepository.findById(businessNumber).isPresent()){
             throw new IllegalStateException(ALREADY_EXIST_STORE_MESSAGE);
@@ -23,7 +23,7 @@ public class StoreOpenValidator {
     }
     private void verifyAllExistTags(Tags tags) {
         tags.get().forEach(tag->{
-            storeTagRepository.findByName(tag.get()).orElseThrow(()->new TagNotFoundException(String.format("%s tag not found", tag.get())));
+            storeTagRepository.findByName(tag.get()).orElseThrow(()->new TagNotFoundException(String.format("%s 태그가 존재하지 않습니다.", tag.get())));
         });
     }
 }

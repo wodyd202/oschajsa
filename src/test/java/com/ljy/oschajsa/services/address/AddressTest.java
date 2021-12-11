@@ -1,10 +1,7 @@
-package com.ljy.oschajsa.address;
+package com.ljy.oschajsa.services.address;
 
 import com.ljy.oschajsa.core.application.AddressHelper;
-import com.ljy.oschajsa.core.object.Address;
-import com.ljy.oschajsa.core.object.AddressInfo;
-import com.ljy.oschajsa.core.object.Coordinate;
-import com.ljy.oschajsa.core.object.InvalidAddressException;
+import com.ljy.oschajsa.core.object.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -72,5 +69,22 @@ public class AddressTest {
         Address address = Address.withCoodinate(coordinate, addressHelper);
         assertEquals(address.getCoordinate(), coordinate);
         assertEquals(address.getAddressInfo(), AddressInfo.withCityProvinceDong("서울특별시","용산구","남영동"));
+    }
+
+    @Test
+    void toModel(){
+        Coordinate coordinate = Coordinate.withLattitudeLongtitude(1.0, 2.0);
+        AddressHelper addressHelper = mock(AddressHelper.class);
+        when(addressHelper.getAddressInfoFrom(coordinate))
+                .thenReturn(AddressInfo.withCityProvinceDong("서울특별시","용산구","남영동"));
+
+        Address address = Address.withCoodinate(coordinate, addressHelper);
+        AddressModel addressModel = address.toModel();
+
+        assertEquals(addressModel.getCity(), "서울특별시");
+        assertEquals(addressModel.getProvince(), "용산구");
+        assertEquals(addressModel.getDong(), "남영동");
+        assertEquals(addressModel.getLettitude(), 1.0);
+        assertEquals(addressModel.getLongtitude(), 2.0);
     }
 }

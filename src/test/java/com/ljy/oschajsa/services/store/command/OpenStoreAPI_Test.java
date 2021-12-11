@@ -82,6 +82,13 @@ public class OpenStoreAPI_Test extends ApiTest {
     }
 
     @Test
+    @DisplayName("존재하지 않는 태그")
+    void notExistTag() throws Exception {
+        OpenStore openStore = aOpenStore().tags(Arrays.asList("notExistTag")).build();
+        assertBadRequestWhenOpenStore(openStore);
+    }
+
+    @Test
     @DisplayName("업체 평일 운영 시작시간은 반드시 기재해야함")
     void emptyWeekdayStart() throws Exception {
         OpenStore openStore = aOpenStore().businessHour(StoreFixture.aChangeBusinessHour()

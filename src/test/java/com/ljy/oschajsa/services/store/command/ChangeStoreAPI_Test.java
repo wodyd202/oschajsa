@@ -41,6 +41,24 @@ public class ChangeStoreAPI_Test extends ApiTest {
     }
 
     @Test
+    @DisplayName("해당 업체가 존재하지 않음")
+    void notExistStore() throws Exception {
+        // given
+        ChangeBusinessName changeBusinessName = ChangeBusinessName.builder()
+                .businessName("업체명수정")
+                .build();
+
+        // when
+        mockMvc.perform(put("/api/v1/store/{businessNumber}/business-name", "999-99-8888")
+                .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(changeBusinessName)))
+
+        // then
+        .andExpect(status().isNotFound());
+    }
+
+    @Test
     @DisplayName("업체명 변경")
     void changeBusinessName() throws Exception {
         // given

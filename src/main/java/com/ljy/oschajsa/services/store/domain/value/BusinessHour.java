@@ -82,16 +82,6 @@ public class BusinessHour {
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
-    @Override
-    public String toString() {
-        return "BusinessHour{" +
-                "weekdayStart=" + weekdayStart +
-                ", weekdayEnd=" + weekdayEnd +
-                ", weekendStart=" + weekendStart +
-                ", weekendEnd=" + weekendEnd +
-                '}';
-    }
-
     public BusinessHourModel toModel() {
         return BusinessHourModel.builder()
                 .weekdayStart(weekdayStart)

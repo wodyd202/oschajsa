@@ -1,21 +1,23 @@
 package com.ljy.oschajsa.core.object;
 
 import com.ljy.oschajsa.core.application.AddressHelper;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
     /**
      * coordinate x,y 좌표값
      * addressInfo 주소 상세 정보 [시,도,동]
      */
-    private final Coordinate coordinate;
-    private final AddressInfo addressInfo;
-
-    // JPA에서 embedded로 사용시 기본 생성자 필요
-    protected Address(){coordinate=null; addressInfo=null;}
+    private Coordinate coordinate;
+    private AddressInfo addressInfo;
 
     /**
      * @param coordinate x,y 좌표값
@@ -31,42 +33,13 @@ public class Address {
         return new Address(coordinate, addressHelper);
     }
 
-    public Coordinate getCoordinate() {
-        return coordinate;
-    }
-
-    public AddressInfo getAddressInfo() {
-        return addressInfo;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Address address = (Address) o;
-        return Objects.equals(coordinate, address.coordinate) && Objects.equals(addressInfo, address.addressInfo);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(coordinate, addressInfo);
-    }
-
     public AddressModel toModel() {
         return AddressModel.builder()
-                .longtitude(coordinate.getLongtitude())
-                .lettitude(coordinate.getLettitude())
+                .longtitude(getCoordinate().getLongtitude())
+                .lettitude(getCoordinate().getLettitude())
                 .dong(getAddressInfo().getDong())
                 .province(getAddressInfo().getProvince())
                 .city(getAddressInfo().getCity())
                 .build();
-    }
-
-    @Override
-    public String toString() {
-        return "Address{" +
-                "coordinate=" + coordinate +
-                ", addressInfo=" + addressInfo +
-                '}';
     }
 }

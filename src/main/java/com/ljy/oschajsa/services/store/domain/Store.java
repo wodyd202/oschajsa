@@ -1,12 +1,10 @@
 package com.ljy.oschajsa.services.store.domain;
 
 import com.ljy.oschajsa.core.object.Address;
-import com.ljy.oschajsa.core.object.InvalidAddressException;
 import com.ljy.oschajsa.services.store.domain.event.*;
 import com.ljy.oschajsa.services.store.domain.infra.LogoConverter;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
 import com.ljy.oschajsa.services.store.domain.value.*;
-import io.lettuce.core.ScriptOutputType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -156,7 +154,7 @@ public class Store extends AbstractAggregateRoot<Store> {
     private static final String ADDRESS_MUST_NOT_BE_EMPTY = "업체 주소를 입력해주세요.";
     private void verifyNotNullAddress(Address address) {
         if(Objects.isNull(address)){
-            throw new InvalidAddressException(ADDRESS_MUST_NOT_BE_EMPTY);
+            throw new IllegalArgumentException(ADDRESS_MUST_NOT_BE_EMPTY);
         }
     }
 
@@ -287,18 +285,5 @@ public class Store extends AbstractAggregateRoot<Store> {
                 .createDate(createDate)
                 .logo(logo == null ? null : logo.getPath())
                 .build();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Store store = (Store) o;
-        return Objects.equals(businessNumber, store.businessNumber) && Objects.equals(businessName, store.businessName) && Objects.equals(businessTel, store.businessTel) && Objects.equals(tags, store.tags) && state == store.state && Objects.equals(businessHour, store.businessHour) && Objects.equals(address, store.address) && Objects.equals(ownerId, store.ownerId) && Objects.equals(createDate, store.createDate);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(businessNumber, businessName, businessTel, tags, state, businessHour, address, ownerId, createDate);
     }
 }

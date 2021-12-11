@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.PersistenceContext;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 import static com.ljy.oschajsa.services.store.domain.QStore.store;
 
 @Repository
+@Transactional(readOnly = true)
 public class JdbcQueryStoreRepository implements QueryStoreRepository {
     @Autowired private JdbcTemplate jdbcTemplate;
     @Autowired private JPAQueryFactory jpaQueryFactory;
@@ -80,7 +82,7 @@ public class JdbcQueryStoreRepository implements QueryStoreRepository {
             sqlBuilder.append(EQUALS_DONG);
             params.add(dto.getDong());
         }else {
-            throw new IllegalArgumentException("invalid stores search values");
+            throw new IllegalArgumentException("좌표값 및 차이값 혹은 검색하고자 하는 도,시,동을 입력해주세요.");
         }
 
         sqlBuilder.append("LIMIT " + (dto.getPage() * 10) + ", 10\r\n");
@@ -109,8 +111,8 @@ public class JdbcQueryStoreRepository implements QueryStoreRepository {
         },params.toArray());
         return list;
     }
-    private final String COUNT_QUERY = "SELECT count(*) FROM stores WHERE ";
 
+    private final String COUNT_QUERY = "SELECT count(*) FROM stores WHERE ";
     @Override
     public long countAll(StoreSearchDTO storeSearchDTO) {
         List<Object> params = new ArrayList<>();

@@ -1,5 +1,7 @@
 package com.ljy.oschajsa.services.user.domain.value;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Embeddable;
@@ -7,11 +9,9 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 @Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class NickName {
-    private final String name;
-
-    // JPA에서 embedded로 사용시 기본 생성자 필요
-    protected NickName(){name=null;}
+    private String name;
 
     private NickName(String name){
         verifyNotEmptyNickname(name);
@@ -25,14 +25,14 @@ public class NickName {
      * - 사용자 닉네임은 완성형 한글, 숫자, 영어[대,소문자]만 허용
      */
     private final static Pattern NICKNAME_REGEX = Pattern.compile("^[\\w가-힣]{3,10}$");
-    private final static String NICKNAME_EXCEPTION_MESSAGE = "nickname can use only hangul ,number,alphabet and the length must be between 3 and 10 characters";
+    private final static String NICKNAME_EXCEPTION_MESSAGE = "닉네임은 한글 조합 3자이상 10자이하로 입력해주세요.";
     private void nicknameValidation(String name) {
         if(!NICKNAME_REGEX.matcher(name).matches()){
             throw new IllegalArgumentException(NICKNAME_EXCEPTION_MESSAGE);
         }
     }
 
-    private final static String NICKNAME_EMPTY_MESSAGE = "nickname must not be empty";
+    private final static String NICKNAME_EMPTY_MESSAGE = "닉네임을 입력해주세요.";
     private void verifyNotEmptyNickname(String name) {
         if(!StringUtils.hasText(name)){
             throw new IllegalArgumentException(NICKNAME_EMPTY_MESSAGE);
@@ -45,13 +45,6 @@ public class NickName {
 
     public String get() {
         return name;
-    }
-
-    @Override
-    public String toString() {
-        return "NickName{" +
-                "name='" + name + '\'' +
-                '}';
     }
 
     @Override

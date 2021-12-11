@@ -1,6 +1,7 @@
 package com.ljy.oschajsa.services.user.command.presentation;
 
 import com.ljy.oschajsa.core.object.InvalidAddressException;
+import com.ljy.oschajsa.services.user.command.application.exception.AlreadyExistUserException;
 import com.ljy.oschajsa.services.user.domain.exception.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,7 +13,7 @@ public class UserExceptionHandler {
             InvalidAddressException.class,
             IllegalArgumentException.class,
             IllegalStateException.class,
-            StoreNotFoundException.class
+            AlreadyExistUserException.class
     })
     public ResponseEntity<String> error(RuntimeException e){
         return ResponseEntity.badRequest().body(e.getMessage());

@@ -57,7 +57,7 @@ public class RedisQueryStoreRepository implements CacheQueryStoreRepository {
 
     @Override
     public List<StoreModel> findByUserId(String userId) {
-        if(redisTemplate.hasKey(USER_STORE_KEY + ":" + userId)){
+        if(!redisTemplate.hasKey(USER_STORE_KEY + ":" + userId)){
             return null;
         }
         List<StoreModel> storeModels = listOperations.range(USER_STORE_KEY + ":" + userId, 0, -1).stream()

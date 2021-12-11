@@ -51,10 +51,6 @@ public class Password {
         return new Password(pw, passwordEncoder);
     }
 
-    Password encode(PasswordEncoder passwordEncoder) {
-        return new Password(get(), passwordEncoder);
-    }
-
     public String get() {
         return pw;
     }

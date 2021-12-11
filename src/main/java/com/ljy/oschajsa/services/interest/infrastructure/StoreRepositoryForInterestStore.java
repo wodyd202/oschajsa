@@ -8,11 +8,13 @@ import com.ljy.oschajsa.services.store.domain.model.StoreModel;
 import com.ljy.oschajsa.services.store.query.application.CacheQueryStoreRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @AllArgsConstructor
 @Slf4j
+@Profile("!test")
 public class StoreRepositoryForInterestStore implements StoreRepository {
     private CacheQueryStoreRepository storeCacheRepository;
 

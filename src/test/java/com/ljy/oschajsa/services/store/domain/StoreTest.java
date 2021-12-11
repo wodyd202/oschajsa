@@ -2,6 +2,7 @@ package com.ljy.oschajsa.services.store.domain;
 
 import com.ljy.oschajsa.StubAddressHelper;
 import com.ljy.oschajsa.core.application.AddressHelper;
+import com.ljy.oschajsa.core.object.InvalidAddressException;
 import com.ljy.oschajsa.services.store.command.application.StoreMapper;
 import com.ljy.oschajsa.services.store.domain.value.*;
 import com.ljy.oschajsa.services.store.command.application.model.ChangeBusinessHour;
@@ -196,6 +197,11 @@ public class StoreTest {
         assertThrows(IllegalArgumentException.class, () -> {
             BusinessHour.weekdayStartWeekdayEndWeekendStartWeekendEnd(9, 26, 9, 18);
         });
+
+        // when
+        assertThrows(IllegalArgumentException.class, () -> {
+            BusinessHour.weekdayStartWeekdayEndWeekendStartWeekendEnd(9, 18, -1, 18);
+        });
     }
 
     @Test
@@ -204,6 +210,11 @@ public class StoreTest {
         // when
         assertThrows(IllegalArgumentException.class, () -> {
             BusinessHour.weekdayStartWeekdayEndWeekendStartWeekendEnd(9, 18, 9, 27);
+        });
+
+        // when
+        assertThrows(IllegalArgumentException.class, () -> {
+            BusinessHour.weekdayStartWeekdayEndWeekendStartWeekendEnd(9, 18, -1, 27);
         });
     }
 
@@ -222,6 +233,54 @@ public class StoreTest {
         // when
         assertThrows(IllegalArgumentException.class, () -> {
             BusinessHour.weekdayStartWeekdayEndWeekendStartWeekendEnd(9, 18, 18, 9);
+        });
+    }
+
+    @Test
+    void newStore_emptyBusinessName(){
+        // when
+        assertThrows(IllegalArgumentException.class, ()->{
+            aStore(addressHelper, OwnerId.of("owner")).businessName(null).build();
+        });
+    }
+
+    @Test
+    void newStore_emptyBusinessNumber(){
+        // when
+        assertThrows(IllegalArgumentException.class, ()->{
+            aStore(addressHelper, OwnerId.of("owner")).businessNumber(null).build();
+        });
+    }
+
+    @Test
+    void newStore_emptyBusinessTel(){
+        // when
+        assertThrows(IllegalArgumentException.class, ()->{
+            aStore(addressHelper, OwnerId.of("owner")).businessTel(null).build();
+        });
+    }
+
+    @Test
+    void newStore_emptyBusinessHour(){
+        // when
+        assertThrows(IllegalArgumentException.class, ()->{
+            aStore(addressHelper, OwnerId.of("owner")).businessHour(null).build();
+        });
+    }
+
+    @Test
+    void newStore_emptyBusinessAddress(){
+        // when
+        assertThrows(IllegalArgumentException.class, ()->{
+            aStore(addressHelper, OwnerId.of("owner")).address(null).build();
+        });
+    }
+
+    @Test
+    void newStore_emptyBusinessTag(){
+        // when
+        assertThrows(IllegalArgumentException.class, ()->{
+            aStore(addressHelper, OwnerId.of("owner")).tags(null).build();
         });
     }
 
@@ -295,6 +354,17 @@ public class StoreTest {
         // when
         assertThrows(IllegalArgumentException.class,()->{
             store.changeLogo(OwnerId.of("owner"), new MockMultipartFile("image.exe","image.exe","image", new byte[]{}));
+        });
+    }
+
+    @Test
+    @DisplayName("자기 자신의 업체만 업체명 변경 가능")
+    void changeBusinessName_NotMyStore(){
+        // given
+        Store store = aStore(addressHelper, OwnerId.of("owner")).build();
+
+        assertThrows(IllegalStateException.class,()->{
+            store.changeBusinessName(null, OwnerId.of("notMyStore"));
         });
     }
 }
