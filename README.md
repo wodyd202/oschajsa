@@ -17,14 +17,13 @@
 #### Install
 * 실행전 Mysql 3306 port가 구성되어있어야합니다.
 * Redis는 embedded redis를 사용하고 있으나, 프로젝트에 포함된 docker-compose를 사용해 별개로 구성해도 무방합니다.
-##
+
 ```sh
 git clone https://github.com/wodyd202/oschajsa.git
 mvn clean spring-boot:run
 ```
 ##
-##
-##
+
 #### 아키텍처
 
 해당 이미지는 업체 기준의 아키텍처를 그린 이미지입니다. 서비스가 CQRS로 분리되어있기 때문에 조회를 제외한 사용자의 요청은 Command Layer에서 처리하게 됩니다.
@@ -36,7 +35,7 @@ Command Layer에서 데이터를 지속적으로 처리시 Query Layer와 연동
 이로인해 메모리 낭비가 발생하게되는데 이를 보완하기위해 TTL(7일)을 적용하였고, redis에서 조회했으나 데이터가 존재하지 않을 시 해당 데이터를 데이터베이스에서 가져와 다시 동기화(Lazy Loading
 )하는 로직을 구현했습니다.
 
-###
+##
 
 #### APIs
 
