@@ -1,5 +1,6 @@
 package com.ljy.oschajsa.services.user.query.application;
 
+import com.ljy.oschajsa.services.common.address.model.AddressModel;
 import com.ljy.oschajsa.services.user.domain.exception.UserNotFoundException;
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
 import com.ljy.oschajsa.services.user.query.application.external.InterestRepository;
@@ -45,14 +46,21 @@ public class QueryUserService implements UserDetailsService {
         return userModel;
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public AddressModel getAddressModel(String userId) {
         // 레디스에서 먼저 조회 후 없으면 DB에서 조회
         // DB에도 없으면 에러
-        UserModel userModel = getModel(username);
+        UserModel userModel = getModel(userId);
+        return userModel.getAddress();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        // 레디스에서 먼저 조회 후 없으면 DB에서 조회
+        // DB에도 없으면 에러
+        UserModel userModel = getModel(userId);
 
         if(userModel.isWithdrawal()){
-            throw new UsernameNotFoundException(username);
+            throw new UsernameNotFoundException(userId);
         }
         return new User(userModel.getUserId(), userModel.getPassword(), asList(new SimpleGrantedAuthority("ROLE_USER")));
     }

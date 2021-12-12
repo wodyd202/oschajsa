@@ -1,19 +1,17 @@
 package com.ljy.oschajsa.services.store.query;
 
-import com.ljy.oschajsa.core.application.AddressHelper;
+import com.ljy.oschajsa.services.common.address.application.AddressHelper;
 import com.ljy.oschajsa.services.store.StoreAPITest;
-import com.ljy.oschajsa.services.store.StoreFixture;
-import com.ljy.oschajsa.services.store.domain.StoreTest;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
 import com.ljy.oschajsa.services.store.domain.value.BusinessNumber;
 import com.ljy.oschajsa.services.store.domain.value.OwnerId;
 import com.ljy.oschajsa.services.store.query.application.QueryStoreRepository;
-import com.ljy.oschajsa.services.store.query.application.StoreSearchDTO;
+import com.ljy.oschajsa.services.store.query.application.model.AddressInfoDTO;
+import com.ljy.oschajsa.services.store.query.application.model.DifferenceCoordinateDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -53,25 +51,10 @@ public class JdbcQueryStoreRepository_Test extends StoreAPITest {
     }
 
     @Test
-    @DisplayName("주변 업체 리스트 조회시 좌표값 및 차이를 모두 입력해야함")
-    void findAll_invalidCoordinate(){
-        // given
-        StoreSearchDTO storeSearchDTO = StoreSearchDTO.builder()
-                .differenceCoordinate(3)
-                .page(0)
-                .build();
-
-        // when
-        assertThrows(Exception.class,()->{
-            queryStoreRepository.findAll(storeSearchDTO);
-        });
-    }
-
-    @Test
     @DisplayName("3km 이내의 업체 리스트 가져오기 테스트")
     void findAll_1(){
         // given
-        StoreSearchDTO storeSearchDTO = StoreSearchDTO.builder()
+        DifferenceCoordinateDTO storeSearchDTO = DifferenceCoordinateDTO.builder()
                 .differenceCoordinate(3)
                 .lettitude(1.1)
                 .longtitude(1.1)
@@ -79,7 +62,7 @@ public class JdbcQueryStoreRepository_Test extends StoreAPITest {
                 .build();
 
         // when
-        List<StoreModel> storeModels = queryStoreRepository.findAll(storeSearchDTO);
+        List<StoreModel> storeModels = queryStoreRepository.findByDifferenceCoordinate(storeSearchDTO);
 
         // then
         assertNotNull(storeModels);
@@ -89,7 +72,7 @@ public class JdbcQueryStoreRepository_Test extends StoreAPITest {
     @DisplayName("3km 이내의 업체 개수 가져오기 테스트")
     void countAll_1(){
         // given
-        StoreSearchDTO storeSearchDTO = StoreSearchDTO.builder()
+        DifferenceCoordinateDTO storeSearchDTO = DifferenceCoordinateDTO.builder()
                 .differenceCoordinate(3)
                 .lettitude(1.1)
                 .longtitude(1.1)
@@ -97,97 +80,42 @@ public class JdbcQueryStoreRepository_Test extends StoreAPITest {
 
         // when
         assertDoesNotThrow(()->{
-            queryStoreRepository.countAll(storeSearchDTO);
+            queryStoreRepository.countByDifferenceCoordinate(storeSearchDTO);
         });
     }
 
     @Test
-    @DisplayName("시 기준으로 업체 리스트 가져오기 테스트")
+    @DisplayName("시, 도, 동 기준으로 업체 리스트 가져오기 테스트")
     void findAll_2(){
         // given
-        StoreSearchDTO storeSearchDTO = StoreSearchDTO.builder()
+        AddressInfoDTO storeSearchDTO = AddressInfoDTO.builder()
                 .city("시")
+                .province("도")
+                .dong("동")
                 .page(0)
                 .build();
 
         // when
-        List<StoreModel> storeModels = queryStoreRepository.findAll(storeSearchDTO);
+        List<StoreModel> storeModels = queryStoreRepository.findByAddressInfo(storeSearchDTO);
 
         // then
         assertNotNull(storeModels);
     }
 
     @Test
-    @DisplayName("시 기준으로 업체 개수 가져오기 테스트")
+    @DisplayName("시, 도, 동 기준으로 업체 개수 가져오기 테스트")
     void countAll_2(){
         // given
-        StoreSearchDTO storeSearchDTO = StoreSearchDTO.builder()
+        AddressInfoDTO storeSearchDTO = AddressInfoDTO.builder()
                 .city("시")
-                .build();
-
-        // when
-        assertDoesNotThrow(()->{
-            queryStoreRepository.countAll(storeSearchDTO);
-        });
-    }
-
-    @Test
-    @DisplayName("도 기준으로 업체 리스트 가져오기 테스트")
-    void findAll_3(){
-        // given
-        StoreSearchDTO storeSearchDTO = StoreSearchDTO.builder()
                 .province("도")
-                .page(0)
-                .build();
-
-        // when
-        List<StoreModel> storeModels = queryStoreRepository.findAll(storeSearchDTO);
-
-        // then
-        assertNotNull(storeModels);
-    }
-
-    @Test
-    @DisplayName("도 기준으로 업체 개수 가져오기 테스트")
-    void countAll_3(){
-        // given
-        StoreSearchDTO storeSearchDTO = StoreSearchDTO.builder()
-                .province("도")
-                .build();
-
-        // when
-        assertDoesNotThrow(()->{
-            queryStoreRepository.countAll(storeSearchDTO);
-        });
-    }
-
-    @Test
-    @DisplayName("동 기준으로 업체 리스트 가져오기 테스트")
-    void findAll_4(){
-        // given
-        StoreSearchDTO storeSearchDTO = StoreSearchDTO.builder()
-                .dong("동")
-                .page(0)
-                .build();
-
-        // when
-        List<StoreModel> storeModels = queryStoreRepository.findAll(storeSearchDTO);
-
-        // then
-        assertNotNull(storeModels);
-    }
-
-    @Test
-    @DisplayName("동 기준으로 업체 개수 가져오기 테스트")
-    void countAll_4(){
-        // given
-        StoreSearchDTO storeSearchDTO = StoreSearchDTO.builder()
                 .dong("동")
                 .build();
 
         // when
         assertDoesNotThrow(()->{
-            queryStoreRepository.countAll(storeSearchDTO);
+            queryStoreRepository.countByAddressInfo(storeSearchDTO);
         });
     }
+
 }

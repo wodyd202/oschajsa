@@ -1,6 +1,6 @@
 package com.ljy.oschajsa.services.store.domain;
 
-import com.ljy.oschajsa.core.object.Address;
+import com.ljy.oschajsa.services.common.address.model.Address;
 import com.ljy.oschajsa.services.store.domain.event.*;
 import com.ljy.oschajsa.services.store.domain.infra.LogoConverter;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
@@ -8,6 +8,7 @@ import com.ljy.oschajsa.services.store.domain.value.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,54 +21,61 @@ import java.util.stream.Collectors;
 /**
  * 업체 도메인
  */
+@Slf4j
 @Entity
-@Table(name = "stores")
+@Table(name = "stores", indexes = @Index(columnList = "province, city, dong"))
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Store extends AbstractAggregateRoot<Store> {
 
-    /**
-     * businessNumber 사업자 번호
-     * businessName 상호명
-     * businessTel 전화번호
-     * tags 업체 태그 최대 3개
-     * state 업체 상태(영업중, 판매중단, 폐업)
-     * businessHour 영업 시간
-     * address 주소
-     * ownerId 업체 사장 아이디
-     * createDate 업체 등록일
-     */
+    // 사업자 번호
     @EmbeddedId
+    @AttributeOverride(name = "number", column = @Column(name = "business_number", length = 11))
     private BusinessNumber businessNumber;
+
+    // 상호명
     @Embedded
+    @AttributeOverride(name = "businessName", column = @Column(name = "business_name", length = 20, nullable = false))
     private BusinessName businessName;
+
+    // 업체 전화번호
     @Embedded
+    @AttributeOverride(name = "tel", column = @Column(name = "tel", length = 13, nullable = false))
     private BusinessTel businessTel;
+
+    // 업체 태그 정보
     @Embedded
     private Tags tags;
 
+    // 업체 상태
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 5)
     private StoreState state;
 
+    // 업체 운영 시간
     @Embedded
     private BusinessHour businessHour;
 
+    // 업체 로고
     @Convert(converter = LogoConverter.class)
     private Logo logo;
 
+    // 업체 주소
+    @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "city", column = @Column(length = 50, nullable = true)),
-            @AttributeOverride(name = "dong", column = @Column(length = 50, nullable = true)),
-            @AttributeOverride(name = "province", column = @Column(length = 50, nullable = true)),
-            @AttributeOverride(name = "lettitude", column = @Column(nullable = true)),
-            @AttributeOverride(name = "longtitude", column = @Column(nullable = true))
+            @AttributeOverride(name = "addressInfo.city", column = @Column(length = 50, nullable = true)),
+            @AttributeOverride(name = "addressInfo.dong", column = @Column(length = 50, nullable = true)),
+            @AttributeOverride(name = "addressInfo.province", column = @Column(length = 50, nullable = true)),
+            @AttributeOverride(name = "coordinate.lettitude", column = @Column(nullable = true)),
+            @AttributeOverride(name = "coordinate.longtitude", column = @Column(nullable = true))
     })
     private Address address;
 
+    // 업체 사장
     @Embedded
     private OwnerId ownerId;
 
+    // 업체 등록일
     @Column(nullable = false)
     private LocalDate createDate;
 
@@ -89,6 +97,7 @@ public class Store extends AbstractAggregateRoot<Store> {
         this.ownerId = ownerId;
         this.createDate = LocalDate.now();
 
+        log.info("new store : {}", this);
         registerEvent(new OpenedStoreEvent(businessNumber, businessName, tags, businessTel, businessHour, address, ownerId, createDate));
     }
 
@@ -173,6 +182,7 @@ public class Store extends AbstractAggregateRoot<Store> {
     public void open(StoreOpenValidator storeRegisterValidator) {
         storeRegisterValidator.validation(businessNumber, tags);
         state = StoreState.OPEN;
+        log.info("store open validation success : {}", businessNumber);
     }
 
     /**
@@ -181,8 +191,10 @@ public class Store extends AbstractAggregateRoot<Store> {
      */
     public void changeLogo(OwnerId changer, MultipartFile image) {
         verifyIsMyStore(changer);
+        Logo originLogo = this.logo;
         setLogo(image);
         registerEvent(new ChangedLogoEvent(businessNumber, logo));
+        log.info("{} store change logo : {} to {}", businessNumber, originLogo, this.logo);
     }
 
     private boolean isMyStore(OwnerId changer) {
@@ -190,25 +202,18 @@ public class Store extends AbstractAggregateRoot<Store> {
     }
 
     private void setLogo(MultipartFile image) {
-        verifyNotEmptyImage(image);
-        logo = Logo.of(image.getOriginalFilename());
-    }
-
-    private static final String IMAGE_MUST_NOT_BE_EMPTY = "업체 로고 이미지를 입력해주세요.";
-    private void verifyNotEmptyImage(MultipartFile image) {
-        if(Objects.isNull(image)){
-            throw new IllegalArgumentException(IMAGE_MUST_NOT_BE_EMPTY);
-        }
+        logo = image != null ? Logo.of(image.getOriginalFilename()) : null;
     }
 
     /**
      * @param closer
-     * # 업체 운영 종료
+     * # 업체 폐업
      */
     public void close(OwnerId closer) {
         verifyIsMyStore(closer);
         this.state = StoreState.CLOSE;
         registerEvent(new ClosedStoreEvent(businessNumber));
+        log.info("{} store close", businessNumber);
     }
 
     /**
@@ -218,8 +223,10 @@ public class Store extends AbstractAggregateRoot<Store> {
      */
     public void changeBusinessName(BusinessName businessName, OwnerId changer) {
         verifyIsMyStore(changer);
+        BusinessName originBusinessName = this.businessName;
         setBusinessName(businessName);
         registerEvent(new ChangedBusinessNameEvent(businessNumber, businessName));
+        log.info("{} store change name : {} to {}", businessNumber, originBusinessName, this.businessName);
     }
 
     /**
@@ -229,8 +236,10 @@ public class Store extends AbstractAggregateRoot<Store> {
      */
     public void changeTel(BusinessTel businessTel, OwnerId changer) {
         verifyIsMyStore(changer);
+        BusinessTel originBusinessTel = this.businessTel;
         setBusinessTel(businessTel);
         registerEvent(new ChangedBusinessTelEvent(businessNumber, businessTel));
+        log.info("{} store change tel : {} to {}", businessNumber, originBusinessTel, this.businessTel);
     }
 
     /**
@@ -240,8 +249,10 @@ public class Store extends AbstractAggregateRoot<Store> {
      */
     public void changeBusinessHour(BusinessHour businessHour, OwnerId changer) {
         verifyIsMyStore(changer);
+        BusinessHour originBusinessHour = this.businessHour;
         setBusinessHour(businessHour);
         registerEvent(new ChangedBusinessHourEvent(businessNumber, businessHour));
+        log.info("{} store change business hour : {} to {}", businessNumber, originBusinessHour, this.businessHour);
     }
 
     /**
@@ -253,6 +264,7 @@ public class Store extends AbstractAggregateRoot<Store> {
         verifyIsMyStore(remover);
         tags.remove(tag);
         registerEvent(new RemovedTagEvent(businessNumber, tag));
+        log.info("{} store remove tag : {} to {}", businessNumber, tag);
     }
 
     /**
@@ -264,12 +276,21 @@ public class Store extends AbstractAggregateRoot<Store> {
         verifyIsMyStore(adder);
         tags.add(tag, this);
         registerEvent(new AddedTagEvent(businessNumber, tag));
+        log.info("{} store add tag : {} to {}", businessNumber, tag);
     }
 
     private void verifyIsMyStore(OwnerId ownerId) {
         if(!isMyStore(ownerId)){
             throw new IllegalStateException("자신의 업체가 아닙니다.");
         }
+    }
+
+    public boolean hasLogo() {
+        return logo != null && logo.getPath() != null;
+    }
+
+    public String getLogo() {
+        return logo.getPath();
     }
 
     public StoreModel toModel() {
@@ -285,5 +306,21 @@ public class Store extends AbstractAggregateRoot<Store> {
                 .createDate(createDate)
                 .logo(logo == null ? null : logo.getPath())
                 .build();
+    }
+
+    @Override
+    public String toString() {
+        return "Store{" +
+                "businessNumber=" + businessNumber +
+                ", businessName=" + businessName +
+                ", businessTel=" + businessTel +
+                ", tags=" + tags +
+                ", state=" + state +
+                ", businessHour=" + businessHour +
+                ", logo=" + logo +
+                ", address=" + address +
+                ", ownerId=" + ownerId +
+                ", createDate=" + createDate +
+                '}';
     }
 }

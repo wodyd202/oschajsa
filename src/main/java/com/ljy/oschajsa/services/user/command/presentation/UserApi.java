@@ -1,6 +1,6 @@
 package com.ljy.oschajsa.services.user.command.presentation;
 
-import com.ljy.oschajsa.core.http.ControllerHelper;
+import com.ljy.oschajsa.services.common.controller.ControllerHelper;
 import com.ljy.oschajsa.services.user.domain.value.UserId;
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
 import com.ljy.oschajsa.services.user.command.application.ChangeAddressService;
@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -23,37 +22,53 @@ import java.security.Principal;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("api/v1/user")
+@RequestMapping("api/v1/users")
 public class UserApi {
     private final RegisterUserService registerUserService;
     private final ChangeAddressService changeAddressService;
     private final WithdrawalService withdrawalService;
 
+    /**
+     * @param registerUser
+     * @param errors
+     * # 회원가입
+     */
     @PostMapping
     public ResponseEntity<UserModel> registerUser(@Valid @RequestBody RegisterUser registerUser,
-                                                  @ApiIgnore  Errors errors){
+                                                  Errors errors){
         ControllerHelper.verifyNotContainsError(errors);
         UserModel userModel = registerUserService.register(registerUser);
         return ResponseEntity.ok(userModel);
     }
 
-    @PutMapping("address")
+    /**
+     * @param changeAddress
+     * @param errors
+     * @param principal
+     * # 사용자 주소지 변경
+     */
+    @PatchMapping("address")
     public ResponseEntity<UserModel> changeAddress(@Valid @RequestBody ChangeAddress changeAddress,
-                                                   @ApiIgnore Errors errors,
-                                                   @ApiIgnore Principal principal){
+                                                   Errors errors,
+                                                   Principal principal){
         ControllerHelper.verifyNotContainsError(errors);
         UserModel userModel = changeAddressService.changeAddress(changeAddress, UserId.of(principal.getName()));
         return ResponseEntity.ok(userModel);
     }
 
-    private final static String SUCCESS_WITHDRAWAL = "success withdrawal user";
+    /**
+     * @param withdrawalUser
+     * @param errors
+     * @param principal
+     * # 회원 탈퇴
+     */
     @DeleteMapping
     public ResponseEntity<String> withdrawal(@Valid @RequestBody WithdrawalUser withdrawalUser,
-                                             @ApiIgnore Errors errors,
-                                             @ApiIgnore Principal principal){
+                                             Errors errors,
+                                             Principal principal){
         ControllerHelper.verifyNotContainsError(errors);
         withdrawalService.withdrawal(withdrawalUser, UserId.of(principal.getName()));
-        return ResponseEntity.ok(SUCCESS_WITHDRAWAL);
+        return ResponseEntity.ok("회원탈퇴가 정상적으로 처리되었습니다.");
     }
 
 }

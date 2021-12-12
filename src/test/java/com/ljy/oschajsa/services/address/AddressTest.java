@@ -1,7 +1,7 @@
 package com.ljy.oschajsa.services.address;
 
-import com.ljy.oschajsa.core.application.AddressHelper;
-import com.ljy.oschajsa.core.object.*;
+import com.ljy.oschajsa.services.common.address.application.AddressHelper;
+import com.ljy.oschajsa.services.common.address.model.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

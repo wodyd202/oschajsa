@@ -16,6 +16,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * 업체 API 테스트
+ */
 public class OpenStoreAPI_Test extends ApiTest {
 
     @BeforeEach
@@ -26,7 +29,7 @@ public class OpenStoreAPI_Test extends ApiTest {
     @Test
     @DisplayName("업체 등록 요청시 토큰을 포함시켜 요청해야함")
     void open_403() throws Exception {
-        mockMvc.perform(post("/api/v1/store")
+        mockMvc.perform(post("/api/v1/stores")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(OpenStore.builder().build())))
                 .andExpect(status().isForbidden());
@@ -163,7 +166,7 @@ public class OpenStoreAPI_Test extends ApiTest {
         OpenStore openStore = aOpenStore().businessNumber("123-12-1234").build();
 
         // when
-        mockMvc.perform(post("/api/v1/store")
+        mockMvc.perform(post("/api/v1/stores")
                         .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(openStore)))
@@ -173,7 +176,7 @@ public class OpenStoreAPI_Test extends ApiTest {
     }
 
     private void assertBadRequestWhenOpenStore(OpenStore openStore) throws Exception{
-        mockMvc.perform(post("/api/v1/store")
+        mockMvc.perform(post("/api/v1/stores")
                         .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(openStore)))

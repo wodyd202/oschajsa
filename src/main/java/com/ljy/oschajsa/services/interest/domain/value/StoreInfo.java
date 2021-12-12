@@ -34,4 +34,14 @@ public class StoreInfo {
                 .businessHour(businessHour)
                 .build();
     }
+
+    @Override
+    public String toString() {
+        return "StoreInfo{" +
+                "businessNumber='" + businessNumber + '\'' +
+                ", businessName='" + businessName + '\'' +
+                ", logo='" + logo + '\'' +
+                ", businessHour=" + businessHour +
+                '}';
+    }
 }

@@ -1,9 +1,9 @@
 package com.ljy.oschajsa.services.store;
 
-import com.ljy.oschajsa.core.application.AddressHelper;
-import com.ljy.oschajsa.core.object.Address;
-import com.ljy.oschajsa.core.object.AddressInfo;
-import com.ljy.oschajsa.core.object.Coordinate;
+import com.ljy.oschajsa.services.common.address.application.AddressHelper;
+import com.ljy.oschajsa.services.common.address.model.Address;
+import com.ljy.oschajsa.services.common.address.model.AddressInfo;
+import com.ljy.oschajsa.services.common.address.model.Coordinate;
 import com.ljy.oschajsa.services.store.command.application.model.ChangeBusinessHour;
 import com.ljy.oschajsa.services.store.command.application.model.ChangeCoordinate;
 import com.ljy.oschajsa.services.store.command.application.model.OpenStore;

@@ -1,6 +1,6 @@
 package com.ljy.oschajsa.services.store.query;
 
-import com.ljy.oschajsa.core.application.AddressHelper;
+import com.ljy.oschajsa.services.common.address.application.AddressHelper;
 import com.ljy.oschajsa.services.store.domain.value.OwnerId;
 import com.ljy.oschajsa.services.store.domain.Store;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;

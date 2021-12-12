@@ -1,9 +1,9 @@
 package com.ljy.oschajsa.services.user.domain;
 
-import com.ljy.oschajsa.core.application.AddressHelper;
-import com.ljy.oschajsa.core.object.Address;
-import com.ljy.oschajsa.core.object.AddressInfo;
-import com.ljy.oschajsa.core.object.Coordinate;
+import com.ljy.oschajsa.services.common.address.application.AddressHelper;
+import com.ljy.oschajsa.services.common.address.model.Address;
+import com.ljy.oschajsa.services.common.address.model.AddressInfo;
+import com.ljy.oschajsa.services.common.address.model.Coordinate;
 import com.ljy.oschajsa.services.user.command.application.model.RegisterUser;
 import com.ljy.oschajsa.services.user.command.application.*;
 import com.ljy.oschajsa.services.user.domain.model.UserModel;

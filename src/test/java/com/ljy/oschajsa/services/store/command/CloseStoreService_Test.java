@@ -1,6 +1,6 @@
 package com.ljy.oschajsa.services.store.command;
 
-import com.ljy.oschajsa.core.application.AddressHelper;
+import com.ljy.oschajsa.services.common.address.application.AddressHelper;
 import com.ljy.oschajsa.services.store.StoreAPITest;
 import com.ljy.oschajsa.services.store.command.application.CloseStoreService;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;

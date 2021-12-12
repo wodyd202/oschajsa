@@ -21,11 +21,42 @@ public class UserSearchAPI_Test extends ApiTest {
     }
 
     @Test
-    @DisplayName("사용자 정보 조회")
-    void getAddress() throws Exception{
+    @DisplayName("사용자 조회시 토큰을 추가해야함")
+    void emptyTokenGetUserInfo() throws Exception{
         // when
-        mockMvc.perform(get("/api/v1/user")
+        mockMvc.perform(get("/api/v1/users"))
+
+        // then
+        .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("사용자 정보 조회")
+    void getUserInfo() throws Exception {
+        // when
+        mockMvc.perform(get("/api/v1/users")
                 .header("X-AUTH-TOKEN", obtainsAccessToken("username","password")))
+
+        // then
+        .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("사용자 주소 조회시 토큰을 추가해야함")
+    void emptyTokenGetAddressInfo() throws Exception{
+        // when
+        mockMvc.perform(get("/api/v1/users/address"))
+
+                // then
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("사용자 주소 조회")
+    void getAddress() throws Exception {
+        // when
+        mockMvc.perform(get("/api/v1/users/address")
+                        .header("X-AUTH-TOKEN", obtainsAccessToken("username","password")))
 
         // then
         .andExpect(status().isOk());

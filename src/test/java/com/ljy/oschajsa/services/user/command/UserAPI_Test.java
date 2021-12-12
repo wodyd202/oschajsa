@@ -46,7 +46,7 @@ public class UserAPI_Test extends ApiTest {
                 .password("password")
                 .nickname("nickname")
                 .build();
-        mockMvc.perform(post("/api/v1/user")
+        mockMvc.perform(post("/api/v1/users")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(registerUser)))
         .andExpect(status().isOk());
@@ -59,7 +59,7 @@ public class UserAPI_Test extends ApiTest {
                 .password("password")
                 .nickname("nickname")
                 .build();
-        mockMvc.perform(post("/api/v1/user")
+        mockMvc.perform(post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(registerUser)))
                 .andExpect(status().isBadRequest());
@@ -72,7 +72,7 @@ public class UserAPI_Test extends ApiTest {
                 .id("userid")
                 .nickname("nickname")
                 .build();
-        mockMvc.perform(post("/api/v1/user")
+        mockMvc.perform(post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(registerUser)))
                 .andExpect(status().isBadRequest());
@@ -85,7 +85,7 @@ public class UserAPI_Test extends ApiTest {
                 .id("userid")
                 .password("password")
                 .build();
-        mockMvc.perform(post("/api/v1/user")
+        mockMvc.perform(post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(registerUser)))
                 .andExpect(status().isBadRequest());
@@ -99,7 +99,7 @@ public class UserAPI_Test extends ApiTest {
                 .longtitude(127.423084873712)
                 .lettitude(37.0789561558879)
                 .build();
-        mockMvc.perform(put("/api/v1/user/address")
+        mockMvc.perform(patch("/api/v1/users/address")
             .header("X-AUTH-TOKEN",obtainsAccessToken("changeaddress","password"))
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(changeAddress)))
@@ -108,7 +108,7 @@ public class UserAPI_Test extends ApiTest {
 
     @Test
     void changeAddress_403() throws Exception {
-        mockMvc.perform(put("/api/v1/user/address"))
+        mockMvc.perform(put("/api/v1/users/address"))
             .andExpect(status().isForbidden());
     }
 
@@ -119,7 +119,7 @@ public class UserAPI_Test extends ApiTest {
         ChangeAddress changeAddress = ChangeAddress.builder()
                 .lettitude(37.0789561558879)
                 .build();
-        mockMvc.perform(put("/api/v1/user/address")
+        mockMvc.perform(patch("/api/v1/users/address")
                 .header("X-AUTH-TOKEN",obtainsAccessToken("changeaddress","password"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(changeAddress)))
@@ -133,7 +133,7 @@ public class UserAPI_Test extends ApiTest {
         ChangeAddress changeAddress = ChangeAddress.builder()
                 .longtitude(127.423084873712)
                 .build();
-        mockMvc.perform(put("/api/v1/user/address")
+        mockMvc.perform(patch("/api/v1/users/address")
                 .header("X-AUTH-TOKEN",obtainsAccessToken("changeaddress","password"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(changeAddress)))
@@ -145,7 +145,7 @@ public class UserAPI_Test extends ApiTest {
     void withdrawal() throws Exception {
         createUser("withdrawal","password");
         WithdrawalUser withdrawalUser = WithdrawalUser.builder().originPassword("password").build();
-        mockMvc.perform(delete("/api/v1/user")
+        mockMvc.perform(delete("/api/v1/users")
                 .header("X-AUTH-TOKEN",obtainsAccessToken("withdrawal","password"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(withdrawalUser)))
@@ -153,8 +153,9 @@ public class UserAPI_Test extends ApiTest {
     }
 
     @Test
+    @DisplayName("회원 탈퇴시 유효한 토큰을 넣지 않으면 에러")
     void withdrawal_403() throws Exception {
-        mockMvc.perform(delete("/api/v1/user"))
+        mockMvc.perform(delete("/api/v1/users"))
             .andExpect(status().isForbidden());
     }
 
@@ -163,7 +164,7 @@ public class UserAPI_Test extends ApiTest {
     void emptyOriginPassword_withdrawal() throws Exception {
         createUser("withdrawal1","password");
         WithdrawalUser withdrawalUser = WithdrawalUser.builder().build();
-        mockMvc.perform(delete("/api/v1/user")
+        mockMvc.perform(delete("/api/v1/users")
                 .header("X-AUTH-TOKEN",obtainsAccessToken("withdrawal1","password"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(withdrawalUser)))
@@ -171,8 +172,9 @@ public class UserAPI_Test extends ApiTest {
     }
 
     @Test
-    void getUserAddress_403() throws Exception{
-        mockMvc.perform(get("/api/v1/user/address"))
+    @DisplayName("사용자 정보 조회")
+    void getUser_403() throws Exception{
+        mockMvc.perform(get("/api/v1/users"))
                 .andExpect(status().isForbidden());
     }
 }

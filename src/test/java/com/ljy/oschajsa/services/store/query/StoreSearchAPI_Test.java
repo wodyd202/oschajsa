@@ -1,11 +1,9 @@
 package com.ljy.oschajsa.services.store.query;
 
-import com.ljy.oschajsa.core.application.AddressHelper;
+import com.ljy.oschajsa.services.common.address.application.AddressHelper;
 import com.ljy.oschajsa.services.store.StoreAPITest;
-import com.ljy.oschajsa.services.store.StoreFixture;
 import com.ljy.oschajsa.services.store.domain.value.BusinessNumber;
 import com.ljy.oschajsa.services.store.domain.value.OwnerId;
-import com.ljy.oschajsa.services.store.query.application.StoreSearchDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +15,9 @@ import static com.ljy.oschajsa.services.store.StoreFixture.aStore;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * 업체 조회 API 테스트
+ */
 @AutoConfigureMockMvc
 public class StoreSearchAPI_Test extends StoreAPITest {
     @Autowired MockMvc mockMvc;
@@ -31,20 +32,101 @@ public class StoreSearchAPI_Test extends StoreAPITest {
     @DisplayName("해당 업체 조회")
     void findByBusinessNumber() throws Exception{
         // when
-        mockMvc.perform(get("/api/v1/store/{businessNumber}", "345-34-3456"))
+        mockMvc.perform(get("/api/v1/stores/{businessNumber}", "345-34-3456"))
 
         // then
         .andExpect(status().isOk());
     }
 
     @Test
-    @DisplayName("주변 업체 리스트 조회")
-    void findAll() throws Exception{
+    @DisplayName("주변 업체 리스트 조회시 거리차이는 필수 항목임")
+    void emptyDifferenceCoordinateGetStoresByDifferenceCoordinate() throws Exception {
         // when
-        mockMvc.perform(get("/api/v1/store/difference-coordinate")
+        mockMvc.perform(get("/api/v1/stores/difference-coordinate")
+                        .param("longtitude", "127.423084873712")
+                        .param("lettitude", "37.0789561558879")
+                )
+
+                // then
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("주변 업체 리스트 조회시 거리차이는 1이상 5이하로 입력해야함")
+    void invalidDifferenceCoordinateGetStoresByDifferenceCoordinate() throws Exception {
+        // when
+        mockMvc.perform(get("/api/v1/stores/difference-coordinate")
+                        .param("longtitude", "127.423084873712")
+                        .param("lettitude", "37.0789561558879")
+                        .param("differenceCoordinate", "0")
+                )
+
+                // then
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    @DisplayName("주변 업체 리스트 조회시 경도값은 필수 항목임")
+    void emptyLongtitudeGetStoresByDifferenceCoordinate() throws Exception {
+        // when
+        mockMvc.perform(get("/api/v1/stores/difference-coordinate")
+                        .param("lettitude", "37.0789561558879")
+                        .param("differenceCoordinate", "3")
+                )
+
+                // then
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("주변 업체 리스트 조회시 위도값은 필수 항목임")
+    void emptyLettitudeGetStoresByDifferenceCoordinate() throws Exception {
+        // when
+        mockMvc.perform(get("/api/v1/stores/difference-coordinate")
+                        .param("longtitude", "37.0789561558879")
+                        .param("differenceCoordinate", "3")
+                )
+
+                // then
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("주변 업체 리스트 조회")
+    void getStoresByDifferenceCoordinate() throws Exception{
+        // when
+        mockMvc.perform(get("/api/v1/stores/difference-coordinate")
                         .param("longtitude", "127.423084873712")
                         .param("lettitude", "37.0789561558879")
                         .param("differenceCoordinate", "3")
+                )
+
+        // then
+        .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("시, 도, 동 기준으로 업체 리스트 조회시 시, 도, 동 모두 입력해야함")
+    void invalidGetStoresByAddressInfo() throws Exception {
+        // when
+        mockMvc.perform(get("/api/v1/stores/address-info")
+                        .param("city", "시")
+                        .param("province", "도")
+                )
+
+        // then
+        .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("시, 도, 동 기준으로 업체 리스트 조회")
+    void getStoresByAddressInfo() throws Exception {
+        // when
+        mockMvc.perform(get("/api/v1/stores/address-info")
+                        .param("city", "시")
+                        .param("province", "도")
+                        .param("dong", "동")
                 )
 
         // then

@@ -11,7 +11,7 @@ import java.util.Objects;
  * 업체 태그
  */
 @Entity
-@Table(name = "store_tags")
+@Table(name = "store_tags", indexes = @Index(columnList = "store_business_number"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tag {
 
@@ -19,9 +19,12 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
 
+    // 태그 이름
+    @Column(nullable = false, length = 10)
     private String tag;
 
     @ManyToOne
+    @JoinColumn(name="store_business_number", nullable=false)
     private Store store;
 
     private Tag(String tag) {

@@ -1,8 +1,8 @@
 package com.ljy.oschajsa.services.store.command.application;
 
-import com.ljy.oschajsa.core.application.AddressHelper;
-import com.ljy.oschajsa.core.object.Address;
-import com.ljy.oschajsa.core.object.Coordinate;
+import com.ljy.oschajsa.services.common.address.application.AddressHelper;
+import com.ljy.oschajsa.services.common.address.model.Address;
+import com.ljy.oschajsa.services.common.address.model.Coordinate;
 import com.ljy.oschajsa.services.store.command.application.model.OpenStore;
 import com.ljy.oschajsa.services.store.domain.*;
 import com.ljy.oschajsa.services.store.domain.value.*;

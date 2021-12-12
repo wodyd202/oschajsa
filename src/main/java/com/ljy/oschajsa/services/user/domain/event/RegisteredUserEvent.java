@@ -1,7 +1,7 @@
 package com.ljy.oschajsa.services.user.domain.event;
 
-import com.ljy.oschajsa.core.object.Address;
-import com.ljy.oschajsa.core.object.AddressModel;
+import com.ljy.oschajsa.services.common.address.model.Address;
+import com.ljy.oschajsa.services.common.address.model.AddressModel;
 import com.ljy.oschajsa.services.user.domain.value.NickName;
 import com.ljy.oschajsa.services.user.domain.value.Password;
 import com.ljy.oschajsa.services.user.domain.value.UserId;

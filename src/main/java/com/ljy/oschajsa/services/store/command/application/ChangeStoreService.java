@@ -1,9 +1,8 @@
 package com.ljy.oschajsa.services.store.command.application;
 
-import com.ljy.oschajsa.core.file.FileUploader;
+import com.ljy.oschajsa.common.file.FileUploader;
 import com.ljy.oschajsa.services.store.command.application.model.*;
 import com.ljy.oschajsa.services.store.domain.Store;
-import com.ljy.oschajsa.services.store.domain.exception.StoreNotFoundException;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
 import com.ljy.oschajsa.services.store.domain.value.*;
 import lombok.AllArgsConstructor;
@@ -106,7 +105,11 @@ public class ChangeStoreService {
      * # 업체 로고 변경
      */
     public StoreModel changeLogo(ChangeLogo changeLogo, BusinessNumber businessNumber, OwnerId owner) {
-        Store store = storeRepository.findById(businessNumber).orElseThrow(StoreNotFoundException::new);
+        Store store = getStore(storeRepository, businessNumber);
+        // 기존 로고가 존재할 경우 로고파일 삭제
+        if(store.hasLogo()){
+            fileUploader.removeFile(store.getLogo());
+        }
         store.changeLogo(owner, changeLogo.getFile());
         StoreModel storeModel = store.toModel();
         fileUploader.uploadFile(changeLogo.getFile(), storeModel.getLogo());

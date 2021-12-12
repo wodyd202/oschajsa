@@ -1,24 +1,19 @@
 package com.ljy.oschajsa.services.store.domain.value;
 
 import com.ljy.oschajsa.services.store.domain.model.BusinessHourModel;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Getter
 @Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BusinessHour {
-    private final int weekdayStart, weekdayEnd;
-    private final int weekendStart, weekendEnd;
-
-    // JPA에서 embedded로 사용시 기본 생성자 필요
-    protected BusinessHour(){
-        weekdayEnd = 0;
-        weekdayStart = 0;
-        weekendEnd = 0;
-        weekendStart = 0;
-    }
+    private int weekdayStart, weekdayEnd;
+    private int weekendStart, weekendEnd;
 
     private BusinessHour(Integer weekdayStart, Integer weekdayEnd, Integer weekendStart, Integer weekendEnd) {
         verifyNotEmptyWeekdayHour(weekdayStart, weekdayEnd);

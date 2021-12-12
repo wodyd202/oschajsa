@@ -21,4 +21,11 @@ public class Registrant {
     public String get() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "Registrant{" +
+                "id='" + id + '\'' +
+                '}';
+    }
 }

@@ -1,7 +1,7 @@
 package com.ljy.oschajsa.services.store.command;
 
 import com.ljy.oschajsa.ApiTest;
-import com.ljy.oschajsa.core.application.AddressHelper;
+import com.ljy.oschajsa.services.common.address.application.AddressHelper;
 import com.ljy.oschajsa.services.store.command.application.model.*;
 import com.ljy.oschajsa.services.store.domain.Store;
 import com.ljy.oschajsa.services.store.domain.value.*;
@@ -10,14 +10,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
 
 import static com.ljy.oschajsa.services.store.StoreFixture.aStore;
 import static org.mockito.Mockito.mock;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -49,7 +47,7 @@ public class ChangeStoreAPI_Test extends ApiTest {
                 .build();
 
         // when
-        mockMvc.perform(put("/api/v1/store/{businessNumber}/business-name", "999-99-8888")
+        mockMvc.perform(patch("/api/v1/stores/{businessNumber}/business-name", "999-99-8888")
                 .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(changeBusinessName)))
@@ -67,7 +65,7 @@ public class ChangeStoreAPI_Test extends ApiTest {
                 .build();
 
         // when
-        mockMvc.perform(put("/api/v1/store/{businessNumber}/business-name", "333-22-4444")
+        mockMvc.perform(patch("/api/v1/stores/{businessNumber}/business-name", "333-22-4444")
                 .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(changeBusinessName)))
@@ -85,7 +83,7 @@ public class ChangeStoreAPI_Test extends ApiTest {
                 .build();
 
         // when
-        mockMvc.perform(put("/api/v1/store/{businessNumber}/tel", "333-22-4444")
+        mockMvc.perform(patch("/api/v1/stores/{businessNumber}/tel", "333-22-4444")
                         .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(changeTel)))
@@ -106,7 +104,7 @@ public class ChangeStoreAPI_Test extends ApiTest {
             .build();
 
         // when
-        mockMvc.perform(put("/api/v1/store/{businessNumber}/business-hour", "333-22-4444")
+        mockMvc.perform(patch("/api/v1/stores/{businessNumber}/business-hour", "333-22-4444")
                 .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(changeBusinessHour)))
@@ -124,7 +122,7 @@ public class ChangeStoreAPI_Test extends ApiTest {
                 .build();
 
         // when
-        mockMvc.perform(delete("/api/v1/store/{businessNumber}/tag", "333-22-4444")
+        mockMvc.perform(delete("/api/v1/stores/{businessNumber}/tag", "333-22-4444")
                         .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(removeTag)))
@@ -142,7 +140,7 @@ public class ChangeStoreAPI_Test extends ApiTest {
                 .build();
 
         // when
-        mockMvc.perform(put("/api/v1/store/{businessNumber}/tag", "333-22-4444")
+        mockMvc.perform(patch("/api/v1/stores/{businessNumber}/tag", "333-22-4444")
                         .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(addTag)))

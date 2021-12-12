@@ -2,7 +2,7 @@ package com.ljy.oschajsa.services.user.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ljy.oschajsa.core.object.AddressModel;
+import com.ljy.oschajsa.services.common.address.model.AddressModel;
 import com.ljy.oschajsa.services.user.domain.UserState;
 import com.ljy.oschajsa.services.user.domain.event.ChangedUserAddressEvent;
 import com.ljy.oschajsa.services.user.domain.event.WithdrawaledUserEvent;
