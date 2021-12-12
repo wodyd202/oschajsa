@@ -21,6 +21,8 @@ public class OpenedStoreEvent {
     private String ownerId;
     private LocalDate createDate;
 
+    protected OpenedStoreEvent(){}
+
     public OpenedStoreEvent(BusinessNumber businessNumber,
                             BusinessName businessName,
                             Tags tags,

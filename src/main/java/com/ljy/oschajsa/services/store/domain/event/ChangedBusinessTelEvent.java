@@ -7,6 +7,11 @@ import lombok.Getter;
 @Getter
 public class ChangedBusinessTelEvent extends AbstractStoreEvent {
     private String businessTel;
+
+    protected ChangedBusinessTelEvent(){
+        super(null);
+    }
+
     public ChangedBusinessTelEvent(BusinessNumber businessNumber, BusinessTel businessTel) {
         super(businessNumber.get());
         this.businessTel = businessTel.get();

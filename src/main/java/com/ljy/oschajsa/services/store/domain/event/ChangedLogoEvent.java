@@ -7,6 +7,11 @@ import lombok.Getter;
 @Getter
 public class ChangedLogoEvent extends AbstractStoreEvent {
     private String logo;
+
+    protected ChangedLogoEvent(){
+        super(null);
+    }
+
     public ChangedLogoEvent(BusinessNumber businessNumber, Logo logo) {
         super(businessNumber.get());
         this.logo = logo.getPath();

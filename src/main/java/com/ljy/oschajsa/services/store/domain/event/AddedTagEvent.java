@@ -7,6 +7,9 @@ import lombok.Getter;
 @Getter
 public class AddedTagEvent extends AbstractStoreEvent {
     private String tag;
+
+    protected AddedTagEvent(){super(null);}
+
     public AddedTagEvent(BusinessNumber businessNumber, Tag tag) {
         super(businessNumber.get());
         this.tag = tag.get();

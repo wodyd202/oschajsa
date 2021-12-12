@@ -1,0 +1,17 @@
+spring:
+  kafka:
+    consumer:
+      auto-offset-reset: latest
+    bootstrap-servers: localhost:9092
+
+kafka:
+  topic:
+    store:
+      addedTag: "oschajsa.store.addedTagEvent"
+      removedTag: "oschajsa.store.removedTagEvent"
+      changedBusinessHour: "oschajsa.store.changedBusinessHourEvent"
+      changedBusinessName: "oschajsa.store.changedBusinessNameEvent"
+      changedBusinessTel: "oschajsa.store.changedBusinessTelEvent"
+      changedLogo: "oschajsa.store.changedBusinessLogoEvent"
+      closedStore: "oschajsa.store.closedStoreEvent"
+      opendStore: "oschajsa.store.openedStoreEvent"
