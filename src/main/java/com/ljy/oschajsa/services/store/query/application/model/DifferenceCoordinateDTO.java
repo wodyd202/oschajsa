@@ -18,9 +18,9 @@ public class DifferenceCoordinateDTO {
     @NotNull(message = "위도 좌표를 입력해주세요.")
     private Double lettitude;
 
-    @NotNull(message = "거리 차이는 1km 이상 5km 이하로 입력해주세요.")
-    @Min(value = 1, message = "거리 차이는 1km 이상 5km 이하로 입력해주세요.")
-    @Max(value = 5, message = "거리 차이는 1km 이상 5km 이하로 입력해주세요.")
+    @NotNull(message = "거리 차이는 1km 이상 20km 이하로 입력해주세요.")
+    @Min(value = 1, message = "거리 차이는 1km 이상 20km 이하로 입력해주세요.")
+    @Max(value = 20, message = "거리 차이는 1km 이상 20km 이하로 입력해주세요.")
     private Integer differenceCoordinate;
 
     @Min(value = 0, message = "페이지는 0 이상 입력해주세요.")

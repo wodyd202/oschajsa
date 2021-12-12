@@ -121,7 +121,10 @@ public class JdbcQueryStoreRepository implements QueryStoreRepository {
     private List<StoreModel> executeQuery(List<Object> params, StringBuilder sqlBuilder, int page) {
         appendLimitQuery(sqlBuilder, page);
         return jdbcTemplate.query(sqlBuilder.toString(), (resultSet, i) -> StoreModel.builder()
+                .businessNumber(resultSet.getString("business_number"))
                 .businessName(resultSet.getString("business_name"))
+                .owner(resultSet.getString("owner_id"))
+                .logo(resultSet.getString("logo"))
                 .tel(resultSet.getString("tel"))
                 .address(AddressModel.builder()
                         .dong(resultSet.getString("dong"))

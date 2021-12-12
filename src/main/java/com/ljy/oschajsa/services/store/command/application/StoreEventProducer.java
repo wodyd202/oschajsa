@@ -1,9 +1,7 @@
 package com.ljy.oschajsa.services.store.command.application;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ljy.oschajsa.services.store.domain.event.*;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
@@ -69,7 +67,7 @@ public class StoreEventProducer {
     private String CLOSED_STORE_TOPIC;
 
     @EventListener
-    void handle(ClosedStoreEvent event) throws Exception {
+    void handle(PreparedClosedStoreEvent event) throws Exception {
         kafkaTemplate.send(CLOSED_STORE_TOPIC, objectMapper.writeValueAsString(event));
     }
 

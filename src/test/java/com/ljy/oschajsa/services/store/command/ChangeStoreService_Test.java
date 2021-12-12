@@ -26,7 +26,7 @@ public class ChangeStoreService_Test extends StoreAPITest {
     @BeforeEach
     void setUp(){
         // given
-        saveStore(aStore(addressHelper, OwnerId.of("ownerId")).businessNumber(BusinessNumber.of("000-00-0000"))
+        saveStore(aStore(addressHelper, OwnerId.of("ownerId")).businessNumber(BusinessNumber.of("000-12-5600"))
                 .tags(Tags.withTags(Arrays.asList(Tag.of("귀여움"), Tag.of("앙증맞음"))))
                 .build());
     }
@@ -38,8 +38,8 @@ public class ChangeStoreService_Test extends StoreAPITest {
         ChangeBusinessName changeBusinessName = ChangeBusinessName.builder()
                 .businessName("업체명수정")
                 .build();
-        changeStoreService.changeBusinessName(BusinessNumber.of("000-00-0000"), changeBusinessName, OwnerId.of("ownerId"));
-        StoreModel store = getStore(BusinessNumber.of("000-00-0000"));
+        changeStoreService.changeBusinessName(BusinessNumber.of("000-12-5600"), changeBusinessName, OwnerId.of("ownerId"));
+        StoreModel store = getStore(BusinessNumber.of("000-12-5600"));
 
         // then
         assertEquals(store.getBusinessName(), "업체명수정");
@@ -52,8 +52,8 @@ public class ChangeStoreService_Test extends StoreAPITest {
         ChangeTel changeTel = ChangeTel.builder()
                 .tel("000-0000-1111")
                 .build();
-        changeStoreService.changeTel(BusinessNumber.of("000-00-0000"),changeTel, OwnerId.of("ownerId"));
-        StoreModel store = getStore(BusinessNumber.of("000-00-0000"));
+        changeStoreService.changeTel(BusinessNumber.of("000-12-5600"),changeTel, OwnerId.of("ownerId"));
+        StoreModel store = getStore(BusinessNumber.of("000-12-5600"));
 
         // then
         assertEquals(store.getTel(), "000-0000-1111");
@@ -69,8 +69,8 @@ public class ChangeStoreService_Test extends StoreAPITest {
                 .weekendStart(1)
                 .weekendEnd(15)
                 .build();
-        changeStoreService.changeBusinessHour(BusinessNumber.of("000-00-0000"), changeBusinessHour, OwnerId.of("ownerId"));
-        StoreModel store = getStore(BusinessNumber.of("000-00-0000"));
+        changeStoreService.changeBusinessHour(BusinessNumber.of("000-12-5600"), changeBusinessHour, OwnerId.of("ownerId"));
+        StoreModel store = getStore(BusinessNumber.of("000-12-5600"));
 
         // then
         assertEquals(store.getBusinessHour().getWeekdayStart(), 1);
@@ -86,8 +86,8 @@ public class ChangeStoreService_Test extends StoreAPITest {
         RemoveTag removeTag = RemoveTag.builder()
                 .tag("앙증맞음")
                 .build();
-        changeStoreService.removeTag(BusinessNumber.of("000-00-0000"), removeTag, OwnerId.of("ownerId"));
-        StoreModel store = getStore(BusinessNumber.of("000-00-0000"));
+        changeStoreService.removeTag(BusinessNumber.of("000-12-5600"), removeTag, OwnerId.of("ownerId"));
+        StoreModel store = getStore(BusinessNumber.of("000-12-5600"));
 
         // then
         assertFalse(store.getTags().contains("앙증맞음"));
@@ -100,8 +100,8 @@ public class ChangeStoreService_Test extends StoreAPITest {
         AddTag addTag = AddTag.builder()
                 .tag("태그추가")
                 .build();
-        changeStoreService.addTag(BusinessNumber.of("000-00-0000"), addTag, OwnerId.of("ownerId"));
-        StoreModel store = getStore(BusinessNumber.of("000-00-0000"));
+        changeStoreService.addTag(BusinessNumber.of("000-12-5600"), addTag, OwnerId.of("ownerId"));
+        StoreModel store = getStore(BusinessNumber.of("000-12-5600"));
 
         // then
         assertTrue(store.getTags().contains("태그추가"));

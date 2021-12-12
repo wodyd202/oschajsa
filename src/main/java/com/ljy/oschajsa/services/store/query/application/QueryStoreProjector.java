@@ -40,6 +40,10 @@ public class QueryStoreProjector {
         StoreModel storeModel = storeRepository.findById(event.getBusinessNumber()).get();
         invoke(event, storeModel);
         storeRepository.save(storeModel);
+
+        if(event.getClass().equals(PreparedClosedStoreEvent.class)){
+            storeRepository.savePreparedCloseStore(event.getBusinessNumber());
+        }
     }
 
     private void invoke(AbstractStoreEvent event, StoreModel storeModel) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {

@@ -9,3 +9,4 @@ redis:
     user: "oschajsa:user"
     store: "oschajsa:store"
     user-store: "oschajsa:user-store"
+    prepare-close-store: "oschajsa:prepare-close-store"

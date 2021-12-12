@@ -1,5 +1,5 @@
 package com.ljy.oschajsa.services.store.domain.value;
 
 public enum StoreState {
-    OPEN, CLOSE, STOP
+    OPEN, PREPARED_CLOSE, STOP
 }

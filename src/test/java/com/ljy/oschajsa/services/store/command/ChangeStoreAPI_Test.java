@@ -149,4 +149,56 @@ public class ChangeStoreAPI_Test extends ApiTest {
         .andExpect(status().isOk());
     }
 
+    @Test
+    @DisplayName("업체 운영 중지")
+    void stop() throws Exception {
+        // given
+        Store store = aStore(addressHelper, OwnerId.of("username"))
+                .businessNumber(BusinessNumber.of("989-98-9898")).build();
+        store.open(mock(StoreOpenValidator.class));
+        storeRepository.save(store);
+
+        // when
+        mockMvc.perform(patch("/api/v1/stores/{businessNumber}/stop", "989-98-9898")
+                .header("X-AUTH-TOKEN", obtainsAccessToken("username","password")))
+
+        // then
+        .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("업체 재오픈")
+    void reOpen() throws Exception {
+        // given
+        Store store = aStore(addressHelper, OwnerId.of("username"))
+                .businessNumber(BusinessNumber.of("543-34-3533")).build();
+        store.open(mock(StoreOpenValidator.class));
+        store.stop(OwnerId.of("username"));
+        storeRepository.save(store);
+
+        // when
+        mockMvc.perform(patch("/api/v1/stores/{businessNumber}/re-open", "543-34-3533")
+                        .header("X-AUTH-TOKEN", obtainsAccessToken("username","password")))
+
+        // then
+        .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("업체 폐업")
+    void close() throws Exception {
+        // given
+        Store store = aStore(addressHelper, OwnerId.of("username"))
+                .businessNumber(BusinessNumber.of("565-56-5656")).build();
+        store.open(mock(StoreOpenValidator.class));
+        storeRepository.save(store);
+
+        // when
+        mockMvc.perform(delete("/api/v1/stores/{businessNumber}", "565-56-5656")
+                    .header("X-AUTH-TOKEN", obtainsAccessToken("username","password")))
+
+        // then
+        .andExpect(status().isOk());
+    }
+
 }

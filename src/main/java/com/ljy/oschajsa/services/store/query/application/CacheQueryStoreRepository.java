@@ -9,4 +9,7 @@ public interface CacheQueryStoreRepository {
     void save(StoreModel storeModel);
     Optional<StoreModel> findById(String businessNumber);
     List<StoreModel> findByUserId(String userId);
+
+    void savePreparedCloseStore(String businessNumber);
+    void removeClosedStore();
 }

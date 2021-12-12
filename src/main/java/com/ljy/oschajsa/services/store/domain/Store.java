@@ -49,7 +49,7 @@ public class Store extends AbstractAggregateRoot<Store> {
 
     // 업체 상태
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 5)
+    @Column(nullable = false, length = 14)
     private StoreState state;
 
     // 업체 운영 시간
@@ -73,11 +73,14 @@ public class Store extends AbstractAggregateRoot<Store> {
 
     // 업체 사장
     @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "owner_id", length = 50, nullable = true))
     private OwnerId ownerId;
 
     // 업체 등록일
     @Column(nullable = false)
     private LocalDate createDate;
+
+    private LocalDate closingReservationDate;
 
     @Builder
     public Store(BusinessName businessName,
@@ -206,14 +209,44 @@ public class Store extends AbstractAggregateRoot<Store> {
     }
 
     /**
-     * @param closer
-     * # 업체 폐업
+     * @param ownerId
+     * # 업체 재오픈
      */
-    public void close(OwnerId closer) {
+    public void reOpen(OwnerId ownerId) {
+        verifyIsMyStore(ownerId);
+        verifyNotClosed();
+        this.state = StoreState.OPEN;
+        registerEvent(new ReOpenedStoreEvent(businessNumber));
+        log.info("{} store re open", businessNumber);
+    }
+
+    private void verifyNotClosed() {
+        if(state.equals(StoreState.PREPARED_CLOSE)){
+            throw new IllegalStateException("이미 폐업한 상태의 업체입니다.");
+        }
+    }
+
+    /**
+     * @param changer
+     * # 업체 영업 중지
+     */
+    public void stop(OwnerId changer) {
+        verifyIsMyStore(changer);
+        this.state = StoreState.STOP;
+        registerEvent(new StopedStoreEvent(businessNumber));
+        log.info("{} store stop", businessNumber);
+    }
+
+    /**
+     * @param closer
+     * # 업체 폐업 준비
+     */
+    public void preparedClose(OwnerId closer) {
         verifyIsMyStore(closer);
-        this.state = StoreState.CLOSE;
-        registerEvent(new ClosedStoreEvent(businessNumber));
-        log.info("{} store close", businessNumber);
+        this.state = StoreState.PREPARED_CLOSE;
+        closingReservationDate = LocalDate.now().plusDays(30);
+        registerEvent(new PreparedClosedStoreEvent(businessNumber));
+        log.info("{} store prepared close", businessNumber);
     }
 
     /**

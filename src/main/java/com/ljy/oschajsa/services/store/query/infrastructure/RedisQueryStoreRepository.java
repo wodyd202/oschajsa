@@ -24,6 +24,7 @@ public class RedisQueryStoreRepository implements CacheQueryStoreRepository {
 
     @Value("${redis.key.store}") private String STORE_KEY;
     @Value("${redis.key.user-store}") private String USER_STORE_KEY;
+    @Value("${redis.key.prepare-close-store}") private String PREPARED_STORE_KEY;
 
     private HashOperations<String, Object, Object> hashOperations;
     private ListOperations<String, Object> listOperations;
@@ -65,5 +66,20 @@ public class RedisQueryStoreRepository implements CacheQueryStoreRepository {
                                         .collect(Collectors.toList());
         redisTemplate.expire(USER_STORE_KEY + ":" + userId, Duration.ofDays(7));
         return storeModels;
+    }
+
+    @Override
+    public void savePreparedCloseStore(String businessNumber) {
+        listOperations.rightPush(PREPARED_STORE_KEY, businessNumber);
+        log.info("save prepare close store : {}", businessNumber);
+    }
+
+    @Override
+    public void removeClosedStore() {
+        List<Object> range = listOperations.range(PREPARED_STORE_KEY, 0, -1);
+        for (Object businessNumber : range) {
+            redisTemplate.delete(STORE_KEY + ":" + businessNumber);
+            log.info("remove store into redis : {}" , businessNumber);
+        }
     }
 }

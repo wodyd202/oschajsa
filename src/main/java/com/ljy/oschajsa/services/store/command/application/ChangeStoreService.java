@@ -2,6 +2,7 @@ package com.ljy.oschajsa.services.store.command.application;
 
 import com.ljy.oschajsa.common.file.FileUploader;
 import com.ljy.oschajsa.services.store.command.application.model.*;
+import com.ljy.oschajsa.services.store.command.application.schedule.StoreRepositoryForRemoveStore;
 import com.ljy.oschajsa.services.store.domain.Store;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
 import com.ljy.oschajsa.services.store.domain.value.*;
@@ -20,6 +21,48 @@ import static com.ljy.oschajsa.services.store.command.application.StoreServiceHe
 public class ChangeStoreService {
     private StoreRepository storeRepository;
     private FileUploader fileUploader;
+
+    /**
+     * @param businessNumber
+     * @param ownerId
+     * # 업체 재오픈
+     */
+    public StoreModel reOpen(BusinessNumber businessNumber, OwnerId ownerId) {
+        Store store = getStore(storeRepository, businessNumber);
+        store.reOpen(ownerId);
+
+        storeRepository.save(store);
+
+        return store.toModel();
+    }
+
+    /**
+     * @param businessNumber
+     * @param closer
+     * # 업체 폐업 준비
+     */
+    public StoreModel preparedClose(BusinessNumber businessNumber, OwnerId closer) {
+        Store store = getStore(storeRepository, businessNumber);
+        store.preparedClose(closer);
+
+        storeRepository.save(store);
+
+        return store.toModel();
+    }
+
+    /**
+     * @param businessNumber
+     * @param changer
+     * # 업체 운영 중지
+     */
+    public StoreModel stop(BusinessNumber businessNumber, OwnerId changer) {
+        Store store = getStore(storeRepository, businessNumber);
+        store.stop(changer);
+
+        storeRepository.save(store);
+
+        return store.toModel();
+    }
 
     /**
      * @param businessNumber

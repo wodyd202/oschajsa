@@ -8,6 +8,8 @@ import com.ljy.oschajsa.services.store.domain.value.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.NoSuchElementException;
+
 import static org.mockito.Mockito.mock;
 
 @SpringBootTest
@@ -17,7 +19,12 @@ public class StoreAPITest {
 
     public void saveStore(Store store){
         store.open(mock(StoreOpenValidator.class));
-        storeRepository.save(store);
+        StoreModel storeModel = store.toModel();
+        try{
+            getStore(BusinessNumber.of(storeModel.getBusinessNumber()));
+        }catch (NoSuchElementException e){
+            storeRepository.save(store);
+        }
     }
 
     public StoreModel getStore(BusinessNumber businessNumber){

@@ -160,7 +160,7 @@
                 <configuration>
                     <excludes>
                         <exclude>com/ljy/oschajsa/config/**</exclude>
-                        <exclude>com/ljy/oschajsa/core/**</exclude>
+                        <exclude>com/ljy/oschajsa/services/common/**</exclude>
                         <exclude>com/ljy/oschajsa/**/external/**</exclude>
                         <exclude>*Application.*</exclude>
                         <exclude>*Runner.*</exclude>

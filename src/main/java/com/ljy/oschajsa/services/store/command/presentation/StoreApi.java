@@ -27,6 +27,42 @@ public class StoreApi {
     private ChangeStoreService changeStoreService;
 
     /**
+     * @param businessNumber
+     * @param principal
+     * # 업체 재오픈
+     */
+    @PatchMapping("{businessNumber}/re-open")
+    public ResponseEntity<StoreModel> reOpen(@PathVariable BusinessNumber businessNumber,
+                                             Principal principal){
+        StoreModel storeModel = changeStoreService.reOpen(businessNumber, OwnerId.of(principal.getName()));
+        return ResponseEntity.ok(storeModel);
+    }
+
+    /**
+     * @param businessNumber
+     * @param principal
+     * # 업체 영업 중지
+     */
+    @PatchMapping("{businessNumber}/stop")
+    public ResponseEntity<StoreModel> stop(@PathVariable BusinessNumber businessNumber,
+                                             Principal principal){
+        StoreModel storeModel = changeStoreService.stop(businessNumber, OwnerId.of(principal.getName()));
+        return ResponseEntity.ok(storeModel);
+    }
+
+    /**
+     * @param businessNumber
+     * @param principal
+     * # 폐업 준비
+     */
+    @DeleteMapping("{businessNumber}")
+    public ResponseEntity<StoreModel> preparedClose(@PathVariable BusinessNumber businessNumber,
+                                            Principal principal){
+        StoreModel storeModel = changeStoreService.preparedClose(businessNumber, OwnerId.of(principal.getName()));
+        return ResponseEntity.ok(storeModel);
+    }
+
+    /**
      * @param openStore
      * @param errors
      * @param principal
@@ -140,5 +176,7 @@ public class StoreApi {
         StoreModel storeModel = changeStoreService.removeTag(businessNumber, removeTag, OwnerId.of(principal.getName()));
         return ResponseEntity.ok(storeModel);
     }
+
+
 
 }

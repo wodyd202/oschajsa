@@ -23,9 +23,7 @@ public class JwtAuthenticationFilter implements Filter {
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (EmptyTokenException e) {
-            log.error("empty token");
         } catch (InvalidTokenException e) {
-            log.error("invalid token");
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

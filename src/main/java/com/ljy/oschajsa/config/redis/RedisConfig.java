@@ -19,19 +19,21 @@ import javax.annotation.PreDestroy;
 import java.util.List;
 import java.util.Optional;
 
-//@Configuration
+@Configuration
 @Profile("!test")
 public class RedisConfig {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Value("${spring.redis.cluster.nodes}")
-    private List<String> clusterNodes;
+    @Value("${spring.redis.host}")
+    private String host;
+
+    @Value("${spring.redis.port}")
+    private int port;
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration(clusterNodes);
-        return new LettuceConnectionFactory(redisClusterConfiguration);
+        return new LettuceConnectionFactory(host, port);
     }
 
     @Bean

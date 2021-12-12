@@ -6,6 +6,7 @@ import com.ljy.oschajsa.services.store.domain.event.ChangedBusinessNameEvent;
 import com.ljy.oschajsa.services.store.domain.event.ChangedLogoEvent;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.scheduling.annotation.Async;
@@ -20,6 +21,7 @@ import javax.persistence.Entity;
 @Async("interestExecutor")
 @Component
 @AllArgsConstructor
+@Profile("!test")
 public class StoreEventListener {
     private ObjectMapper objectMapper;
     private JdbcInterestRepository interestRepository;
