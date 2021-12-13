@@ -5,6 +5,17 @@ spring:
 redis:
   key:
     user: "oschajsa:user"
+
+    # 업체 캐시 키
     store: "oschajsa:store"
+    # 주변 업체 리스트 키
+    store-difference-doordinate: "oschajsa:store-difference-doordinate:"
+    # 주변 업체 리스트 개수 키
+    store-difference-doordinate-count: "oschajsa:store-difference-doordinate-count:"
+    # 도,시,동 업체 리스트 키
+    store-address: "oschajsa:store-address:"
+    # 도,시,동 업체 리스트 개수 키
+    store-address-count: "oschajsa:store-address-count:"
+
     user-store: "oschajsa:user-store"
     prepare-close-store: "oschajsa:prepare-close-store"

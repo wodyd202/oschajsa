@@ -10,20 +10,41 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import redis.embedded.RedisServer;
 
-@Configuration
-public class RedisConfig {
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.util.Optional;
+
+//@Configuration
+public class EmbeddedRedisConfig {
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Value("${spring.redis.host}")
-    private String host;
 
     @Value("${spring.redis.port}")
     private int port;
 
+    @Value("${spring.redis.host}")
+    private String host;
+
+    private RedisServer redisServer;
+
+    @PreDestroy
+    public void destroy() {
+        Optional.ofNullable(redisServer).ifPresent(RedisServer::stop);
+    }
+
+    @PostConstruct
+    public void afterPropertiesSet() {
+        redisServer = new RedisServer(port);
+        try{
+            redisServer.start();
+        }catch (Exception e){
+        }
+    }
+
     @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
+    RedisConnectionFactory redisConnectionFactory(){
         return new LettuceConnectionFactory(host, port);
     }
 

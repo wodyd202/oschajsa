@@ -2,6 +2,7 @@ package com.ljy.oschajsa.services.user.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ljy.oschajsa.services.common.address.model.Address;
 import com.ljy.oschajsa.services.common.address.model.AddressModel;
 import com.ljy.oschajsa.services.user.domain.UserState;
 import com.ljy.oschajsa.services.user.domain.event.ChangedUserAddressEvent;
@@ -42,13 +43,13 @@ public class UserModel {
     public UserModel(String userId,
                      String nickname,
                      String password,
-                     AddressModel address,
+                     Address address,
                      LocalDateTime createDateTime,
                      UserState state) {
         this.userId = userId;
         this.nickname = nickname;
         this.password = password;
-        this.address = address;
+        this.address = address == null ? null : address.toModel();
         this.createDateTime = createDateTime;
         this.state = state;
     }

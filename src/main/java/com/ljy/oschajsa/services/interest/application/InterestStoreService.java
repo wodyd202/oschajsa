@@ -5,6 +5,8 @@ import com.ljy.oschajsa.services.interest.domain.Interest;
 import com.ljy.oschajsa.services.interest.domain.model.InterestModel;
 import com.ljy.oschajsa.services.interest.domain.value.Registrant;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,7 @@ public class InterestStoreService {
     private StoreRepository storeRepository;
     private InterestRepository interestRepository;
 
+    @CacheEvict(value = "store-interest", key = "#userId.get()")
     public void interest(String businessNumber, Registrant userId){
         Optional<Interest> optionalInterest = interestRepository.findByUserIdAndBusinessNumber(userId, businessNumber);
         // 이미 존재할 경우 제거
@@ -36,6 +39,7 @@ public class InterestStoreService {
         }
     }
 
+    @Cacheable(value = "store-interest", key = "#userId.get()")
     public List<InterestModel> getInterestModels(Registrant userId) {
         return interestRepository.findByUserId(userId).stream().map(Interest::toModel).collect(Collectors.toList());
     }

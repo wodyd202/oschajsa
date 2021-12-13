@@ -7,6 +7,7 @@ import com.ljy.oschajsa.services.user.domain.UserRepository;
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
 import com.ljy.oschajsa.services.user.command.application.model.RegisterUser;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ public class RegisterUserService {
      * @param registerUser
      * # 사용자 등록
      */
+    @Cacheable(value = "user", key = "#registerUser.id")
     public UserModel register(RegisterUser registerUser) {
         verifyNotExistUser(registerUser.getId());
         User user = userMapper.mapFrom(registerUser);

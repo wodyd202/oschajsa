@@ -9,6 +9,7 @@ import com.ljy.oschajsa.services.store.query.application.model.AddressInfoDTO;
 import com.ljy.oschajsa.services.store.query.application.model.StoreResponse;
 import com.ljy.oschajsa.services.store.query.application.model.DifferenceCoordinateDTO;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +24,6 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class QueryStoreService {
     private QueryStoreRepository storeRepository;
-    private CacheQueryStoreRepository cacheStoreRepository;
 
     // 외부 모듈
     private InterestRepository interestRepository;
@@ -32,26 +32,24 @@ public class QueryStoreService {
      * @param businessNumber
      * # 업체 단건 조회
      */
-    public StoreResponse getStoreModel(String businessNumber) {
-        StoreModel storeModel = cacheStoreRepository.findById(businessNumber).orElseGet(()->{
-            StoreModel storeModelFromDB = storeRepository.findById(businessNumber).orElseThrow(StoreNotFoundException::new);
-            cacheStoreRepository.save(storeModelFromDB);
-            return storeModelFromDB;
-        });
+    @Cacheable(value = "store", key = "#businessNumber")
+    public StoreModel getStoreModel(String businessNumber) {
+        StoreModel storeModel = storeRepository.findById(businessNumber).orElseThrow(StoreNotFoundException::new);
+
         storeModel.addInterestTotalCount(interestRepository.getIntestTotalCount(businessNumber));
-        return new StoreResponse(storeModel);
+
+        return storeModel;
     }
 
     /**
      * @param storeSearchDTO
      * # 좌표에서 부터 x(km) 떨어진 업체 리스트 조회
      */
-    public List<StoreResponse> getStoreModelsByDifferenceCoordinate(DifferenceCoordinateDTO storeSearchDTO) {
+    @Cacheable(value = "store-difference-doordinate", key = "T(java.lang.String).format('%f-%f-%d', #storeSearchDTO.longtitude, #storeSearchDTO.lettitude, #storeSearchDTO.differenceCoordinate)")
+    public List<StoreModel> getStoreModelsByDifferenceCoordinate(DifferenceCoordinateDTO storeSearchDTO) {
         return storeRepository.findByDifferenceCoordinate(storeSearchDTO).stream()
-                .map(StoreResponse::new)
                 // 폐업한 업체를 상위로 올림
-                .sorted((o1, o2) -> {
-                    StoreModel storeModel = o1.getStoreModel();
+                .sorted((storeModel, o2) -> {
                     AddressModel address = storeModel.getAddress();
                     int distance = (int) distance(storeSearchDTO.getLettitude(), storeSearchDTO.getLongtitude(), address.getLettitude(), address.getLongtitude());
                     return distance + (storeModel.getState().equals(StoreState.PREPARED_CLOSE) ? -100 : 0);
@@ -71,12 +69,10 @@ public class QueryStoreService {
         return (dist);
     }
 
-    // This function converts decimal degrees to radians
     private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
 
-    // This function converts radians to decimal degrees
     private double rad2deg(double rad) {
         return (rad * 180 / Math.PI);
     }
@@ -85,6 +81,7 @@ public class QueryStoreService {
      * @param storeSearchDTO
      * # 좌표에서 부터 x(km) 떨어진 업체 개수 조회
      */
+    @Cacheable(value = "store-count-by-difference-doordinate", key = "T(java.lang.String).format('%f-%f-%d', #storeSearchDTO.longtitude, #storeSearchDTO.lettitude, #storeSearchDTO.differenceCoordinate)")
     public long getCountStoreModelsByDifferenceCoordinate(DifferenceCoordinateDTO storeSearchDTO) {
         return storeRepository.countByDifferenceCoordinate(storeSearchDTO);
     }
@@ -93,6 +90,7 @@ public class QueryStoreService {
      * @param addressInfoDTO
      * # 시, 도, 동 기준으로 업체 리스트 조회
      */
+    @Cacheable(value = "store-by-address", key = "T(java.lang.String).format('%s-%s-%s', #addressInfoDTO.province, #addressInfoDTO.city, #addressInfoDTO.dong)")
     public List<StoreResponse> getStoreModelsByAddressInfo(AddressInfoDTO addressInfoDTO) {
         return storeRepository.findByAddressInfo(addressInfoDTO).stream()
                 .map(StoreResponse::new)
@@ -105,6 +103,7 @@ public class QueryStoreService {
      * @param addressInfoDTO
      * # 시, 도, 동 기준으로 업체 개수 조회
      */
+    @Cacheable(value = "store-count-by-address", key = "T(java.lang.String).format('%s-%s-%s', #addressInfoDTO.province, #addressInfoDTO.city, #addressInfoDTO.dong)")
     public long getCountStoreModelsByAddressInfo(AddressInfoDTO addressInfoDTO) {
         return storeRepository.countByAddressInfo(addressInfoDTO);
     }

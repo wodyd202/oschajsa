@@ -7,6 +7,8 @@ import com.ljy.oschajsa.services.store.domain.Store;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
 import com.ljy.oschajsa.services.store.domain.value.*;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,7 @@ public class ChangeStoreService {
      * @param ownerId
      * # 업체 재오픈
      */
+    @CachePut(value = "store", key = "#businessNumber.get()")
     public StoreModel reOpen(BusinessNumber businessNumber, OwnerId ownerId) {
         Store store = getStore(storeRepository, businessNumber);
         store.reOpen(ownerId);
@@ -41,6 +44,7 @@ public class ChangeStoreService {
      * @param closer
      * # 업체 폐업 준비
      */
+    @CachePut(value = "store", key = "#businessNumber.get()")
     public StoreModel preparedClose(BusinessNumber businessNumber, OwnerId closer) {
         Store store = getStore(storeRepository, businessNumber);
         store.preparedClose(closer);
@@ -55,6 +59,7 @@ public class ChangeStoreService {
      * @param changer
      * # 업체 운영 중지
      */
+    @CachePut(value = "store", key = "#businessNumber.get()")
     public StoreModel stop(BusinessNumber businessNumber, OwnerId changer) {
         Store store = getStore(storeRepository, businessNumber);
         store.stop(changer);
@@ -70,6 +75,7 @@ public class ChangeStoreService {
      * @param changer
      * # 업체 정보 변경
      */
+    @CachePut(value = "store", key = "#businessNumber.get()")
     public StoreModel changeBusinessName(BusinessNumber businessNumber,
                                          ChangeBusinessName changeBusinessName,
                                          OwnerId changer) {
@@ -86,6 +92,7 @@ public class ChangeStoreService {
      * @param changer
      * # 업체 전화번호 변경
      */
+    @CachePut(value = "store", key = "#businessNumber.get()")
     public StoreModel changeTel(BusinessNumber businessNumber, ChangeTel changeTel, OwnerId changer) {
         Store store = getStore(storeRepository, businessNumber);
         store.changeTel(BusinessTel.of(changeTel.getTel()), changer);
@@ -100,6 +107,7 @@ public class ChangeStoreService {
      * @param changer
      * # 업체 운영 시간 변경
      */
+    @CachePut(value = "store", key = "#businessNumber.get()")
     public StoreModel changeBusinessHour(BusinessNumber businessNumber, ChangeBusinessHour changeBusinessHour, OwnerId changer) {
         Store store = getStore(storeRepository, businessNumber);
         store.changeBusinessHour(BusinessHour.weekdayStartWeekdayEndWeekendStartWeekendEnd(
@@ -119,6 +127,7 @@ public class ChangeStoreService {
      * @param remover
      * # 업체 태그 제거
      */
+    @CachePut(value = "store", key = "#businessNumber.get()")
     public StoreModel removeTag(BusinessNumber businessNumber, RemoveTag removeTag, OwnerId remover) {
         Store store = getStore(storeRepository, businessNumber);
         store.removeTag(Tag.of(removeTag.getTag()), remover);
@@ -133,6 +142,7 @@ public class ChangeStoreService {
      * @param adder
      * # 업체 태그 추가
      */
+    @CachePut(value = "store", key = "#businessNumber.get()")
     public StoreModel addTag(BusinessNumber businessNumber, AddTag addTag, OwnerId adder) {
         Store store = getStore(storeRepository, businessNumber);
         store.addTag(Tag.of(addTag.getTag()), adder);
@@ -147,6 +157,7 @@ public class ChangeStoreService {
      * @param owner
      * # 업체 로고 변경
      */
+    @CachePut(value = "store", key = "#businessNumber.get()")
     public StoreModel changeLogo(ChangeLogo changeLogo, BusinessNumber businessNumber, OwnerId owner) {
         Store store = getStore(storeRepository, businessNumber);
         // 기존 로고가 존재할 경우 로고파일 삭제

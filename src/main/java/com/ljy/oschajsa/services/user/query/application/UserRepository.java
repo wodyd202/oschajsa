@@ -4,7 +4,6 @@ import com.ljy.oschajsa.services.user.domain.model.UserModel;
 
 import java.util.Optional;
 
-public interface QueryUserRepository {
-    void save(UserModel userModel);
+public interface UserRepository {
     Optional<UserModel> findById(String userId);
 }

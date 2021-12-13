@@ -2,16 +2,18 @@ package com.ljy.oschajsa.services.interest.domain.model;
 
 import com.ljy.oschajsa.services.interest.domain.value.BusinessHour;
 import com.ljy.oschajsa.services.store.domain.model.BusinessHourModel;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BusinessInfoModel {
     private String businessNumber;
     private String businessName;
     private String logo;
     private BusinessHourModel businessHour;
-    private boolean isOpen;
 
     @Builder
     public BusinessInfoModel(String businessNumber,
@@ -22,6 +24,5 @@ public class BusinessInfoModel {
         this.businessName = businessName;
         this.logo = logo;
         this.businessHour = businessHour.toModel();
-        this.isOpen = businessHour.isCurrentOpen();
     }
 }

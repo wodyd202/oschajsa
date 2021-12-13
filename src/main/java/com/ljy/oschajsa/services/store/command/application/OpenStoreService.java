@@ -7,6 +7,9 @@ import com.ljy.oschajsa.services.store.domain.value.StoreOpenValidator;
 import com.ljy.oschajsa.services.store.domain.value.StoreRepository;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
 import lombok.AllArgsConstructor;
+import org.hibernate.annotations.Cache;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,7 @@ public class OpenStoreService {
      * @param ownerId
      * # 업체 개설
      */
+    @Cacheable(value = "store", key = "#openStore.businessNumber")
     public StoreModel open(OpenStore openStore, OwnerId ownerId) {
         Store store = storeMapper.mapFrom(openStore, ownerId);
         store.open(storeOpenValidator);

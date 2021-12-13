@@ -151,7 +151,7 @@ public class User extends AbstractAggregateRoot<User> {
         return UserModel.builder()
                 .userId(userId.get())
                 .nickname(nickname.get())
-                .address(address == null ? null : address.toModel())
+                .address(address)
                 .createDateTime(createDateTime)
                 .state(state)
                 .build();

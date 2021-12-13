@@ -1,9 +1,7 @@
 package com.ljy.oschajsa.services.user.query.persentation;
 
-import com.ljy.oschajsa.services.common.address.model.AddressModel;
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
-import com.ljy.oschajsa.services.user.query.application.QueryUserService;
-import io.lettuce.core.ScriptOutputType;
+import com.ljy.oschajsa.services.user.query.application.UserSearchService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +17,7 @@ import java.security.Principal;
 @AllArgsConstructor
 @RequestMapping("api/v1/users")
 public class UserQueryAPI {
-    private QueryUserService queryUserService;
+    private UserSearchService queryUserService;
 
     /**
      * @param principal
@@ -31,8 +29,4 @@ public class UserQueryAPI {
         return ResponseEntity.ok(userModel);
     }
 
-    @GetMapping("address")
-    public ResponseEntity<AddressModel> getAddressModel(Principal principal){
-        return ResponseEntity.ok(queryUserService.getAddressModel(principal.getName()));
-    }
 }

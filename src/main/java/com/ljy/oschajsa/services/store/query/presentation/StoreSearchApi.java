@@ -1,5 +1,6 @@
 package com.ljy.oschajsa.services.store.query.presentation;
 
+import com.ljy.oschajsa.services.store.domain.model.StoreModel;
 import com.ljy.oschajsa.services.store.query.application.QueryStoreService;
 import com.ljy.oschajsa.services.store.query.application.model.AddressInfoDTO;
 import com.ljy.oschajsa.services.store.query.application.model.DifferenceCoordinateDTO;
@@ -33,8 +34,8 @@ public class StoreSearchApi {
      * # 업체 상세 조회
      */
     @GetMapping("{businessNumber}")
-    public ResponseEntity<StoreResponse> getStoreResponse(@PathVariable String businessNumber){
-        StoreResponse storeModel = storeService.getStoreModel(businessNumber);
+    public ResponseEntity<StoreModel> getStoreResponse(@PathVariable String businessNumber){
+        StoreModel storeModel = storeService.getStoreModel(businessNumber);
         return ResponseEntity.ok(storeModel);
     }
 
@@ -48,7 +49,7 @@ public class StoreSearchApi {
         verifyNotContainsError(errors);
 
         // 리스트 조회
-        List<StoreResponse> storeModels = storeService.getStoreModelsByDifferenceCoordinate(storeSearchDTO);
+        List<StoreModel> storeModels = storeService.getStoreModelsByDifferenceCoordinate(storeSearchDTO);
 
         // 전체 개수 조회
         long totalCount = storeService.getCountStoreModelsByDifferenceCoordinate(storeSearchDTO);

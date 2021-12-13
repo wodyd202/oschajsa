@@ -5,9 +5,10 @@ import com.ljy.oschajsa.services.interest.application.external.StoreRepository;
 import com.ljy.oschajsa.services.interest.domain.value.StoreInfo;
 import com.ljy.oschajsa.services.store.domain.exception.StoreNotFoundException;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
-import com.ljy.oschajsa.services.store.query.application.CacheQueryStoreRepository;
+import com.ljy.oschajsa.services.store.query.application.QueryStoreRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 @Profile("!test")
 public class StoreRepositoryForInterestStore implements StoreRepository {
-    private CacheQueryStoreRepository storeCacheRepository;
+    private QueryStoreRepository storeCacheRepository;
 
     @Override
     public StoreInfo getStore(String businessNumber) {
