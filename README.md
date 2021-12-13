@@ -4,6 +4,7 @@
 
 #### Tech
 - Spring Boot
+- Kafka
 - Redis
 - Mysql
 - Maven
