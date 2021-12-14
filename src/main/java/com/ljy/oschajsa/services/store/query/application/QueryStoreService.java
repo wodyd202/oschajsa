@@ -91,11 +91,10 @@ public class QueryStoreService {
      * # 시, 도, 동 기준으로 업체 리스트 조회
      */
     @Cacheable(value = "store-by-address", key = "T(java.lang.String).format('%s-%s-%s-%d', #addressInfoDTO.province, #addressInfoDTO.city, #addressInfoDTO.dong, #addressInfoDTO.page)")
-    public List<StoreResponse> getStoreModelsByAddressInfo(AddressInfoDTO addressInfoDTO) {
+    public List<StoreModel> getStoreModelsByAddressInfo(AddressInfoDTO addressInfoDTO) {
         return storeRepository.findByAddressInfo(addressInfoDTO).stream()
-                .map(StoreResponse::new)
                 // 폐업한 업체를 상위로 올림
-                .sorted((o1, o2) -> o1.getStoreModel().getState().equals(StoreState.PREPARED_CLOSE) ? -1 : 0)
+                .sorted((o1, o2) -> o1.getState().equals(StoreState.PREPARED_CLOSE) ? -1 : 0)
                 .collect(Collectors.toList());
     }
 

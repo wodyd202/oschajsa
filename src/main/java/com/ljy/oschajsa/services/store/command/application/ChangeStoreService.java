@@ -20,8 +20,55 @@ import static com.ljy.oschajsa.services.store.command.application.StoreServiceHe
 @Transactional
 @AllArgsConstructor
 public class ChangeStoreService {
-    private StoreRepository storeRepository;
-    private FileUploader fileUploader;
+    private final StoreRepository storeRepository;
+    private final FileUploader fileUploader;
+
+    /**
+     * @param businessNumber
+     * @param changeStore
+     * @param changer
+     * # 업체 정보 변경
+     */
+    @CachePut(value = "store", key = "#businessNumber.get()")
+    public StoreModel changeStore(BusinessNumber businessNumber, ChangeStore changeStore, OwnerId changer) throws NotChangeStoreException {
+        Store store = getStore(storeRepository, businessNumber);
+
+        boolean isChangeBusinessName = false;
+        boolean isChangeBusinessTel = false;
+        boolean isChangeBusinessHour = false;
+
+        // 업체명 변경
+        if(changeStore.getBusinessName() != null){
+            isChangeBusinessName = store.changeBusinessName(BusinessName.of(changeStore.getBusinessName()), changer);
+        }
+
+        // 업체 전화번호 변경
+        if(changeStore.getBusinessTel() != null){
+            isChangeBusinessTel = store.changeTel(BusinessTel.of(changeStore.getBusinessTel()), changer);
+        }
+
+        // 업체 운영시간 변경
+        if(changeStore.getBusinessHour() != null){
+            ChangeBusinessHour changeBusinessHour = changeStore.getBusinessHour();
+            isChangeBusinessHour = store.changeBusinessHour(BusinessHour.weekdayStartWeekdayEndWeekendStartWeekendEnd(
+                    changeBusinessHour.getWeekdayStart(),
+                    changeBusinessHour.getWeekdayEnd(),
+                    changeBusinessHour.getWeekendStart(),
+                    changeBusinessHour.getWeekendEnd()
+            ), changer);
+        }
+
+        if(isNotChange(isChangeBusinessName, isChangeBusinessTel, isChangeBusinessHour)){
+            throw new NotChangeStoreException();
+        }
+
+        storeRepository.save(store);
+        return store.toModel();
+    }
+
+    private boolean isNotChange(boolean isChangeBusinessName, boolean isChangeBusinessTel, boolean isChangeBusinessHour) {
+        return !isChangeBusinessName && !isChangeBusinessTel && !isChangeBusinessHour;
+    }
 
     /**
      * @param businessNumber
@@ -167,51 +214,5 @@ public class ChangeStoreService {
         StoreModel storeModel = store.toModel();
         fileUploader.uploadFile(changeLogo.getFile(), storeModel.getLogo());
         return storeModel;
-    }
-
-    /**
-     * @param businessNumber
-     * @param changeStore
-     * @param changer
-     * # 업체 정보 변경
-     */
-    public StoreModel changeStore(BusinessNumber businessNumber, ChangeStore changeStore, OwnerId changer) throws NotChangeStoreException {
-        Store store = getStore(storeRepository, businessNumber);
-
-        boolean isChangeBusinessName = false;
-        boolean isChangeBusinessTel = false;
-        boolean isChangeBusinessHour = false;
-
-        // 업체명 변경
-        if(changeStore.getBusinessName() != null){
-            isChangeBusinessName = store.changeBusinessName(BusinessName.of(changeStore.getBusinessName()), changer);
-        }
-
-        // 업체 전화번호 변경
-        if(changeStore.getBusinessTel() != null){
-            isChangeBusinessTel = store.changeTel(BusinessTel.of(changeStore.getBusinessTel()), changer);
-        }
-
-        // 업체 운영시간 변경
-        if(changeStore.getBusinessHour() != null){
-            ChangeBusinessHour changeBusinessHour = changeStore.getBusinessHour();
-            isChangeBusinessHour = store.changeBusinessHour(BusinessHour.weekdayStartWeekdayEndWeekendStartWeekendEnd(
-                    changeBusinessHour.getWeekdayStart(),
-                    changeBusinessHour.getWeekdayEnd(),
-                    changeBusinessHour.getWeekendStart(),
-                    changeBusinessHour.getWeekendEnd()
-            ), changer);
-        }
-
-        if(isNotChange(isChangeBusinessName, isChangeBusinessTel, isChangeBusinessHour)){
-            throw new NotChangeStoreException();
-        }
-
-        storeRepository.save(store);
-        return store.toModel();
-    }
-
-    private boolean isNotChange(boolean isChangeBusinessName, boolean isChangeBusinessTel, boolean isChangeBusinessHour) {
-        return !isChangeBusinessName && !isChangeBusinessTel && !isChangeBusinessHour;
     }
 }

@@ -7,10 +7,8 @@ import lombok.Getter;
 @Getter
 public class StoreResponse {
     private StoreModel storeModel;
-    private boolean open;
 
     public StoreResponse(StoreModel storeModel) {
         this.storeModel = storeModel;
-        open = storeModel.getBusinessHour().isCurrentOpen();
     }
 }

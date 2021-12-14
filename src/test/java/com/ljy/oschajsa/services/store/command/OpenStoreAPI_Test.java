@@ -8,10 +8,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.util.Arrays;
 
 import static com.ljy.oschajsa.services.store.StoreFixture.aOpenStore;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -231,7 +235,22 @@ public class OpenStoreAPI_Test extends ApiTest {
         .andExpect(jsonPath("$..['tags']").exists())
         .andExpect(jsonPath("$..['state']").exists())
         .andExpect(jsonPath("$..['businessHour']").exists())
-        .andExpect(jsonPath("$..['address']").exists());
+        .andExpect(jsonPath("$..['address']").exists())
+        .andDo(document("open store",
+        requestFields(
+                fieldWithPath("businessName").type(JsonFieldType.STRING).description("업체명"),
+                fieldWithPath("businessNumber").type(JsonFieldType.STRING).description("사업자 번호"),
+                fieldWithPath("businessTel").type(JsonFieldType.STRING).description("업체 전화번호"),
+                fieldWithPath("tags").type(JsonFieldType.ARRAY).description("업체 태그"),
+                fieldWithPath("businessHour").type(JsonFieldType.OBJECT).description("업체 운영 시간 정보"),
+                fieldWithPath("businessHour.weekdayStart").type(JsonFieldType.NUMBER).description("업체 평일 운영 시작 시간"),
+                fieldWithPath("businessHour.weekdayEnd").type(JsonFieldType.NUMBER).description("업체 평일 운영 종료 시간"),
+                fieldWithPath("businessHour.weekendStart").type(JsonFieldType.NUMBER).description("업체 주말 운영 시작 시간"),
+                fieldWithPath("businessHour.weekendEnd").type(JsonFieldType.NUMBER).description("업체 주말 운영 종료 시간"),
+                fieldWithPath("coordinate").type(JsonFieldType.OBJECT).description("업체 주소 좌표"),
+                fieldWithPath("coordinate.lettitude").type("double").description("업체 주소 좌표"),
+                fieldWithPath("coordinate.longtitude").type("double").description("업체 주소 좌표")
+        )));
     }
 
     private void assertBadRequestWhenOpenStore(OpenStore openStore) throws Exception{

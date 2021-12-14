@@ -1,0 +1,112 @@
+= 옷찾사(oschajsa)
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectnums:
+:sectlinks:
+:sectanchors:
+
+[[api]]
+== 사용자(User) Api
+=== 토큰 발급
+include::{snippets}/access token/http-request.adoc[]
+include::{snippets}/access token/request-fields.adoc[]
+include::{snippets}/access token/http-response.adoc[]
+
+=== 사용자 조회
+include::{snippets}/get user/http-request.adoc[]
+include::{snippets}/get user/http-response.adoc[]
+include::{snippets}/get user/response-fields.adoc[]
+
+=== 사용자 생성
+include::{snippets}/user/http-request.adoc[]
+include::{snippets}/user/request-fields.adoc[]
+include::{snippets}/user/http-response.adoc[]
+
+=== 사용자 수정
+==== 주소 수정
+include::{snippets}/change user/http-request.adoc[]
+include::{snippets}/change user/request-fields.adoc[]
+include::{snippets}/change user/http-response.adoc[]
+
+=== 회원 탈퇴
+include::{snippets}/withdrawal user/http-request.adoc[]
+include::{snippets}/withdrawal user/request-fields.adoc[]
+include::{snippets}/withdrawal user/http-response.adoc[]
+
+== 업체(Store) Api
+=== 업체 조회
+include::{snippets}/get store/path-parameters.adoc[]
+include::{snippets}/get store/response-body.adoc[]
+include::{snippets}/get store/response-fields.adoc[]
+
+=== 좌표로 부터 x 거리 이내의 업체 조회
+include::{snippets}/get store by difference coordinate/http-request.adoc[]
+include::{snippets}/get store by difference coordinate/request-parameters.adoc[]
+include::{snippets}/get store by difference coordinate/http-response.adoc[]
+include::{snippets}/get store by difference coordinate/response-fields.adoc[]
+
+=== 시, 도, 동 기준으로 업체 조회
+include::{snippets}/get store by address info/http-request.adoc[]
+include::{snippets}/get store by address info/request-parameters.adoc[]
+include::{snippets}/get store by address info/http-response.adoc[]
+include::{snippets}/get store by address info/response-fields.adoc[]
+
+=== 업체 등록
+include::{snippets}/open store/http-request.adoc[]
+include::{snippets}/open store/request-fields.adoc[]
+include::{snippets}/open store/http-response.adoc[]
+
+=== 업체 정보 수정
+==== 업체명 수정
+include::{snippets}/change businessname/http-request.adoc[]
+include::{snippets}/change businessname/request-fields.adoc[]
+include::{snippets}/change businessname/http-response.adoc[]
+
+==== 업체 전화번호 수정
+include::{snippets}/change businessTel/http-request.adoc[]
+include::{snippets}/change businessTel/request-fields.adoc[]
+include::{snippets}/change businessTel/http-response.adoc[]
+
+==== 업체 운영 정보 수정
+include::{snippets}/change businessHour/http-request.adoc[]
+include::{snippets}/change businessHour/request-fields.adoc[]
+include::{snippets}/change businessHour/http-response.adoc[]
+
+==== 업체 태그 추가
+include::{snippets}/add tag/http-request.adoc[]
+include::{snippets}/add tag/request-fields.adoc[]
+include::{snippets}/add tag/http-response.adoc[]
+
+==== 업체 태그 제거
+include::{snippets}/remove tag/http-request.adoc[]
+include::{snippets}/remove tag/request-fields.adoc[]
+include::{snippets}/remove tag/http-response.adoc[]
+
+==== 업체 영업 일시 중지
+include::{snippets}/stop store/http-request.adoc[]
+include::{snippets}/stop store/path-parameters.adoc[]
+include::{snippets}/stop store/http-response.adoc[]
+
+==== 업체 영업 시작
+include::{snippets}/reopen store/http-request.adoc[]
+include::{snippets}/reopen store/path-parameters.adoc[]
+include::{snippets}/reopen store/http-response.adoc[]
+
+==== 업체 폐업 준비
+include::{snippets}/close store/http-request.adoc[]
+include::{snippets}/close store/path-parameters.adoc[]
+include::{snippets}/close store/http-response.adoc[]
+
+[[api]]
+== 관심업체(interest) Api
+
+==== 관심업체 등록
+include::{snippets}/reopen store/http-request.adoc[]
+include::{snippets}/reopen store/path-parameters.adoc[]
+
+==== 관심업체 조회
+include::{snippets}/close store/http-request.adoc[]
+include::{snippets}/close store/response-body.adoc[]

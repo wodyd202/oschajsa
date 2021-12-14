@@ -12,12 +12,19 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.util.Arrays;
 
 import static com.ljy.oschajsa.services.store.StoreFixture.aStore;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -74,7 +81,13 @@ public class ChangeStoreAPI_Test extends ApiTest {
                         .content(objectMapper.writeValueAsString(changeStore)))
 
         // then
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andDo(document("change businessname",
+                requestFields(
+                        fieldWithPath("businessName").type(JsonFieldType.STRING).description("수정할 업체명"),
+                        fieldWithPath("businessTel").type(JsonFieldType.STRING).ignored(),
+                        fieldWithPath("businessHour").type(JsonFieldType.OBJECT).ignored()
+                )));
         StoreModel storeModel = storeRepository.findById(BusinessNumber.of("333-22-4444")).get().toModel();
         assertEquals(storeModel.getBusinessName(), "업체명수정");
     }
@@ -94,7 +107,13 @@ public class ChangeStoreAPI_Test extends ApiTest {
                         .content(objectMapper.writeValueAsString(changeStore)))
 
         // then
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andDo(document("change businessTel",
+        requestFields(
+                fieldWithPath("businessName").type(JsonFieldType.STRING).ignored(),
+                fieldWithPath("businessTel").type(JsonFieldType.STRING).description("수정할 업체 전화번호"),
+                fieldWithPath("businessHour").type(JsonFieldType.OBJECT).ignored()
+        )));
         StoreModel storeModel = storeRepository.findById(BusinessNumber.of("333-22-4444")).get().toModel();
         assertEquals(storeModel.getTel(), "000-0000-1111");
     }
@@ -119,7 +138,17 @@ public class ChangeStoreAPI_Test extends ApiTest {
                 .content(objectMapper.writeValueAsString(changeStore)))
 
         // then
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andDo(document("change businessHour",
+        requestFields(
+                fieldWithPath("businessName").type(JsonFieldType.STRING).ignored(),
+                fieldWithPath("businessTel").type(JsonFieldType.STRING).ignored(),
+                fieldWithPath("businessHour").type(JsonFieldType.OBJECT).description("수정할 업체 운영 시간 정보"),
+                fieldWithPath("businessHour.weekdayStart").type(JsonFieldType.NUMBER).description("수정할 업체 평일 운영 시작 시간 정보"),
+                fieldWithPath("businessHour.weekdayEnd").type(JsonFieldType.NUMBER).description("수정할 업체 평일 운영 종료 시간 정보"),
+                fieldWithPath("businessHour.weekendStart").type(JsonFieldType.NUMBER).description("수정할 업체 주말 운영 시작 시간 정보"),
+                fieldWithPath("businessHour.weekendEnd").type(JsonFieldType.NUMBER).description("수정할 업체 주말 운영 종료 시간 정보")
+        )));
         StoreModel storeModel = storeRepository.findById(BusinessNumber.of("333-22-4444")).get().toModel();
         assertEquals(storeModel.getBusinessHour().getWeekdayStart(), 1);
         assertEquals(storeModel.getBusinessHour().getWeekdayEnd(), 15);
@@ -157,7 +186,11 @@ public class ChangeStoreAPI_Test extends ApiTest {
                         .content(objectMapper.writeValueAsString(removeTag)))
 
         // then
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andDo(document("remove tag",
+        requestFields(
+                fieldWithPath("tag").type(JsonFieldType.STRING).description("삭제할 태그 정보")
+        )));
     }
 
     @Test
@@ -175,7 +208,11 @@ public class ChangeStoreAPI_Test extends ApiTest {
                         .content(objectMapper.writeValueAsString(addTag)))
 
         // then
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andDo(document("add tag",
+        requestFields(
+                fieldWithPath("tag").type(JsonFieldType.STRING).description("추가할 태그 정보")
+        )));
     }
 
     @Test
@@ -188,11 +225,16 @@ public class ChangeStoreAPI_Test extends ApiTest {
         storeRepository.save(store);
 
         // when
-        mockMvc.perform(patch("/api/v1/stores/{businessNumber}/stop", "989-98-9898")
+        mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/stores/{businessNumber}/stop", "989-98-9898")
                 .header("X-AUTH-TOKEN", obtainsAccessToken("username","password")))
 
         // then
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andDo(document("stop store",
+            pathParameters(
+                    parameterWithName("businessNumber").description("업체 사업자 번호")
+            )
+        ));
     }
 
     @Test
@@ -206,11 +248,15 @@ public class ChangeStoreAPI_Test extends ApiTest {
         storeRepository.save(store);
 
         // when
-        mockMvc.perform(patch("/api/v1/stores/{businessNumber}/re-open", "543-34-3533")
+        mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/stores/{businessNumber}/re-open", "543-34-3533")
                         .header("X-AUTH-TOKEN", obtainsAccessToken("username","password")))
 
         // then
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andDo(document("reopen store",
+        pathParameters(
+                parameterWithName("businessNumber").description("업체 사업자 번호")
+        )));
     }
 
     @Test
@@ -223,11 +269,15 @@ public class ChangeStoreAPI_Test extends ApiTest {
         storeRepository.save(store);
 
         // when
-        mockMvc.perform(delete("/api/v1/stores/{businessNumber}", "565-56-5656")
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/v1/stores/{businessNumber}", "565-56-5656")
                     .header("X-AUTH-TOKEN", obtainsAccessToken("username","password")))
 
         // then
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andDo(document("close store",
+        pathParameters(
+                parameterWithName("businessNumber").description("업체 사업자 번호")
+        )));
     }
 
 }

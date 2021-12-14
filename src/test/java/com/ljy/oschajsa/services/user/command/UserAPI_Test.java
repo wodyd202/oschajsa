@@ -8,8 +8,11 @@ import com.ljy.oschajsa.services.user.command.application.model.WithdrawalUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -24,10 +27,11 @@ public class UserAPI_Test extends ApiTest {
         createUser("accesstoken","password");
 
         // when
-        String accessToken = obtainsAccessToken("accesstoken", "password");
-
-        // then
-        assertNotNull(accessToken);
+        mockMvc.perform(post("/oauth/token")
+                        .param("username", "accesstoken")
+                        .param("password", "password"))
+        .andExpect(status().isOk())
+        .andDo(document("access token"));
     }
 
     @Test
@@ -108,7 +112,15 @@ public class UserAPI_Test extends ApiTest {
         .andExpect(jsonPath("$..['userId']").exists())
         .andExpect(jsonPath("$..['password']").doesNotExist())
         .andExpect(jsonPath("$..['nickname']").exists())
-        .andExpect(jsonPath("$..['state']").exists());
+        .andExpect(jsonPath("$..['state']").exists())
+        .andDo(document("user",
+                requestFields(
+                        fieldWithPath("id").description("사용자 아이디"),
+                        fieldWithPath("password").description("사용자 비밀번호"),
+                        fieldWithPath("nickname").description("사용자 닉네임"),
+                        fieldWithPath("lettitude").type("double").description("주소에 대한 위도 좌표 값(옵션)").optional(),
+                        fieldWithPath("longtitude").type("double").description("주소에 대한 경도 좌표 값(옵션)").optional()
+                )));
     }
 
     @Test
@@ -145,7 +157,13 @@ public class UserAPI_Test extends ApiTest {
         .andExpect(jsonPath("$..['password']").doesNotExist())
         .andExpect(jsonPath("$..['nickname']").exists())
         .andExpect(jsonPath("$..['address']").exists())
-        .andExpect(jsonPath("$..['state']").exists());
+        .andExpect(jsonPath("$..['state']").exists())
+        .andDo(document("change user",
+        requestFields(
+                fieldWithPath("address").type(JsonFieldType.OBJECT).description("주소 좌표 값"),
+                fieldWithPath("address.lettitude").type("double").description("주소에 대한 위도 좌표 값").optional(),
+                fieldWithPath("address.longtitude").type("double").description("주소에 대한 경도 좌표 값").optional()
+        )));
     }
 
     @Test
@@ -227,6 +245,10 @@ public class UserAPI_Test extends ApiTest {
                 .content(objectMapper.writeValueAsString(withdrawalUser)))
 
         // then
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andDo(document("withdrawal user",
+        requestFields(
+                fieldWithPath("originPassword").type(JsonFieldType.STRING).description("자신의 비밀번호")
+        )));
     }
 }

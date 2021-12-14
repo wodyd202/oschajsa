@@ -65,7 +65,7 @@ public class StoreSearchApi {
         verifyNotContainsError(errors);
 
         // 리스트 조회
-        List<StoreResponse> storeModels = storeService.getStoreModelsByAddressInfo(addressInfoDTO);
+        List<StoreModel> storeModels = storeService.getStoreModelsByAddressInfo(addressInfoDTO);
 
         // 전체 개수 조회
         long totalCount = storeService.getCountStoreModelsByAddressInfo(addressInfoDTO);
