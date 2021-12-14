@@ -27,7 +27,10 @@ mvn clean spring-boot:run
 
 ![KakaoTalk_Photo_2021-12-11-16-52-36](https://user-images.githubusercontent.com/77535935/145974645-25cce457-a481-4dc1-b918-11fdd1c896e9.jpeg)
 
-![KakaoTalk_Photo_2021-12-11-16-52-43](https://user-images.githubusercontent.com/77535935/145974581-bcacf391-ab5c-40d5-9c74-eec7e52eabe8.jpeg)
+##
+#### 데이터 조회 시나리오
+
+![KakaoTalk_Photo_2021-12-11-16-52-43](https://user-images.githubusercontent.com/77535935/145975491-baf5597a-16d6-45ee-ac2a-db2ffc3b1708.jpeg)
 ##
 
 #### APIs
