@@ -20,7 +20,7 @@ public class UserId implements Serializable {
         this.id = id;
     }
 
-    private final static String USER_ID_EMPTY_MESSAGE = "user id must not be empty";
+    private final static String USER_ID_EMPTY_MESSAGE = "사용자의 아이디를 입력해주세요.";
     private void verifyNotEmptyUserId(String id) {
         if(!StringUtils.hasText(id)){
             throw new IllegalArgumentException(USER_ID_EMPTY_MESSAGE);
@@ -34,7 +34,7 @@ public class UserId implements Serializable {
      * - 사용자 아이디는 영어[소문자], 숫자만 허용한다.
      */
     private final static Pattern USER_ID_REGEX = Pattern.compile("^[a-z]+[a-z0-9]{4,15}$");
-    private final static String USER_ID_EXCEPTION_MESSAGE = "user id be allowed small letter, number however first char must be small letter";
+    private final static String USER_ID_EXCEPTION_MESSAGE = "사용자의 아이디는 영어(대소문자), 숫자 조합 4자 이상 15자 이하로 입력해주세요.";
     private void idValidation(String id) {
         if(!USER_ID_REGEX.matcher(id).matches()){
             throw new IllegalArgumentException(USER_ID_EXCEPTION_MESSAGE);

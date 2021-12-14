@@ -17,11 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @AllArgsConstructor
 public class WithdrawalService {
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @CachePut(value = "user", key = "#userid.get()")
-    public void withdrawal(WithdrawalUser withdrawalUser, UserId userid) {
+    public void withdrawal(final WithdrawalUser withdrawalUser, final UserId userid) {
         User user = UserServiceHelper.findByUserId(userRepository, userid);
         user.withdrawal(passwordEncoder, withdrawalUser.getOriginPassword());
         userRepository.save(user);

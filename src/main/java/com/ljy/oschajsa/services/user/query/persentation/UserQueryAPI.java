@@ -2,6 +2,7 @@ package com.ljy.oschajsa.services.user.query.persentation;
 
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
 import com.ljy.oschajsa.services.user.query.application.UserSearchService;
+import com.ljy.oschajsa.services.user.query.application.model.UserResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,16 +18,15 @@ import java.security.Principal;
 @AllArgsConstructor
 @RequestMapping("api/v1/users")
 public class UserQueryAPI {
-    private UserSearchService queryUserService;
+    private final UserSearchService queryUserService;
 
     /**
      * @param principal
      * # 자신의 정보 조회
      */
     @GetMapping
-    public ResponseEntity<UserModel> getUserModel(Principal principal){
-        UserModel userModel = queryUserService.getUserModel(principal.getName());
-        return ResponseEntity.ok(userModel);
+    public ResponseEntity<UserResponse> getUserModel(final Principal principal){
+        UserResponse userResponse = queryUserService.getUserModel(principal.getName());
+        return ResponseEntity.ok(userResponse);
     }
-
 }

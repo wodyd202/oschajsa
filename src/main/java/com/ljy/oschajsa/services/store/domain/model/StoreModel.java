@@ -1,6 +1,9 @@
 package com.ljy.oschajsa.services.store.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.ljy.oschajsa.services.common.address.model.AddressModel;
 import com.ljy.oschajsa.services.store.domain.event.*;
 import com.ljy.oschajsa.services.store.domain.value.StoreState;
@@ -24,7 +27,6 @@ public class StoreModel {
     private BusinessHourModel businessHour;
     private AddressModel address;
     private String owner;
-    private LocalDate createDate;
     private String logo;
 
     private long intestTotalCount;
@@ -52,7 +54,6 @@ public class StoreModel {
         this.businessHour = businessHour;
         this.address = address;
         this.owner = owner;
-        this.createDate = createDate;
         this.logo = logo;
     }
 
@@ -94,7 +95,6 @@ public class StoreModel {
                 ", businessHour=" + businessHour +
                 ", address=" + address +
                 ", owner='" + owner + '\'' +
-                ", createDate=" + createDate +
                 ", logo='" + logo + '\'' +
                 '}';
     }

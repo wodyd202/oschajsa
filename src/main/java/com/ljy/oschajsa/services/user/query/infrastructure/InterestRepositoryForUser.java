@@ -1,9 +1,7 @@
 package com.ljy.oschajsa.services.user.query.infrastructure;
 
-import com.ljy.oschajsa.services.interest.domain.QInterest;
 import com.ljy.oschajsa.services.user.query.application.external.Interest;
 import com.ljy.oschajsa.services.user.query.application.external.InterestRepository;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

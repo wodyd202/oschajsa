@@ -4,15 +4,16 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.validation.Errors;
+import org.springframework.validation.MapBindingResult;
 
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChangeAddress {
-    @NotNull(message = "lettitude must not be null")
     private Double lettitude;
-    @NotNull(message = "longtitude must not be null")
     private Double longtitude;
 
     @Builder

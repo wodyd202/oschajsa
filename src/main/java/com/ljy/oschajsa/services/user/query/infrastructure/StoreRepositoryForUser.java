@@ -19,7 +19,6 @@ public class StoreRepositoryForUser implements StoreRepository {
     private QueryStoreRepository storeRepository;
 
     @Override
-    @Cacheable(value = "store-by-user", key = "#userId")
     public List<Store> getStore(String userId) {
         log.info("load external store for user into redis : {}", userId);
         List<StoreModel> storeModels = storeRepository.findByUserId(userId);
@@ -27,7 +26,6 @@ public class StoreRepositoryForUser implements StoreRepository {
                 .map(obj->Store.builder()
                         .businessNumber(obj.getBusinessNumber())
                         .businessName(obj.getBusinessName())
-                        .createDate(obj.getCreateDate())
                         .state(obj.getState())
                         .build())
                 .collect(Collectors.toList());

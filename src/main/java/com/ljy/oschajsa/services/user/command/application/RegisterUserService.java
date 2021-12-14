@@ -18,15 +18,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @AllArgsConstructor
 public class RegisterUserService {
-    private UserRepository userRepository;
-    private UserMapper userMapper;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     /**
      * @param registerUser
      * # 사용자 등록
      */
-    @Cacheable(value = "user", key = "#registerUser.id")
-    public UserModel register(RegisterUser registerUser) {
+    public UserModel register(final RegisterUser registerUser) {
         verifyNotExistUser(registerUser.getId());
         User user = userMapper.mapFrom(registerUser);
 

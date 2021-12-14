@@ -29,7 +29,6 @@ public class OpenStoreService {
      * @param ownerId
      * # 업체 개설
      */
-    @Cacheable(value = "store", key = "#openStore.businessNumber")
     public StoreModel open(OpenStore openStore, OwnerId ownerId) {
         Store store = storeMapper.mapFrom(openStore, ownerId);
         store.open(storeOpenValidator);

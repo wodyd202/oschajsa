@@ -9,6 +9,5 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AddTag {
-    @NotBlank(message = "태그 정보를 입력해주세요.")
     private String tag;
 }

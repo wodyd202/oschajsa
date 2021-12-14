@@ -9,7 +9,6 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @NoArgsConstructor
 final public class WithdrawalUser {
-    @NotBlank(message = "originPassword must not be empty")
     private String originPassword;
 
     @Builder

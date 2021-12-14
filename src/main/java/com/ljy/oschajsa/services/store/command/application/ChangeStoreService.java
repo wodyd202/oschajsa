@@ -1,14 +1,13 @@
 package com.ljy.oschajsa.services.store.command.application;
 
 import com.ljy.oschajsa.common.file.FileUploader;
+import com.ljy.oschajsa.services.store.command.application.exception.NotChangeStoreException;
 import com.ljy.oschajsa.services.store.command.application.model.*;
-import com.ljy.oschajsa.services.store.command.application.schedule.StoreRepositoryForRemoveStore;
 import com.ljy.oschajsa.services.store.domain.Store;
 import com.ljy.oschajsa.services.store.domain.model.StoreModel;
 import com.ljy.oschajsa.services.store.domain.value.*;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -168,5 +167,51 @@ public class ChangeStoreService {
         StoreModel storeModel = store.toModel();
         fileUploader.uploadFile(changeLogo.getFile(), storeModel.getLogo());
         return storeModel;
+    }
+
+    /**
+     * @param businessNumber
+     * @param changeStore
+     * @param changer
+     * # 업체 정보 변경
+     */
+    public StoreModel changeStore(BusinessNumber businessNumber, ChangeStore changeStore, OwnerId changer) throws NotChangeStoreException {
+        Store store = getStore(storeRepository, businessNumber);
+
+        boolean isChangeBusinessName = false;
+        boolean isChangeBusinessTel = false;
+        boolean isChangeBusinessHour = false;
+
+        // 업체명 변경
+        if(changeStore.getBusinessName() != null){
+            isChangeBusinessName = store.changeBusinessName(BusinessName.of(changeStore.getBusinessName()), changer);
+        }
+
+        // 업체 전화번호 변경
+        if(changeStore.getBusinessTel() != null){
+            isChangeBusinessTel = store.changeTel(BusinessTel.of(changeStore.getBusinessTel()), changer);
+        }
+
+        // 업체 운영시간 변경
+        if(changeStore.getBusinessHour() != null){
+            ChangeBusinessHour changeBusinessHour = changeStore.getBusinessHour();
+            isChangeBusinessHour = store.changeBusinessHour(BusinessHour.weekdayStartWeekdayEndWeekendStartWeekendEnd(
+                    changeBusinessHour.getWeekdayStart(),
+                    changeBusinessHour.getWeekdayEnd(),
+                    changeBusinessHour.getWeekendStart(),
+                    changeBusinessHour.getWeekendEnd()
+            ), changer);
+        }
+
+        if(isNotChange(isChangeBusinessName, isChangeBusinessTel, isChangeBusinessHour)){
+            throw new NotChangeStoreException();
+        }
+
+        storeRepository.save(store);
+        return store.toModel();
+    }
+
+    private boolean isNotChange(boolean isChangeBusinessName, boolean isChangeBusinessTel, boolean isChangeBusinessHour) {
+        return !isChangeBusinessName && !isChangeBusinessTel && !isChangeBusinessHour;
     }
 }

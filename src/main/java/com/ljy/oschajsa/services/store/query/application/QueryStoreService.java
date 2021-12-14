@@ -45,7 +45,7 @@ public class QueryStoreService {
      * @param storeSearchDTO
      * # 좌표에서 부터 x(km) 떨어진 업체 리스트 조회
      */
-    @Cacheable(value = "store-difference-doordinate", key = "T(java.lang.String).format('%f-%f-%d', #storeSearchDTO.longtitude, #storeSearchDTO.lettitude, #storeSearchDTO.differenceCoordinate)")
+    @Cacheable(value = "store-difference-doordinate", key = "T(java.lang.String).format('%f-%f-%d-%d', #storeSearchDTO.longtitude, #storeSearchDTO.lettitude, #storeSearchDTO.differenceCoordinate, #storeSearchDTO.page)")
     public List<StoreModel> getStoreModelsByDifferenceCoordinate(DifferenceCoordinateDTO storeSearchDTO) {
         return storeRepository.findByDifferenceCoordinate(storeSearchDTO).stream()
                 // 폐업한 업체를 상위로 올림
@@ -90,7 +90,7 @@ public class QueryStoreService {
      * @param addressInfoDTO
      * # 시, 도, 동 기준으로 업체 리스트 조회
      */
-    @Cacheable(value = "store-by-address", key = "T(java.lang.String).format('%s-%s-%s', #addressInfoDTO.province, #addressInfoDTO.city, #addressInfoDTO.dong)")
+    @Cacheable(value = "store-by-address", key = "T(java.lang.String).format('%s-%s-%s-%d', #addressInfoDTO.province, #addressInfoDTO.city, #addressInfoDTO.dong, #addressInfoDTO.page)")
     public List<StoreResponse> getStoreModelsByAddressInfo(AddressInfoDTO addressInfoDTO) {
         return storeRepository.findByAddressInfo(addressInfoDTO).stream()
                 .map(StoreResponse::new)

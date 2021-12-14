@@ -1,15 +1,16 @@
 package com.ljy.oschajsa.services.store.domain.value;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Embeddable;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
 @Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BusinessName {
-    private final String businessName;
-
-    // JPA에서 embedded로 사용시 기본 생성자 필요
-    protected BusinessName(){businessName=null;}
+    private String businessName;
 
     /**
      * @param businessName 상호명

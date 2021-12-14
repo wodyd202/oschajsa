@@ -13,6 +13,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static com.ljy.oschajsa.services.store.StoreFixture.aStore;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -35,7 +37,16 @@ public class StoreSearchAPI_Test extends StoreAPITest {
         mockMvc.perform(get("/api/v1/stores/{businessNumber}", "345-34-3456"))
 
         // then
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+                .andExpect(jsonPath("$..['businessNumber']").exists())
+                .andExpect(jsonPath("$..['businessName']").exists())
+                .andExpect(jsonPath("$..['tel']").exists())
+                .andExpect(jsonPath("$..['tags']").exists())
+                .andExpect(jsonPath("$..['state']").exists())
+                .andExpect(jsonPath("$..['businessHour']").exists())
+                .andExpect(jsonPath("$..['address']").exists())
+                .andExpect(jsonPath("$..['owner']").exists())
+                .andExpect(jsonPath("$..['intestTotalCount']").exists());
     }
 
     @Test
@@ -103,7 +114,9 @@ public class StoreSearchAPI_Test extends StoreAPITest {
                 )
 
         // then
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$..['stores']").exists())
+        .andExpect(jsonPath("$..['totalCount']").exists());
     }
 
     @Test
@@ -130,6 +143,8 @@ public class StoreSearchAPI_Test extends StoreAPITest {
                 )
 
         // then
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$..['stores']").exists())
+        .andExpect(jsonPath("$..['totalCount']").exists());
     }
 }

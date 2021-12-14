@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.ljy.oschajsa.services.common.controller.ControllerHelper.verifyNotContainsError;
+import static com.ljy.oschajsa.services.common.controller.ApiHelper.verifyNotContainsError;
 
 /**
  * 업체 조회 API
@@ -34,7 +33,7 @@ public class StoreSearchApi {
      * # 업체 상세 조회
      */
     @GetMapping("{businessNumber}")
-    public ResponseEntity<StoreModel> getStoreResponse(@PathVariable String businessNumber){
+    public ResponseEntity<StoreModel> getStoreResponse(@PathVariable final String businessNumber){
         StoreModel storeModel = storeService.getStoreModel(businessNumber);
         return ResponseEntity.ok(storeModel);
     }
@@ -45,7 +44,7 @@ public class StoreSearchApi {
      * # 몇 km 거리 내에 있는 업체 리스트 조회
      */
     @GetMapping("difference-coordinate")
-    public ResponseEntity<HashMap<String, Object>> getStoreResponseByDifferenceCoordinate(@Valid DifferenceCoordinateDTO storeSearchDTO, Errors errors){
+    public ResponseEntity<HashMap<String, Object>> getStoreResponseByDifferenceCoordinate(@Valid final DifferenceCoordinateDTO storeSearchDTO, final Errors errors){
         verifyNotContainsError(errors);
 
         // 리스트 조회
@@ -62,7 +61,7 @@ public class StoreSearchApi {
     }
 
     @GetMapping("address-info")
-    public ResponseEntity<HashMap<String, Object>> getStoreResponseByAddressInfo(@Valid AddressInfoDTO addressInfoDTO, Errors errors){
+    public ResponseEntity<HashMap<String, Object>> getStoreResponseByAddressInfo(@Valid final AddressInfoDTO addressInfoDTO, final Errors errors){
         verifyNotContainsError(errors);
 
         // 리스트 조회

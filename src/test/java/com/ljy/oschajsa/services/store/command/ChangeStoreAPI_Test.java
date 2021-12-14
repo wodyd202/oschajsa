@@ -2,8 +2,10 @@ package com.ljy.oschajsa.services.store.command;
 
 import com.ljy.oschajsa.ApiTest;
 import com.ljy.oschajsa.services.common.address.application.AddressHelper;
+import com.ljy.oschajsa.services.store.command.application.model.ChangeStore;
 import com.ljy.oschajsa.services.store.command.application.model.*;
 import com.ljy.oschajsa.services.store.domain.Store;
+import com.ljy.oschajsa.services.store.domain.model.StoreModel;
 import com.ljy.oschajsa.services.store.domain.value.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +16,7 @@ import org.springframework.http.MediaType;
 import java.util.Arrays;
 
 import static com.ljy.oschajsa.services.store.StoreFixture.aStore;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,15 +45,15 @@ public class ChangeStoreAPI_Test extends ApiTest {
     @DisplayName("해당 업체가 존재하지 않음")
     void notExistStore() throws Exception {
         // given
-        ChangeBusinessName changeBusinessName = ChangeBusinessName.builder()
+        ChangeStore changeStore = ChangeStore.builder()
                 .businessName("업체명수정")
                 .build();
 
         // when
-        mockMvc.perform(patch("/api/v1/stores/{businessNumber}/business-name", "999-99-8888")
+        mockMvc.perform(patch("/api/v1/stores/{businessNumber}", "999-99-8888")
                 .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(changeBusinessName)))
+                .content(objectMapper.writeValueAsString(changeStore)))
 
         // then
         .andExpect(status().isNotFound());
@@ -60,57 +63,83 @@ public class ChangeStoreAPI_Test extends ApiTest {
     @DisplayName("업체명 변경")
     void changeBusinessName() throws Exception {
         // given
-        ChangeBusinessName changeBusinessName = ChangeBusinessName.builder()
+        ChangeStore changeStore = ChangeStore.builder()
                 .businessName("업체명수정")
                 .build();
 
         // when
-        mockMvc.perform(patch("/api/v1/stores/{businessNumber}/business-name", "333-22-4444")
-                .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(changeBusinessName)))
+        mockMvc.perform(patch("/api/v1/stores/{businessNumber}", "333-22-4444")
+                        .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(changeStore)))
 
         // then
         .andExpect(status().isOk());
+        StoreModel storeModel = storeRepository.findById(BusinessNumber.of("333-22-4444")).get().toModel();
+        assertEquals(storeModel.getBusinessName(), "업체명수정");
     }
 
     @Test
     @DisplayName("업체 전화번호 변경")
     void changeTel() throws Exception {
         // given
-        ChangeTel changeTel = ChangeTel.builder()
-                .tel("000-0000-0000")
+        ChangeStore changeStore = ChangeStore.builder()
+                .businessTel("000-0000-1111")
                 .build();
 
         // when
-        mockMvc.perform(patch("/api/v1/stores/{businessNumber}/tel", "333-22-4444")
+        mockMvc.perform(patch("/api/v1/stores/{businessNumber}", "333-22-4444")
                         .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(changeTel)))
+                        .content(objectMapper.writeValueAsString(changeStore)))
 
         // then
         .andExpect(status().isOk());
+        StoreModel storeModel = storeRepository.findById(BusinessNumber.of("333-22-4444")).get().toModel();
+        assertEquals(storeModel.getTel(), "000-0000-1111");
     }
 
     @Test
     @DisplayName("업체 운영 시간 변경")
     void changeBusinessHour() throws Exception {
         // given
-        ChangeBusinessHour changeBusinessHour = ChangeBusinessHour.builder()
-                .weekdayStart(1)
-                .weekdayEnd(15)
-                .weekendStart(1)
-                .weekendEnd(15)
-            .build();
+        ChangeStore changeStore = ChangeStore.builder()
+                .businessHour(ChangeBusinessHour.builder()
+                        .weekdayStart(1)
+                        .weekdayEnd(15)
+                        .weekendStart(1)
+                        .weekendEnd(15)
+                        .build())
+                .build();
 
         // when
-        mockMvc.perform(patch("/api/v1/stores/{businessNumber}/business-hour", "333-22-4444")
+        mockMvc.perform(patch("/api/v1/stores/{businessNumber}", "333-22-4444")
                 .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(changeBusinessHour)))
+                .content(objectMapper.writeValueAsString(changeStore)))
 
         // then
         .andExpect(status().isOk());
+        StoreModel storeModel = storeRepository.findById(BusinessNumber.of("333-22-4444")).get().toModel();
+        assertEquals(storeModel.getBusinessHour().getWeekdayStart(), 1);
+        assertEquals(storeModel.getBusinessHour().getWeekdayEnd(), 15);
+        assertEquals(storeModel.getBusinessHour().getWeekendStart(), 1);
+        assertEquals(storeModel.getBusinessHour().getWeekendEnd(), 15);
+    }
+
+    @Test
+    @DisplayName("변경사항요청을 하였으나 변경되지 않음")
+    void noChangeStore() throws Exception {
+        // given
+        ChangeStore changeStore = ChangeStore.builder()
+                .build();
+
+        // when
+        mockMvc.perform(patch("/api/v1/stores/{businessNumber}", "333-22-4444")
+                .header("X-AUTH-TOKEN", obtainsAccessToken("username","password"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(changeStore)))
+        .andExpect(status().isNoContent());
     }
 
     @Test

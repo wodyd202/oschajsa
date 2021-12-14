@@ -31,16 +31,14 @@ public class Password {
      * - 사용자 비밀번호는 숫자, 영어[대,소문자], 허용하는 특수문자만 허용
      */
     private final static Pattern PW_REGEX = Pattern.compile("[0-9a-zA-Z._%+-]{8,15}$");
-    private final static String PW_EXCEPTION_MESSAGE = "passwords can use numbers, alphabets, and a list of special characters (._%+-), " +
-            "and the length must be between 8 and 15 characters.";
-
+    private final static String PW_EXCEPTION_MESSAGE = "사용자의 비밀번호는 [영어(대소문자), 숫자, 특수문자] 조합으로 8자 이상 15자이하로 입력해주세요. 허용하는 특수문자(._%+-)";
     private void passwordValidation(String pw) {
         if(!PW_REGEX.matcher(pw).matches()){
             throw new IllegalArgumentException(PW_EXCEPTION_MESSAGE);
         }
     }
 
-    private final static String PW_EMPTY_MESSAGE = "password must not be empty";
+    private final static String PW_EMPTY_MESSAGE = "사용자의 비밀번호를 입력해주세요.";
     private void verifyNotEmptyPassword(String pw) {
         if(!StringUtils.hasText(pw)){
             throw new IllegalArgumentException(PW_EMPTY_MESSAGE);

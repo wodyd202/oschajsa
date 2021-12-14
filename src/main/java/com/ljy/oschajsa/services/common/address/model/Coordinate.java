@@ -1,25 +1,24 @@
 package com.ljy.oschajsa.services.common.address.model;
 
 import com.ljy.oschajsa.services.common.address.application.AddressHelper;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Coordinate {
     /**
      * longtitude 경도 x 좌표
      * lettitude 위도 y 좌표
      */
-    private final Double longtitude, lettitude;
-
-    // JPA에서 embedded로 사용시 기본 생성자 필요
-    protected Coordinate(){longtitude=null;lettitude=null;}
+    private double longtitude, lettitude;
 
     /**
      * @param lettitude 위도 y 좌표
      * @param longtitude 경도 x 좌표
-     * - 위도와 경도는 모두 입력되야함
      */
     private Coordinate(Double lettitude, Double longtitude) {
         verifyNotNullLettitude(lettitude);
@@ -28,14 +27,14 @@ public class Coordinate {
         this.lettitude = lettitude;
     }
 
-    private final static String LETTITUDE_NULL_MESSAGE = "lettitude must not be null";
+    private final static String LETTITUDE_NULL_MESSAGE = "위도 좌표를 입력해주세요.";
     private void verifyNotNullLettitude(Double lettitude) {
         if (Objects.isNull(lettitude)) {
             throw new InvalidAddressException(LETTITUDE_NULL_MESSAGE);
         }
     }
 
-    private final static String LONGTITUDE_NULL_MESSAGE = "longtitude must not be null";
+    private final static String LONGTITUDE_NULL_MESSAGE = "경도 좌표를 입력해주세요.";
     private void verifyNotNullLongtitude(Double longtitude) {
         if (Objects.isNull(longtitude)) {
             throw new InvalidAddressException(LONGTITUDE_NULL_MESSAGE);
@@ -50,11 +49,11 @@ public class Coordinate {
         return addressHelper.getAddressInfoFrom(this);
     }
 
-    public Double getLongtitude() {
+    public double getLongtitude() {
         return longtitude;
     }
 
-    public Double getLettitude() {
+    public double getLettitude() {
         return lettitude;
     }
 

@@ -4,6 +4,7 @@ import com.ljy.oschajsa.services.user.domain.exception.UserNotFoundException;
 import com.ljy.oschajsa.services.user.domain.model.UserModel;
 import com.ljy.oschajsa.services.user.query.application.external.InterestRepository;
 import com.ljy.oschajsa.services.user.query.application.external.StoreRepository;
+import com.ljy.oschajsa.services.user.query.application.model.UserResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,23 +24,28 @@ import static java.util.Arrays.asList;
 @AllArgsConstructor
 @Transactional(readOnly = true)
 public class UserSearchService implements UserDetailsService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     // 외부 모듈
-    private StoreRepository storeRepository;
-    private InterestRepository interestRepository;
+    private final StoreRepository storeRepository;
+    private final InterestRepository interestRepository;
 
+    /**
+     * @param userId
+     * # 사용자 정보 조회
+     */
     @Cacheable(value = "user", key = "#userId")
-    public UserModel getUserModel(String userId) {
+    public UserResponse getUserModel(final String userId) {
         UserModel userModel = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        userModel.emptyPassword();
+        return UserResponse.builder()
+                .user(userModel)
+                // 자신의 관심 업체 10개 조회
+                .interestStores(interestRepository.getInterests(userId))
 
-        // 자신의 업체 정보 추가
-        userModel.addStoreInfo(storeRepository.getStore(userId));
-
-        // 관심업체 10개 추가
-        userModel.addTop10InterestStores(interestRepository.getInterests(userId));
-
-        return userModel;
+                // 자신의 업체 조회
+                .stores(storeRepository.getStore(userId))
+                .build();
     }
 
     @Override

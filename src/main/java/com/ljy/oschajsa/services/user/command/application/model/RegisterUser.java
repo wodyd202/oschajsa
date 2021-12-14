@@ -11,16 +11,16 @@ import javax.validation.constraints.Pattern;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RegisterUser {
-    @NotBlank(message = "user id must not be empty")
-    @Pattern(regexp = "^[a-z]+[a-z0-9]{4,15}$", message = "user id be allowed small letter, number however first char must be small letter")
+    @NotBlank(message = "사용자의 아이디를 입력해주세요.")
+    @Pattern(regexp = "^[a-z]+[a-z0-9]{4,15}$", message = "사용자의 아이디는 영어(대소문자), 숫자 조합 4자 이상 15자 이하로 입력해주세요.")
     private String id;
 
-    @NotBlank(message = "password must not be empty")
-    @Pattern(regexp = "[0-9a-zA-Z._%+-]{8,15}$", message = "passwords can use numbers, alphabets, and a list of special characters (._%+-), and the length must be between 8 and 15 characters.")
+    @NotBlank(message = "사용자의 비밀번호를 입력해주세요.")
+    @Pattern(regexp = "[0-9a-zA-Z._%+-]{8,15}$", message = "사용자의 비밀번호는 [영어(대소문자), 숫자, 특수문자] 조합으로 8자 이상 15자이하로 입력해주세요. 허용하는 특수문자(._%+-)")
     private String password;
 
-    @NotBlank(message = "nickname must not be empty")
-    @Pattern(regexp = "^[\\w가-힣]{3,10}$", message = "nickname can use only hangul ,number,alphabet and the length must be between 3 and 10 characters")
+    @NotBlank(message = "사용자의 닉네임을 입력해주세요.")
+    @Pattern(regexp = "^[\\w가-힣]{3,10}$", message = "닉네임은 한글조합 3자 이상 10자 이하로 입력해주세요.")
     private String nickname;
 
     /**

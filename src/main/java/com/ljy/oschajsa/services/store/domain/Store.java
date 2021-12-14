@@ -254,12 +254,16 @@ public class Store extends AbstractAggregateRoot<Store> {
      * @param changer
      * # 업체명 변경
      */
-    public void changeBusinessName(BusinessName businessName, OwnerId changer) {
+    public boolean changeBusinessName(BusinessName businessName, OwnerId changer) {
         verifyIsMyStore(changer);
+        if(this.businessName.equals(businessName)){
+            return false;
+        }
         BusinessName originBusinessName = this.businessName;
         setBusinessName(businessName);
         registerEvent(new ChangedBusinessNameEvent(businessNumber, businessName));
         log.info("{} store change name : {} to {}", businessNumber, originBusinessName, this.businessName);
+        return true;
     }
 
     /**
@@ -267,12 +271,16 @@ public class Store extends AbstractAggregateRoot<Store> {
      * @param changer
      * # 업체 전화번호 변경
      */
-    public void changeTel(BusinessTel businessTel, OwnerId changer) {
+    public boolean changeTel(BusinessTel businessTel, OwnerId changer) {
         verifyIsMyStore(changer);
+        if(this.businessTel.equals(businessTel)){
+            return false;
+        }
         BusinessTel originBusinessTel = this.businessTel;
         setBusinessTel(businessTel);
         registerEvent(new ChangedBusinessTelEvent(businessNumber, businessTel));
         log.info("{} store change tel : {} to {}", businessNumber, originBusinessTel, this.businessTel);
+        return true;
     }
 
     /**
@@ -280,12 +288,16 @@ public class Store extends AbstractAggregateRoot<Store> {
      * @param changer
      * # 업체 운영시간 변경
      */
-    public void changeBusinessHour(BusinessHour businessHour, OwnerId changer) {
+    public boolean changeBusinessHour(BusinessHour businessHour, OwnerId changer) {
         verifyIsMyStore(changer);
+        if(this.businessHour.equals(businessHour)){
+            return false;
+        }
         BusinessHour originBusinessHour = this.businessHour;
         setBusinessHour(businessHour);
         registerEvent(new ChangedBusinessHourEvent(businessNumber, businessHour));
         log.info("{} store change business hour : {} to {}", businessNumber, originBusinessHour, this.businessHour);
+        return true;
     }
 
     /**

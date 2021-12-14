@@ -25,19 +25,7 @@ public class UserModel {
     private String password;
     private String nickname;
     private AddressModel address;
-    private LocalDateTime createDateTime;
     private UserState state;
-
-    private List<Store> stores;
-    private List<Interest> interestStores;
-
-    public void addStoreInfo(List<Store> stores) {
-        this.stores = stores;
-    }
-
-    public void addTop10InterestStores(List<Interest> interestStores) {
-        this.interestStores = interestStores;
-    }
 
     @Builder
     public UserModel(String userId,
@@ -50,7 +38,6 @@ public class UserModel {
         this.nickname = nickname;
         this.password = password;
         this.address = address == null ? null : address.toModel();
-        this.createDateTime = createDateTime;
         this.state = state;
     }
 
@@ -70,7 +57,6 @@ public class UserModel {
                 "userId='" + userId + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", address=" + address +
-                ", createDateTime=" + createDateTime +
                 ", state=" + state +
                 '}';
     }
@@ -80,8 +66,7 @@ public class UserModel {
         return state.equals(UserState.WITHDRAWAL);
     }
 
-    @JsonIgnore
     public void emptyPassword() {
-        this.password = null;
+        password = null;
     }
 }

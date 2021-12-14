@@ -25,7 +25,7 @@ public class NickName {
      * - 사용자 닉네임은 완성형 한글, 숫자, 영어[대,소문자]만 허용
      */
     private final static Pattern NICKNAME_REGEX = Pattern.compile("^[\\w가-힣]{3,10}$");
-    private final static String NICKNAME_EXCEPTION_MESSAGE = "닉네임은 한글 조합 3자이상 10자이하로 입력해주세요.";
+    private final static String NICKNAME_EXCEPTION_MESSAGE = "닉네임은 한글 조합 3자 이상 10자 이하로 입력해주세요.";
     private void nicknameValidation(String name) {
         if(!NICKNAME_REGEX.matcher(name).matches()){
             throw new IllegalArgumentException(NICKNAME_EXCEPTION_MESSAGE);

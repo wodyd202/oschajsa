@@ -34,8 +34,8 @@ public class QuerydslQueryUserRepository implements UserRepository {
     private ConstructorExpression<UserModel> userModel() {
         return constructor(UserModel.class,
                         user.userId().id,
-                        user.password().pw,
                         user.nickname().name,
+                        user.password().pw,
                         user.address(),
                         user.createDateTime,
                         user.state

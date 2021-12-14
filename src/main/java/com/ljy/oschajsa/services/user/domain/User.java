@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -66,7 +67,7 @@ public class User extends AbstractAggregateRoot<User> {
     private UserState state;
 
     @Builder
-    public User(UserId userId, Password password, NickName nickName, Address address) {
+    public User(final UserId userId,final Password password,final NickName nickName,final Address address) {
         setUserId(userId);
         setPassword(password);
         setNickname(nickName);
@@ -78,41 +79,41 @@ public class User extends AbstractAggregateRoot<User> {
         log.info("new user : {}", this);
     }
 
-    private void setUserId(UserId userId) {
+    private void setUserId(final UserId userId) {
         verifyNotNullUserId(userId);
         this.userId = userId;
     }
 
-    private void setPassword(Password password) {
+    private void setPassword(final Password password) {
         verifyNotNullPassword(password);
         this.password = password;
     }
 
-    private void setNickname(NickName nickName) {
+    private void setNickname(final NickName nickName) {
         verifyNotNullNickname(nickName);
         this.nickname = nickName;
     }
 
-    private void setAddress(Address address) {
+    private void setAddress(final Address address) {
         this.address = address;
     }
 
     private final static String NULL_USER_ID_MESSAGE = "사용자의 아이디를 입력해주세요.";
-    private void verifyNotNullUserId(UserId userId) {
+    private void verifyNotNullUserId(final UserId userId) {
         if(isNull(userId)){
             throw new IllegalArgumentException(NULL_USER_ID_MESSAGE);
         }
     }
 
     private final static String NULL_USER_PASSWORD_MESSAGE = "사용자의 비밀번호를 입력해주세요.";
-    private void verifyNotNullPassword(Password password) {
+    private void verifyNotNullPassword(final Password password) {
         if(isNull(password)){
             throw new IllegalArgumentException(NULL_USER_PASSWORD_MESSAGE);
         }
     }
 
     private final static String NULL_USER_NICKNAME_MESSAGE = "사용자의 닉네임을 입력해주세요.";
-    private void verifyNotNullNickname(NickName nickName) {
+    private void verifyNotNullNickname(final NickName nickName) {
         if(isNull(nickName)){
             throw new IllegalArgumentException(NULL_USER_NICKNAME_MESSAGE);
         }
@@ -123,19 +124,26 @@ public class User extends AbstractAggregateRoot<User> {
      * - 이미 회원탈퇴한 계정이라면 주소 변경을 할 수 없음
      */
     private final static String ALREADY_WITHDRAWAL_USER = "이미 회원탈퇴한 사용자입니다.";
-    final public void changeAddress(Address changeAddress) {
+    final public boolean changeAddress(final Address changeAddress) {
         if(isWithdrawal()){
             throw new IllegalStateException(ALREADY_WITHDRAWAL_USER);
         }
+        if(this.address != null && this.address.equals(changeAddress)){
+            return false;
+        }
         setAddress(changeAddress);
         registerEvent(new ChangedUserAddressEvent(userId, address));
+        return true;
     }
 
     /**
      * @param originPassword 기존 비밀번호
      * - 기존 비밀번호를 입력해야 회원 탈퇴할 수 있음
      */
-    final public void withdrawal(PasswordEncoder passwordEncoder, String originPassword) {
+    final public void withdrawal(final PasswordEncoder passwordEncoder,final String originPassword) {
+        if(!StringUtils.hasText(originPassword)){
+            throw new IllegalArgumentException("기존 비밀번호를 입력해주세요.");
+        }
         if(!passwordEncoder.matches(originPassword, password.get())){
             throw new IllegalArgumentException("기존 비밀번호가 일치하지 않습니다.");
         }

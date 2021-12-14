@@ -3,6 +3,7 @@ package com.ljy.oschajsa.services.store.domain.value;
 import com.ljy.oschajsa.services.store.domain.Store;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -34,13 +35,13 @@ public class Tag {
 
     private static final String TAG_MUST_NOT_BE_EMPTY = "업체 태그를 입력해주세요.";
     private void verifyNotEmptyTag(String tag) {
-        if(tag.isEmpty()){
+        if(!StringUtils.hasText(tag)){
             throw new IllegalArgumentException(TAG_MUST_NOT_BE_EMPTY);
         }
     }
 
     public static Tag of(String tag) {
-        return new Tag(Objects.requireNonNull(tag));
+        return new Tag(tag);
     }
 
     public String get() {
