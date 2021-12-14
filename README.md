@@ -3,42 +3,34 @@
 
 
 #### Tech
-- Spring Boot
-- Kafka
-- Redis
-- Mysql
-- Maven
-- Junit
+- Spring Boot(2.4.6)
+- Kafka(6)
+- Redis(6)
+- Mysql(5)
+- Junit5
+- DDD(cqrs), TDD
 
-<img src="https://coveralls.io/repos/github/wodyd202/oschajsa/badge.svg" alt="Coverage Status" />
-[https://coveralls.io/github/wodyd202/oschajsa]
+<a href="https://coveralls.io/github/wodyd202/oschajsa"><img src="https://coveralls.io/repos/github/wodyd202/oschajsa/badge.svg" alt="Coverage Status" /></a>
 
 ##
 
 #### Install
-* 실행전 Mysql 3306 port가 구성되어있어야합니다.
-* Redis는 embedded redis를 사용하고 있으나, 프로젝트에 포함된 docker-compose를 사용해 별개로 구성해도 무방합니다.
+* 실행전 Mysql(3306 port), Redis(6379 port), kafka(9092 port)가 구성되어있어야합니다.
+* 위 프로젝트에 Mysql, Redis, Kafka의 <a href ="https://github.com/wodyd202/oschajsa/tree/master/docker">docker-compose.yml</a>가 포함되어 있습니다.
 
 ```sh
 git clone https://github.com/wodyd202/oschajsa.git
 mvn clean spring-boot:run
 ```
 ##
-
 #### 아키텍처
 
-![KakaoTalk_Photo_2021-12-11-16-52-36](https://user-images.githubusercontent.com/77535935/145669120-5160398f-ed33-41e1-a651-cf017fc3fc0d.jpeg)
+![KakaoTalk_Photo_2021-12-11-16-52-36](https://user-images.githubusercontent.com/77535935/145974645-25cce457-a481-4dc1-b918-11fdd1c896e9.jpeg)
 
-![KakaoTalk_Photo_2021-12-11-16-52-43](https://user-images.githubusercontent.com/77535935/145669083-17f2239e-6f60-46b3-8807-4e153ad5305c.jpeg)
+##
+#### 데이터 조회 시나리오
 
-해당 이미지는 업체 기준의 아키텍처를 그린 이미지입니다. 서비스가 CQRS로 분리되어있기 때문에 조회를 제외한 사용자의 요청은 Command Layer에서 처리하게 됩니다.
-Command Layer에서 생성, 수정, 삭제 프로세스를 거친 후 도메인 이벤트가 publish되어 Query layer 및 다른 도메인이 해당 이벤트를 consume하고 그에 맞게 처리하게 됩니다.
-
-Command Layer에서는 Mysql DB로 데이터를 처리하였고, 이벤트를 받아 처리하는  Query layer에서는 Redis를 사용해 데이터를 처리하였습니다.
-
-Command Layer에서 데이터를 지속적으로 처리시 Query Layer와 연동되어있는 Redis에 데이터가 계속 쌓이게되는데 데이터가 쌓이면 쌓일 수록 조회되지않는 데이터가 누적이 될것입니다.
-이로인해 메모리 낭비가 발생하게되는데 이를 보완하기위해 TTL(7일)을 적용하였고, redis에서 조회했으나 데이터가 존재하지 않을 시 해당 데이터를 데이터베이스에서 가져와 다시 동기화(Lazy Loading)하는 로직을 구현했습니다.
-
+![KakaoTalk_Photo_2021-12-11-16-52-43](https://user-images.githubusercontent.com/77535935/145975491-baf5597a-16d6-45ee-ac2a-db2ffc3b1708.jpeg)
 ##
 
 #### APIs
@@ -47,18 +39,15 @@ Command Layer에서 데이터를 지속적으로 처리시 Query Layer와 연동
 | ------ | ------ | ------ |
 | /oauth/token | POST | 토큰 발급 |
 | /api/v1/users | POST | 사용자 등록 |
-| /api/v1/users/address | PATCH | 사용자 주소지 변경 |
+| /api/v1/users | PATCH | 사용자 정보 변경 |
 | /api/v1/users | DELETE | 회원 탈퇴 |
 | /api/v1/users | GET | 사용자 정보 조회 |
-| /api/v1/users | GET | 사용자 주소 조회 |
 
 |  |  |  |
 | ------ | ------ | ------ |
 | /api/v1/stores | POST | 업체 등록 |
-| /api/v1/stores/{businessNumber}/logo | POST | 업체 로고 변경 |
-| /api/v1/stores/{businessNumber}/business-name | PATCH | 업체명 변경 |
-| /api/v1/stores/{businessNumber}/tel | PATCH | 업체 전화번호 변경 |
-| /api/v1/stores/{businessNumber}/business-hour | PATCH | 업체 운영시간 변경 |
+| /api/v1/stores/{businessNumber}/logo | POST | 업체 로고 추가 및 변경 |
+| /api/v1/stores/{businessNumber} | PATCH | 업체명 정보 변경 |
 | /api/v1/stores/{businessNumber}/tag | PATCH | 업체 태그 추가 |
 | /api/v1/stores/{businessNumber}/tag | DELETE | 업체 태그 제거 |
 | /api/v1/stores/{businessNumber} | GET | 업체 상세 조회 |
