@@ -25,9 +25,9 @@ mvn clean spring-boot:run
 ##
 #### 아키텍처
 
-![KakaoTalk_Photo_2021-12-11-16-52-36](https://user-images.githubusercontent.com/77535935/145669120-5160398f-ed33-41e1-a651-cf017fc3fc0d.jpeg)
+![KakaoTalk_Photo_2021-12-11-16-52-36](https://user-images.githubusercontent.com/77535935/145974645-25cce457-a481-4dc1-b918-11fdd1c896e9.jpeg)
 
-![KakaoTalk_Photo_2021-12-11-16-52-43](https://user-images.githubusercontent.com/77535935/145669083-17f2239e-6f60-46b3-8807-4e153ad5305c.jpeg)
+![KakaoTalk_Photo_2021-12-11-16-52-43](https://user-images.githubusercontent.com/77535935/145974581-bcacf391-ab5c-40d5-9c74-eec7e52eabe8.jpeg)
 ##
 
 #### APIs
