@@ -1,4 +1,4 @@
-# 옷찾사(oschajsa)
+#  <a href="https://wodyd202.github.io/oschajsa/oschajsa.html">옷찾사(oschajsa)</a>
 쇼핑몰이 존재하지 않는 의류 소상 공인들을 위한 업체 위치 정보 제공 서비스
 
 
@@ -31,6 +31,3 @@ mvn clean spring-boot:run
 #### 데이터 조회 시나리오
 
 ![KakaoTalk_Photo_2021-12-11-16-52-43](https://user-images.githubusercontent.com/77535935/145975491-baf5597a-16d6-45ee-ac2a-db2ffc3b1708.jpeg)
-##
-
-#### <a href="https://wodyd202.github.io/oschajsa/oschajsa.html">APIs</a>
