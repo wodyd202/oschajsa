@@ -49,15 +49,6 @@ public class UserSearchAPI_Test extends ApiTest {
         .andExpect(jsonPath("$..user['nickname']").exists())
         .andExpect(jsonPath("$..user['state']").exists())
         .andExpect(jsonPath("$..['stores']").exists())
-        .andExpect(jsonPath("$..['interestStores']").exists())
-        .andDo(document("get user",
-                responseFields(
-                        fieldWithPath("user").type(JsonFieldType.OBJECT).description("사용자 정보"),
-                        fieldWithPath("user.userId").type(JsonFieldType.STRING).description("사용자 아이디"),
-                        fieldWithPath("user.nickname").type(JsonFieldType.STRING).description("사용자 닉네임"),
-                        fieldWithPath("user.state").type(JsonFieldType.STRING).description("사용자 상태"),
-                        fieldWithPath("stores").type(JsonFieldType.ARRAY).description("운영중인 업체"),
-                        fieldWithPath("interestStores").type(JsonFieldType.ARRAY).description("관심 업체")
-                )));
+        .andExpect(jsonPath("$..['interestStores']").exists());
     }
 }
