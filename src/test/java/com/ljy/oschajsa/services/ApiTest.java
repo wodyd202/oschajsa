@@ -1,4 +1,4 @@
-package com.ljy.oschajsa;
+package com.ljy.oschajsa.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ljy.oschajsa.services.user.domain.value.UserId;
@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
-@AutoConfigureRestDocs
 @AutoConfigureMockMvc
 public class ApiTest {
     @Autowired protected MockMvc mockMvc;

@@ -1,6 +1,6 @@
 package com.ljy.oschajsa.services.user.command;
 
-import com.ljy.oschajsa.ApiTest;
+import com.ljy.oschajsa.services.ApiTest;
 import com.ljy.oschajsa.services.user.command.application.model.ChangeAddress;
 import com.ljy.oschajsa.services.user.command.application.model.ChangeUser;
 import com.ljy.oschajsa.services.user.command.application.model.RegisterUser;
@@ -8,11 +8,9 @@ import com.ljy.oschajsa.services.user.command.application.model.WithdrawalUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.payload.JsonFieldType;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;

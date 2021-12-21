@@ -1,6 +1,7 @@
 package com.ljy.oschajsa.restdocs.user.command;
 
 import com.ljy.oschajsa.restdocs.RestDocsTest;
+import com.ljy.oschajsa.restdocs.user.UserRestDocsTest;
 import com.ljy.oschajsa.services.user.command.application.model.ChangeAddress;
 import com.ljy.oschajsa.services.user.command.application.model.ChangeUser;
 import com.ljy.oschajsa.services.user.command.application.model.RegisterUser;
@@ -19,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * 사용자 restdocs
  */
-public class UserAPI_Test extends RestDocsTest {
+public class UserAPI_Test extends UserRestDocsTest {
     @Test
     @DisplayName("사용자 생성")
     void registerUser() throws Exception{

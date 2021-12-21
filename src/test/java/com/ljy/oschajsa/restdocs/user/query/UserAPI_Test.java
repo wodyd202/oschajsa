@@ -1,6 +1,7 @@
 package com.ljy.oschajsa.restdocs.user.query;
 
 import com.ljy.oschajsa.restdocs.RestDocsTest;
+import com.ljy.oschajsa.restdocs.user.UserRestDocsTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 /**
  * 사용자 조회 restdocs
  */
-public class UserAPI_Test extends RestDocsTest {
+public class UserAPI_Test extends UserRestDocsTest {
     @BeforeEach
     void setUp(){
         createUser("username","password");

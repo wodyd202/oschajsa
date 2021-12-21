@@ -1,20 +1,17 @@
 package com.ljy.oschajsa.services.store.command;
 
-import com.ljy.oschajsa.ApiTest;
+import com.ljy.oschajsa.services.ApiTest;
 import com.ljy.oschajsa.services.store.StoreFixture;
 import com.ljy.oschajsa.services.store.command.application.model.OpenStore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.util.Arrays;
 
 import static com.ljy.oschajsa.services.store.StoreFixture.aOpenStore;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
