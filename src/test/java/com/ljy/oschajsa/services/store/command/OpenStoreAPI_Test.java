@@ -219,7 +219,7 @@ public class OpenStoreAPI_Test extends ApiTest {
     @DisplayName("업체 등록")
     void open() throws Exception {
         // given
-        OpenStore openStore = aOpenStore().businessNumber("123-12-1234").build();
+        OpenStore openStore = aOpenStore().businessNumber("123-17-1234").build();
 
         // when
         mockMvc.perform(post("/api/v1/stores")
@@ -235,22 +235,7 @@ public class OpenStoreAPI_Test extends ApiTest {
         .andExpect(jsonPath("$..['tags']").exists())
         .andExpect(jsonPath("$..['state']").exists())
         .andExpect(jsonPath("$..['businessHour']").exists())
-        .andExpect(jsonPath("$..['address']").exists())
-        .andDo(document("open store",
-        requestFields(
-                fieldWithPath("businessName").type(JsonFieldType.STRING).description("업체명"),
-                fieldWithPath("businessNumber").type(JsonFieldType.STRING).description("사업자 번호"),
-                fieldWithPath("businessTel").type(JsonFieldType.STRING).description("업체 전화번호"),
-                fieldWithPath("tags").type(JsonFieldType.ARRAY).description("업체 태그"),
-                fieldWithPath("businessHour").type(JsonFieldType.OBJECT).description("업체 운영 시간 정보"),
-                fieldWithPath("businessHour.weekdayStart").type(JsonFieldType.NUMBER).description("업체 평일 운영 시작 시간"),
-                fieldWithPath("businessHour.weekdayEnd").type(JsonFieldType.NUMBER).description("업체 평일 운영 종료 시간"),
-                fieldWithPath("businessHour.weekendStart").type(JsonFieldType.NUMBER).description("업체 주말 운영 시작 시간"),
-                fieldWithPath("businessHour.weekendEnd").type(JsonFieldType.NUMBER).description("업체 주말 운영 종료 시간"),
-                fieldWithPath("coordinate").type(JsonFieldType.OBJECT).description("업체 주소 좌표"),
-                fieldWithPath("coordinate.lettitude").type("double").description("업체 주소 좌표"),
-                fieldWithPath("coordinate.longtitude").type("double").description("업체 주소 좌표")
-        )));
+        .andExpect(jsonPath("$..['address']").exists());
     }
 
     private void assertBadRequestWhenOpenStore(OpenStore openStore) throws Exception{

@@ -81,13 +81,7 @@ public class ChangeStoreAPI_Test extends ApiTest {
                         .content(objectMapper.writeValueAsString(changeStore)))
 
         // then
-        .andExpect(status().isOk())
-        .andDo(document("change businessname",
-                requestFields(
-                        fieldWithPath("businessName").type(JsonFieldType.STRING).description("수정할 업체명"),
-                        fieldWithPath("businessTel").type(JsonFieldType.STRING).ignored(),
-                        fieldWithPath("businessHour").type(JsonFieldType.OBJECT).ignored()
-                )));
+        .andExpect(status().isOk());
         StoreModel storeModel = storeRepository.findById(BusinessNumber.of("333-22-4444")).get().toModel();
         assertEquals(storeModel.getBusinessName(), "업체명수정");
     }
@@ -107,13 +101,7 @@ public class ChangeStoreAPI_Test extends ApiTest {
                         .content(objectMapper.writeValueAsString(changeStore)))
 
         // then
-        .andExpect(status().isOk())
-        .andDo(document("change businessTel",
-        requestFields(
-                fieldWithPath("businessName").type(JsonFieldType.STRING).ignored(),
-                fieldWithPath("businessTel").type(JsonFieldType.STRING).description("수정할 업체 전화번호"),
-                fieldWithPath("businessHour").type(JsonFieldType.OBJECT).ignored()
-        )));
+        .andExpect(status().isOk());
         StoreModel storeModel = storeRepository.findById(BusinessNumber.of("333-22-4444")).get().toModel();
         assertEquals(storeModel.getTel(), "000-0000-1111");
     }
@@ -138,17 +126,7 @@ public class ChangeStoreAPI_Test extends ApiTest {
                 .content(objectMapper.writeValueAsString(changeStore)))
 
         // then
-        .andExpect(status().isOk())
-        .andDo(document("change businessHour",
-        requestFields(
-                fieldWithPath("businessName").type(JsonFieldType.STRING).ignored(),
-                fieldWithPath("businessTel").type(JsonFieldType.STRING).ignored(),
-                fieldWithPath("businessHour").type(JsonFieldType.OBJECT).description("수정할 업체 운영 시간 정보"),
-                fieldWithPath("businessHour.weekdayStart").type(JsonFieldType.NUMBER).description("수정할 업체 평일 운영 시작 시간 정보"),
-                fieldWithPath("businessHour.weekdayEnd").type(JsonFieldType.NUMBER).description("수정할 업체 평일 운영 종료 시간 정보"),
-                fieldWithPath("businessHour.weekendStart").type(JsonFieldType.NUMBER).description("수정할 업체 주말 운영 시작 시간 정보"),
-                fieldWithPath("businessHour.weekendEnd").type(JsonFieldType.NUMBER).description("수정할 업체 주말 운영 종료 시간 정보")
-        )));
+        .andExpect(status().isOk());
         StoreModel storeModel = storeRepository.findById(BusinessNumber.of("333-22-4444")).get().toModel();
         assertEquals(storeModel.getBusinessHour().getWeekdayStart(), 1);
         assertEquals(storeModel.getBusinessHour().getWeekdayEnd(), 15);
@@ -186,11 +164,7 @@ public class ChangeStoreAPI_Test extends ApiTest {
                         .content(objectMapper.writeValueAsString(removeTag)))
 
         // then
-        .andExpect(status().isOk())
-        .andDo(document("remove tag",
-        requestFields(
-                fieldWithPath("tag").type(JsonFieldType.STRING).description("삭제할 태그 정보")
-        )));
+        .andExpect(status().isOk());
     }
 
     @Test
@@ -208,11 +182,7 @@ public class ChangeStoreAPI_Test extends ApiTest {
                         .content(objectMapper.writeValueAsString(addTag)))
 
         // then
-        .andExpect(status().isOk())
-        .andDo(document("add tag",
-        requestFields(
-                fieldWithPath("tag").type(JsonFieldType.STRING).description("추가할 태그 정보")
-        )));
+        .andExpect(status().isOk());
     }
 
     @Test
@@ -229,12 +199,7 @@ public class ChangeStoreAPI_Test extends ApiTest {
                 .header("X-AUTH-TOKEN", obtainsAccessToken("username","password")))
 
         // then
-        .andExpect(status().isOk())
-        .andDo(document("stop store",
-            pathParameters(
-                    parameterWithName("businessNumber").description("업체 사업자 번호")
-            )
-        ));
+        .andExpect(status().isOk());
     }
 
     @Test
@@ -252,11 +217,7 @@ public class ChangeStoreAPI_Test extends ApiTest {
                         .header("X-AUTH-TOKEN", obtainsAccessToken("username","password")))
 
         // then
-        .andExpect(status().isOk())
-        .andDo(document("reopen store",
-        pathParameters(
-                parameterWithName("businessNumber").description("업체 사업자 번호")
-        )));
+        .andExpect(status().isOk());
     }
 
     @Test
@@ -273,11 +234,7 @@ public class ChangeStoreAPI_Test extends ApiTest {
                     .header("X-AUTH-TOKEN", obtainsAccessToken("username","password")))
 
         // then
-        .andExpect(status().isOk())
-        .andDo(document("close store",
-        pathParameters(
-                parameterWithName("businessNumber").description("업체 사업자 번호")
-        )));
+        .andExpect(status().isOk());
     }
 
 }

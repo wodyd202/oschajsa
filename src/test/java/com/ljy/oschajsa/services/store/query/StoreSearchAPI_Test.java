@@ -53,31 +53,7 @@ public class StoreSearchAPI_Test extends StoreAPITest {
         .andExpect(jsonPath("$..['businessHour']").exists())
         .andExpect(jsonPath("$..['address']").exists())
         .andExpect(jsonPath("$..['owner']").exists())
-        .andExpect(jsonPath("$..['intestTotalCount']").exists())
-        .andDo(document("get store",
-        pathParameters(
-                parameterWithName("businessNumber").description("업체 사업자 번호")
-        ),
-        responseFields(
-                fieldWithPath("businessNumber").type(JsonFieldType.STRING).description("사업자 번호"),
-                fieldWithPath("businessName").type(JsonFieldType.STRING).description("상호명"),
-                fieldWithPath("tel").type(JsonFieldType.STRING).description("업체 전화번호"),
-                fieldWithPath("tags").type(JsonFieldType.ARRAY).description("업체 태그"),
-                fieldWithPath("state").type(JsonFieldType.STRING).description("업체 상태"),
-                fieldWithPath("businessHour").type(JsonFieldType.OBJECT).description("업체 운영 정보"),
-                fieldWithPath("businessHour.weekdayStart").type(JsonFieldType.NUMBER).description("업체 평일 운영 시작 시간"),
-                fieldWithPath("businessHour.weekdayEnd").type(JsonFieldType.NUMBER).description("업체 평일 운영 종료 시간"),
-                fieldWithPath("businessHour.weekendStart").type(JsonFieldType.NUMBER).description("업체 주말 운영 시작 시간"),
-                fieldWithPath("businessHour.weekendEnd").type(JsonFieldType.NUMBER).description("업체 주말 운영 종료 시간"),
-                fieldWithPath("address").type(JsonFieldType.OBJECT).description("업체 주소 정보"),
-                fieldWithPath("address.dong").type(JsonFieldType.STRING).description("동"),
-                fieldWithPath("address.city").type(JsonFieldType.STRING).description("시"),
-                fieldWithPath("address.province").type(JsonFieldType.STRING).description("도"),
-                fieldWithPath("address.lettitude").type("double").description("위도 좌표 값"),
-                fieldWithPath("address.longtitude").type("double").description("경도 좌표 값"),
-                fieldWithPath("owner").type(JsonFieldType.STRING).description("업체 사장 아이디"),
-                fieldWithPath("intestTotalCount").type(JsonFieldType.NUMBER).description("업체 관심도")
-        )));
+        .andExpect(jsonPath("$..['intestTotalCount']").exists());
     }
 
     @Test
@@ -89,8 +65,8 @@ public class StoreSearchAPI_Test extends StoreAPITest {
                         .param("lettitude", "37.0789561558879")
                 )
 
-                // then
-                .andExpect(status().isBadRequest());
+        // then
+        .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -103,8 +79,8 @@ public class StoreSearchAPI_Test extends StoreAPITest {
                         .param("differenceCoordinate", "0")
                 )
 
-                // then
-                .andExpect(status().isBadRequest());
+        // then
+        .andExpect(status().isBadRequest());
     }
 
 
@@ -117,8 +93,8 @@ public class StoreSearchAPI_Test extends StoreAPITest {
                         .param("differenceCoordinate", "3")
                 )
 
-                // then
-                .andExpect(status().isBadRequest());
+        // then
+        .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -130,8 +106,8 @@ public class StoreSearchAPI_Test extends StoreAPITest {
                         .param("differenceCoordinate", "3")
                 )
 
-                // then
-                .andExpect(status().isBadRequest());
+        // then
+        .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -147,33 +123,7 @@ public class StoreSearchAPI_Test extends StoreAPITest {
         // then
         .andExpect(status().isOk())
         .andExpect(jsonPath("$..['stores']").exists())
-        .andExpect(jsonPath("$..['totalCount']").exists())
-        .andDo(document("get store by difference coordinate",
-        requestParameters(
-                parameterWithName("longtitude").description("경도 좌표 값"),
-                parameterWithName("lettitude").description("위도 좌표 값"),
-                parameterWithName("differenceCoordinate").description("거리 차이(km)")
-        ),
-        responseFields(
-                fieldWithPath("totalCount").type(JsonFieldType.NUMBER).description("업체 개수"),
-                fieldWithPath("stores").type(JsonFieldType.ARRAY).description("업체 리스트"),
-                fieldWithPath("stores[].businessNumber").type(JsonFieldType.STRING).description("업체 사업자번호").optional(),
-                fieldWithPath("stores[].businessName").type(JsonFieldType.STRING).description("업체명").optional(),
-                fieldWithPath("stores[].tel").type(JsonFieldType.STRING).description("업체 전화번호").optional(),
-                fieldWithPath("stores[].state").type(JsonFieldType.STRING).description("업체 상태").optional(),
-                fieldWithPath("stores[].businessHour").type(JsonFieldType.OBJECT).description("업체 운영 정보").optional(),
-                fieldWithPath("stores[].businessHour.weekdayStart").type(JsonFieldType.NUMBER).description("업체 평일 운영 시작 시간").optional(),
-                fieldWithPath("stores[].businessHour.weekdayEnd").type(JsonFieldType.NUMBER).description("업체 평일 운영 종료 시간").optional(),
-                fieldWithPath("stores[].businessHour.weekendStart").type(JsonFieldType.NUMBER).description("업체 주말 운영 시작 시간").optional(),
-                fieldWithPath("stores[].businessHour.weekendEnd").type(JsonFieldType.NUMBER).description("업체 주말 운영 종료 시간").optional(),
-                fieldWithPath("stores[].address.city").type(JsonFieldType.STRING).description("시").optional(),
-                fieldWithPath("stores[].address.dong").type(JsonFieldType.STRING).description("동").optional(),
-                fieldWithPath("stores[].address.province").type(JsonFieldType.STRING).description("도").optional(),
-                fieldWithPath("stores[].address.lettitude").type("double").description("위도 좌표 값").optional(),
-                fieldWithPath("stores[].address.longtitude").type("double").description("경도 좌표 값").optional(),
-                fieldWithPath("stores[].owner").type(JsonFieldType.STRING).description("업체 사장 아이디").optional(),
-                fieldWithPath("stores[].intestTotalCount").ignored().optional()
-        )));
+        .andExpect(jsonPath("$..['totalCount']").exists());
     }
 
     @Test
@@ -202,32 +152,6 @@ public class StoreSearchAPI_Test extends StoreAPITest {
         // then
         .andExpect(status().isOk())
         .andExpect(jsonPath("$..['stores']").exists())
-        .andExpect(jsonPath("$..['totalCount']").exists())
-        .andDo(document("get store by address info",
-        requestParameters(
-                parameterWithName("city").description("시"),
-                parameterWithName("province").description("도"),
-                parameterWithName("dong").description("동")
-        ),
-        responseFields(
-                fieldWithPath("totalCount").type(JsonFieldType.NUMBER).description("업체 개수"),
-                fieldWithPath("stores").type(JsonFieldType.ARRAY).description("업체 리스트"),
-                fieldWithPath("stores[].businessNumber").type(JsonFieldType.STRING).description("업체 사업자번호").optional(),
-                fieldWithPath("stores[].businessName").type(JsonFieldType.STRING).description("업체명").optional(),
-                fieldWithPath("stores[].tel").type(JsonFieldType.STRING).description("업체 전화번호").optional(),
-                fieldWithPath("stores[].state").type(JsonFieldType.STRING).description("업체 상태").optional(),
-                fieldWithPath("stores[].businessHour").type(JsonFieldType.OBJECT).description("업체 운영 정보").optional(),
-                fieldWithPath("stores[].businessHour.weekdayStart").type(JsonFieldType.NUMBER).description("업체 평일 운영 시작 시간").optional(),
-                fieldWithPath("stores[].businessHour.weekdayEnd").type(JsonFieldType.NUMBER).description("업체 평일 운영 종료 시간").optional(),
-                fieldWithPath("stores[].businessHour.weekendStart").type(JsonFieldType.NUMBER).description("업체 주말 운영 시작 시간").optional(),
-                fieldWithPath("stores[].businessHour.weekendEnd").type(JsonFieldType.NUMBER).description("업체 주말 운영 종료 시간").optional(),
-                fieldWithPath("stores[].address.city").type(JsonFieldType.STRING).description("시").optional(),
-                fieldWithPath("stores[].address.dong").type(JsonFieldType.STRING).description("동").optional(),
-                fieldWithPath("stores[].address.province").type(JsonFieldType.STRING).description("도").optional(),
-                fieldWithPath("stores[].address.lettitude").type("double").description("위도 좌표 값").optional(),
-                fieldWithPath("stores[].address.longtitude").type("double").description("경도 좌표 값").optional(),
-                fieldWithPath("stores[].owner").type(JsonFieldType.STRING).description("업체 사장 아이디").optional(),
-                fieldWithPath("stores[].intestTotalCount").ignored().optional()
-        )));
+        .andExpect(jsonPath("$..['totalCount']").exists());
     }
 }

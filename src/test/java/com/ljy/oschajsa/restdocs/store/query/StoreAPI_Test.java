@@ -1,6 +1,5 @@
-package com.ljy.oschajsa.restdocs.store.command;
+package com.ljy.oschajsa.restdocs.store.query;
 
-import com.ljy.oschajsa.restdocs.RestDocsTest;
 import com.ljy.oschajsa.restdocs.store.StoreRestDocsTest;
 import com.ljy.oschajsa.services.common.address.application.AddressHelper;
 import com.ljy.oschajsa.services.store.domain.value.BusinessNumber;
@@ -20,7 +19,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 /**
- * 업체 restdocs
+ * 업체 조회 restdocs
  */
 public class StoreAPI_Test extends StoreRestDocsTest {
     @Autowired AddressHelper addressHelper;

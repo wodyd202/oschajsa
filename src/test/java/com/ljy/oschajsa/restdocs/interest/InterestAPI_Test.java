@@ -1,24 +1,22 @@
-package com.ljy.oschajsa.services.interest.presentation;
+package com.ljy.oschajsa.restdocs.interest;
 
-import com.ljy.oschajsa.ApiTest;
+import com.ljy.oschajsa.restdocs.RestDocsTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-public class InterestAPI_Test extends ApiTest {
+/**
+ * 관심업체 restdocs
+ */
+public class InterestAPI_Test extends RestDocsTest {
 
     @BeforeEach
     void setUp(){
@@ -29,7 +27,7 @@ public class InterestAPI_Test extends ApiTest {
     @DisplayName("관심업체 등록")
     void newInterest() throws Exception{
         // when
-        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/stores/interest/{businessNumber}", "000-00-0000")
+        mockMvc.perform(post("/api/v1/stores/interest/{businessNumber}", "000-00-0000")
                         .header("X-AUTH-TOKEN", obtainsAccessToken("username","password")))
 
         // then

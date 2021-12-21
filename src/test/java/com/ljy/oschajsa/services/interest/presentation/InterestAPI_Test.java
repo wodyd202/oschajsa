@@ -17,6 +17,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * 관심업체 API 테스트
+ */
 @SpringBootTest
 public class InterestAPI_Test extends ApiTest {
 
@@ -33,12 +36,7 @@ public class InterestAPI_Test extends ApiTest {
                         .header("X-AUTH-TOKEN", obtainsAccessToken("username","password")))
 
         // then
-        .andExpect(status().isOk())
-        .andDo(document("interest store",
-                pathParameters(
-                        parameterWithName("businessNumber").description("업체 사업자 번호")
-                )
-        ));
+        .andExpect(status().isOk());
     }
 
     @Test
@@ -49,8 +47,7 @@ public class InterestAPI_Test extends ApiTest {
                         .header("X-AUTH-TOKEN", obtainsAccessToken("username","password")))
 
         // then
-        .andExpect(status().isOk())
-        .andDo(document("get interest store"));
+        .andExpect(status().isOk());
     }
 
 
